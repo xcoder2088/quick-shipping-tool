@@ -222,8 +222,35 @@
             cursor: not-allowed;
         }
 
-        #cameraInput {
+        #cameraInput,
+        #libraryInput {
             display: none;
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .photo-actions button {
+            margin-bottom: 0;
+        }
+
+        .take-photo {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .photo-library {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        @media (max-width: 420px) {
+            .photo-actions {
+                flex-direction: column;
+            }
         }
 
         /* ==========================================
@@ -450,7 +477,7 @@
 
         <div class="setup-content">
 
-            <h1>Shipping Photos</h1>
+            <h1>Quick Shipping Tool</h1>
 
             <p class="setup-subtitle">
                 First time setup<br>
@@ -508,7 +535,7 @@
 
         <div class="header">
 
-            <h1>Shipping Photos</h1>
+            <h1>Quick Shipping Tool</h1>
 
             <p>Shipment documentation</p>
 
@@ -574,13 +601,30 @@
             capture="environment"
         >
 
-        <button
-            type="button"
-            class="add-photo"
-            id="addPhotoButton"
+        <input
+            type="file"
+            id="libraryInput"
+            accept="image/*"
+            multiple
         >
-            + ADD PHOTO
-        </button>
+
+        <div class="photo-actions">
+            <button
+                type="button"
+                class="take-photo"
+                id="takePhotoButton"
+            >
+                TAKE PHOTO
+            </button>
+
+            <button
+                type="button"
+                class="photo-library"
+                id="libraryButton"
+            >
+                PHOTO LIBRARY
+            </button>
+        </div>
 
         <button
             type="button"
@@ -867,8 +911,14 @@
     const cameraInput =
         document.getElementById("cameraInput");
 
-    const addPhotoButton =
-        document.getElementById("addPhotoButton");
+    const libraryInput =
+        document.getElementById("libraryInput");
+
+    const takePhotoButton =
+        document.getElementById("takePhotoButton");
+
+    const libraryButton =
+        document.getElementById("libraryButton");
 
     const sendButton =
         document.getElementById("sendButton");
@@ -1222,7 +1272,68 @@
     // PHOTO PICKER
     // ==============================================
 
-    addPhotoButton.addEventListener(
+    const maxPhotos = 10;
+
+
+    function addSelectedPhotos(fileList) {
+
+        const selectedFiles =
+            Array.from(fileList || []);
+
+
+        if (selectedFiles.length === 0) {
+            return;
+        }
+
+
+        const remainingSlots =
+            maxPhotos - photos.length;
+
+
+        if (remainingSlots <= 0) {
+
+            alert(
+                "Maximum " +
+                maxPhotos +
+                " photos per shipment."
+            );
+
+            return;
+        }
+
+
+        const filesToAdd =
+            selectedFiles.slice(
+                0,
+                remainingSlots
+            );
+
+
+        photos.push(
+            ...filesToAdd
+        );
+
+
+        if (selectedFiles.length > remainingSlots) {
+
+            alert(
+                "Only " +
+                remainingSlots +
+                (remainingSlots === 1
+                    ? " additional photo was added."
+                    : " additional photos were added.") +
+                "\n\nMaximum: " +
+                maxPhotos +
+                " photos per shipment."
+            );
+        }
+
+
+        renderPhotos();
+    }
+
+
+    takePhotoButton.addEventListener(
         "click",
         () => {
 
@@ -1231,24 +1342,37 @@
     );
 
 
+    libraryButton.addEventListener(
+        "click",
+        () => {
+
+            libraryInput.click();
+        }
+    );
+
+
     cameraInput.addEventListener(
         "change",
         () => {
 
-            if (!cameraInput.files.length) {
-                return;
-            }
-
-
-            const file =
-                cameraInput.files[0];
-
-
-            photos.push(file);
+            addSelectedPhotos(
+                cameraInput.files
+            );
 
             cameraInput.value = "";
+        }
+    );
 
-            renderPhotos();
+
+    libraryInput.addEventListener(
+        "change",
+        () => {
+
+            addSelectedPhotos(
+                libraryInput.files
+            );
+
+            libraryInput.value = "";
         }
     );
 
@@ -1718,6 +1842,7 @@
             customerInput.value = "";
             shipmentInput.value = "";
             cameraInput.value = "";
+            libraryInput.value = "";
 
 
             renderPhotos();
