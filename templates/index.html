@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>Quick Shipping Tool</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: white;
+            padding: 24px 20px 40px;
+        }
+
+        .header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: #6b7280;
+        }
+
+        .settings-button {
+            position: absolute;
+            top: -8px;
+            right: 0;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 10px;
+            background: #f3f4f6;
+            color: #374151;
+            font-size: 21px;
+            cursor: pointer;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        #customer,
+        #shipment,
+        #setupDestinationEmail,
+        #setupUserEmail,
+        #settingsDestinationEmail,
+        #settingsUserEmail {
+            width: 100%;
+            height: 56px;
+            border: 2px solid #d1d5db;
+            border-radius: 12px;
+            padding: 0 16px;
+            font-size: 18px;
+            background: white;
+            color: #1f2937;
+        }
+
+        #customer {
+            margin-bottom: 20px;
+        }
+
+        #shipment {
+            margin-bottom: 28px;
+        }
+
+        #setupDestinationEmail,
+        #setupUserEmail {
+            margin-bottom: 18px;
+        }
+
+        #settingsDestinationEmail {
+            margin-bottom: 18px;
+        }
+
+        #settingsUserEmail {
+            margin-bottom: 22px;
+        }
+
+        #customer:focus,
+        #shipment:focus,
+        #setupDestinationEmail:focus,
+        #setupUserEmail:focus,
+        #settingsDestinationEmail:focus,
+        #settingsUserEmail:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        .destination-info {
+            margin-bottom: 24px;
+            padding: 12px 14px;
+            background: #eff6ff;
+            border-radius: 10px;
+            color: #1e40af;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        .destination-info strong {
+            display: block;
+            margin-bottom: 3px;
+            color: #1e3a8a;
+        }
+
+        .sender-info {
+            margin-top: 8px;
+            color: #4b5563;
+            font-size: 13px;
+        }
+
+        .photo-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        #photoList {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .photo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: #f3f4f6;
+            border-radius: 12px;
+        }
+
+        .photo-item img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .photo-name {
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .check {
+            color: #16a34a;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .delete {
+            width: auto;
+            height: auto;
+            border: none;
+            background: transparent;
+            color: #dc2626;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        button {
+            width: 100%;
+            height: 58px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .add-photo {
+            background: #e5e7eb;
+            color: #111827;
+            margin-bottom: 18px;
+        }
+
+        .send,
+        .primary-button,
+        .confirm-button,
+        .new-shipment {
+            background: #2563eb;
+            color: white;
+        }
+
+        .send:disabled,
+        .confirm-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        #cameraInput {
+            display: none;
+        }
+
+        /* ==========================================
+           FIRST TIME SETUP
+        ========================================== */
+
+        .setup-screen {
+            display: none;
+            min-height: calc(100vh - 64px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .setup-screen.active {
+            display: flex;
+        }
+
+        .setup-content {
+            width: 100%;
+        }
+
+        .setup-content h1 {
+            margin: 0 0 8px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .setup-subtitle {
+            margin: 0 0 32px;
+            text-align: center;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .email-help {
+            margin: -6px 0 22px;
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* ==========================================
+           MODALS
+        ========================================== */
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 24, 39, 0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            border-radius: 18px;
+            padding: 26px 22px 22px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal h2 {
+            margin: 0 0 8px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .modal-subtitle {
+            margin: 0 0 24px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .confirm-box {
+            background: #f3f4f6;
+            border-radius: 14px;
+            padding: 6px 16px;
+            margin-bottom: 22px;
+        }
+
+        .confirm-row {
+            padding: 14px 0;
+            border-bottom: 1px solid #d1d5db;
+        }
+
+        .confirm-row:last-child {
+            border-bottom: none;
+        }
+
+        .confirm-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .confirm-value {
+            display: block;
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            word-break: break-word;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .cancel-button {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        /* ==========================================
+           SUCCESS
+        ========================================== */
+
+        .success-screen {
+            display: none;
+            min-height: calc(100vh - 64px);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .success-screen.active {
+            display: flex;
+        }
+
+        .success-content {
+            width: 100%;
+        }
+
+        .success-icon {
+            width: 84px;
+            height: 84px;
+            margin: 0 auto 22px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        .success-content h2 {
+            margin: 0 0 22px;
+            font-size: 28px;
+        }
+
+        .success-customer {
+            margin: 0 0 6px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .success-shipment {
+            margin: 0 0 8px;
+            color: #4b5563;
+            font-size: 18px;
+        }
+
+        .success-photos {
+            margin: 0 0 8px;
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        .success-email {
+            margin: 0 0 6px;
+            color: #6b7280;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        .success-sender {
+            margin: 0 0 30px;
+            color: #6b7280;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        @media (max-width: 420px) {
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .modal-buttons .confirm-button {
+                order: 1;
+            }
+
+            .modal-buttons .cancel-button {
+                order: 2;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ==========================================
+         FIRST TIME SETUP
+    =========================================== -->
+
+    <div
+        class="setup-screen"
+        id="setupScreen"
+    >
+
+        <div class="setup-content">
+
+            <h1>Shipping Photos</h1>
+
+            <p class="setup-subtitle">
+                First time setup<br>
+                Configure your shipping email preferences.
+            </p>
+
+            <label for="setupDestinationEmail">
+                Send Photos To
+                <span class="required">*</span>
+            </label>
+
+            <input
+                type="email"
+                id="setupDestinationEmail"
+                placeholder="Example: logistic@capol-group.com"
+                autocomplete="email"
+            >
+
+            <label for="setupUserEmail">
+                Your Email
+                <span class="required">*</span>
+            </label>
+
+            <input
+                type="email"
+                id="setupUserEmail"
+                placeholder="Example: your.name@company.com"
+                autocomplete="email"
+            >
+
+            <p class="email-help">
+                Your email will identify who submitted the shipment
+                and will later be used as the reply address.
+                Both addresses are saved on this device.
+            </p>
+
+            <button
+                type="button"
+                class="primary-button"
+                id="saveSetupButton"
+            >
+                SAVE & CONTINUE
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         MAIN SCREEN
+    =========================================== -->
+
+    <div id="mainScreen">
+
+        <div class="header">
+
+            <h1>Shipping Photos</h1>
+
+            <p>Shipment documentation</p>
+
+            <button
+                type="button"
+                class="settings-button"
+                id="settingsButton"
+                aria-label="Settings"
+                title="Settings"
+            >
+                ⚙
+            </button>
+
+        </div>
+
+        <div class="destination-info">
+
+            <strong>Photos will be sent to:</strong>
+
+            <span id="destinationDisplay"></span>
+
+            <div class="sender-info">
+                Submitted by:
+                <span id="userEmailDisplay"></span>
+            </div>
+
+        </div>
+
+        <label for="customer">
+            Customer Name
+            <span class="required">*</span>
+        </label>
+
+        <input
+            type="text"
+            id="customer"
+            placeholder="Example: Canada Bread"
+            autocomplete="organization"
+        >
+
+        <label for="shipment">
+            Shipment / PO
+            <span class="required">*</span>
+        </label>
+
+        <input
+            type="text"
+            id="shipment"
+            placeholder="Example: 458729"
+            autocomplete="off"
+        >
+
+        <div class="photo-title">
+            PHOTOS
+        </div>
+
+        <div id="photoList"></div>
+
+        <input
+            type="file"
+            id="cameraInput"
+            accept="image/*"
+            capture="environment"
+        >
+
+        <button
+            type="button"
+            class="add-photo"
+            id="addPhotoButton"
+        >
+            + ADD PHOTO
+        </button>
+
+        <button
+            type="button"
+            class="send"
+            id="sendButton"
+            disabled
+        >
+            SEND PHOTOS
+        </button>
+
+    </div>
+
+
+    <!-- ==========================================
+         SUCCESS SCREEN
+    =========================================== -->
+
+    <div
+        class="success-screen"
+        id="successScreen"
+    >
+
+        <div class="success-content">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <h2>PHOTOS SENT</h2>
+
+            <p
+                class="success-customer"
+                id="successCustomer"
+            ></p>
+
+            <p
+                class="success-shipment"
+                id="successShipment"
+            ></p>
+
+            <p
+                class="success-photos"
+                id="successPhotos"
+            ></p>
+
+            <p
+                class="success-email"
+                id="successEmail"
+            ></p>
+
+            <p
+                class="success-sender"
+                id="successSender"
+            ></p>
+
+            <button
+                type="button"
+                class="new-shipment"
+                id="newShipmentButton"
+            >
+                NEW SHIPMENT
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==============================================
+     CONFIRMATION
+================================================ -->
+
+<div
+    class="modal-overlay"
+    id="confirmModal"
+>
+
+    <div class="modal">
+
+        <h2>Confirm Shipment</h2>
+
+        <p class="modal-subtitle">
+            Please verify before sending.
+        </p>
+
+        <div class="confirm-box">
+
+            <div class="confirm-row">
+                <span class="confirm-label">
+                    Customer
+                </span>
+
+                <span
+                    class="confirm-value"
+                    id="confirmCustomer"
+                ></span>
+            </div>
+
+            <div class="confirm-row">
+                <span class="confirm-label">
+                    Shipment / PO
+                </span>
+
+                <span
+                    class="confirm-value"
+                    id="confirmShipment"
+                ></span>
+            </div>
+
+            <div class="confirm-row">
+                <span class="confirm-label">
+                    Photos
+                </span>
+
+                <span
+                    class="confirm-value"
+                    id="confirmPhotos"
+                ></span>
+            </div>
+
+            <div class="confirm-row">
+                <span class="confirm-label">
+                    Send To
+                </span>
+
+                <span
+                    class="confirm-value"
+                    id="confirmDestination"
+                ></span>
+            </div>
+
+            <div class="confirm-row">
+                <span class="confirm-label">
+                    Sent By
+                </span>
+
+                <span
+                    class="confirm-value"
+                    id="confirmUserEmail"
+                ></span>
+            </div>
+
+        </div>
+
+        <div class="modal-buttons">
+
+            <button
+                type="button"
+                class="cancel-button"
+                id="cancelButton"
+            >
+                CANCEL
+            </button>
+
+            <button
+                type="button"
+                class="confirm-button"
+                id="confirmButton"
+            >
+                CONFIRM & SEND
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==============================================
+     SETTINGS
+================================================ -->
+
+<div
+    class="modal-overlay"
+    id="settingsModal"
+>
+
+    <div class="modal">
+
+        <h2>Settings</h2>
+
+        <p class="modal-subtitle">
+            Change your email preferences.
+        </p>
+
+        <label for="settingsDestinationEmail">
+            Send Photos To
+        </label>
+
+        <input
+            type="email"
+            id="settingsDestinationEmail"
+            autocomplete="email"
+        >
+
+        <label for="settingsUserEmail">
+            Your Email
+        </label>
+
+        <input
+            type="email"
+            id="settingsUserEmail"
+            autocomplete="email"
+        >
+
+        <div class="modal-buttons">
+
+            <button
+                type="button"
+                class="cancel-button"
+                id="settingsCancelButton"
+            >
+                CANCEL
+            </button>
+
+            <button
+                type="button"
+                class="confirm-button"
+                id="settingsSaveButton"
+            >
+                SAVE
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // ==============================================
+    // LOCAL STORAGE KEYS
+    // ==============================================
+
+    const destinationStorageKey =
+        "shippingPhotosDestinationEmail";
+
+    const userEmailStorageKey =
+        "shippingPhotosUserEmail";
+
+
+    // ==============================================
+    // ELEMENTS
+    // ==============================================
+
+    const setupScreen =
+        document.getElementById("setupScreen");
+
+    const mainScreen =
+        document.getElementById("mainScreen");
+
+    const successScreen =
+        document.getElementById("successScreen");
+
+
+    const setupDestinationEmail =
+        document.getElementById("setupDestinationEmail");
+
+    const setupUserEmail =
+        document.getElementById("setupUserEmail");
+
+    const saveSetupButton =
+        document.getElementById("saveSetupButton");
+
+
+    const destinationDisplay =
+        document.getElementById("destinationDisplay");
+
+    const userEmailDisplay =
+        document.getElementById("userEmailDisplay");
+
+
+    const customerInput =
+        document.getElementById("customer");
+
+    const shipmentInput =
+        document.getElementById("shipment");
+
+    const cameraInput =
+        document.getElementById("cameraInput");
+
+    const addPhotoButton =
+        document.getElementById("addPhotoButton");
+
+    const sendButton =
+        document.getElementById("sendButton");
+
+    const photoList =
+        document.getElementById("photoList");
+
+
+    // Confirmation
+
+    const confirmModal =
+        document.getElementById("confirmModal");
+
+    const confirmCustomer =
+        document.getElementById("confirmCustomer");
+
+    const confirmShipment =
+        document.getElementById("confirmShipment");
+
+    const confirmPhotos =
+        document.getElementById("confirmPhotos");
+
+    const confirmDestination =
+        document.getElementById("confirmDestination");
+
+    const confirmUserEmail =
+        document.getElementById("confirmUserEmail");
+
+    const cancelButton =
+        document.getElementById("cancelButton");
+
+    const confirmButton =
+        document.getElementById("confirmButton");
+
+
+    // Settings
+
+    const settingsButton =
+        document.getElementById("settingsButton");
+
+    const settingsModal =
+        document.getElementById("settingsModal");
+
+    const settingsDestinationEmail =
+        document.getElementById("settingsDestinationEmail");
+
+    const settingsUserEmail =
+        document.getElementById("settingsUserEmail");
+
+    const settingsCancelButton =
+        document.getElementById("settingsCancelButton");
+
+    const settingsSaveButton =
+        document.getElementById("settingsSaveButton");
+
+
+    // Success
+
+    const successCustomer =
+        document.getElementById("successCustomer");
+
+    const successShipment =
+        document.getElementById("successShipment");
+
+    const successPhotos =
+        document.getElementById("successPhotos");
+
+    const successEmail =
+        document.getElementById("successEmail");
+
+    const successSender =
+        document.getElementById("successSender");
+
+    const newShipmentButton =
+        document.getElementById("newShipmentButton");
+
+
+    // ==============================================
+    // STATE
+    // ==============================================
+
+    let photos = [];
+    let previewURLs = [];
+
+
+    // ==============================================
+    // EMAIL CONFIGURATION
+    // ==============================================
+
+    function getDestinationEmail() {
+
+        return localStorage.getItem(
+            destinationStorageKey
+        ) || "";
+    }
+
+
+    function getUserEmail() {
+
+        return localStorage.getItem(
+            userEmailStorageKey
+        ) || "";
+    }
+
+
+    function saveEmailConfiguration(
+        destination,
+        userEmail
+    ) {
+
+        localStorage.setItem(
+            destinationStorageKey,
+            destination.trim()
+        );
+
+        localStorage.setItem(
+            userEmailStorageKey,
+            userEmail.trim()
+        );
+
+        updateEmailDisplay();
+    }
+
+
+    function isValidEmail(email) {
+
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+            email
+        );
+    }
+
+
+    function updateEmailDisplay() {
+
+        destinationDisplay.textContent =
+            getDestinationEmail();
+
+        userEmailDisplay.textContent =
+            getUserEmail();
+    }
+
+
+    // ==============================================
+    // INITIALIZATION
+    // ==============================================
+
+    function initializeApp() {
+
+        const destination =
+            getDestinationEmail();
+
+        const userEmail =
+            getUserEmail();
+
+
+        /*
+         * Existing users of our previous test version
+         * already have the destination saved.
+         *
+         * Since Your Email is new, they will see the
+         * setup screen once more.
+         */
+
+        if (
+            !isValidEmail(destination) ||
+            !isValidEmail(userEmail)
+        ) {
+
+            mainScreen.style.display =
+                "none";
+
+            successScreen.classList.remove(
+                "active"
+            );
+
+            setupScreen.classList.add(
+                "active"
+            );
+
+
+            if (isValidEmail(destination)) {
+
+                setupDestinationEmail.value =
+                    destination;
+            }
+
+
+            setupDestinationEmail.focus();
+
+            return;
+        }
+
+
+        setupScreen.classList.remove(
+            "active"
+        );
+
+        successScreen.classList.remove(
+            "active"
+        );
+
+        mainScreen.style.display =
+            "block";
+
+        updateEmailDisplay();
+    }
+
+
+    // ==============================================
+    // FIRST TIME SETUP
+    // ==============================================
+
+    saveSetupButton.addEventListener(
+        "click",
+        () => {
+
+            const destination =
+                setupDestinationEmail.value.trim();
+
+            const userEmail =
+                setupUserEmail.value.trim();
+
+
+            if (!isValidEmail(destination)) {
+
+                alert(
+                    "Please enter a valid destination email address."
+                );
+
+                setupDestinationEmail.focus();
+
+                return;
+            }
+
+
+            if (!isValidEmail(userEmail)) {
+
+                alert(
+                    "Please enter a valid email address for Your Email."
+                );
+
+                setupUserEmail.focus();
+
+                return;
+            }
+
+
+            saveEmailConfiguration(
+                destination,
+                userEmail
+            );
+
+
+            setupScreen.classList.remove(
+                "active"
+            );
+
+            mainScreen.style.display =
+                "block";
+
+            customerInput.focus();
+        }
+    );
+
+
+    // ==============================================
+    // SETTINGS
+    // ==============================================
+
+    settingsButton.addEventListener(
+        "click",
+        () => {
+
+            settingsDestinationEmail.value =
+                getDestinationEmail();
+
+            settingsUserEmail.value =
+                getUserEmail();
+
+
+            settingsModal.classList.add(
+                "active"
+            );
+
+
+            settingsDestinationEmail.focus();
+        }
+    );
+
+
+    settingsCancelButton.addEventListener(
+        "click",
+        () => {
+
+            settingsModal.classList.remove(
+                "active"
+            );
+        }
+    );
+
+
+    settingsSaveButton.addEventListener(
+        "click",
+        () => {
+
+            const destination =
+                settingsDestinationEmail.value.trim();
+
+            const userEmail =
+                settingsUserEmail.value.trim();
+
+
+            if (!isValidEmail(destination)) {
+
+                alert(
+                    "Please enter a valid destination email address."
+                );
+
+                settingsDestinationEmail.focus();
+
+                return;
+            }
+
+
+            if (!isValidEmail(userEmail)) {
+
+                alert(
+                    "Please enter a valid email address for Your Email."
+                );
+
+                settingsUserEmail.focus();
+
+                return;
+            }
+
+
+            saveEmailConfiguration(
+                destination,
+                userEmail
+            );
+
+
+            settingsModal.classList.remove(
+                "active"
+            );
+        }
+    );
+
+
+    // ==============================================
+    // PHOTO PICKER
+    // ==============================================
+
+    addPhotoButton.addEventListener(
+        "click",
+        () => {
+
+            cameraInput.click();
+        }
+    );
+
+
+    cameraInput.addEventListener(
+        "change",
+        () => {
+
+            if (!cameraInput.files.length) {
+                return;
+            }
+
+
+            const file =
+                cameraInput.files[0];
+
+
+            photos.push(file);
+
+            cameraInput.value = "";
+
+            renderPhotos();
+        }
+    );
+
+
+    // ==============================================
+    // RENDER PHOTOS
+    // ==============================================
+
+    function renderPhotos() {
+
+        previewURLs.forEach(
+            (url) => {
+
+                URL.revokeObjectURL(url);
+            }
+        );
+
+
+        previewURLs = [];
+
+        photoList.innerHTML = "";
+
+
+        photos.forEach(
+            (photo, index) => {
+
+                const item =
+                    document.createElement("div");
+
+                item.className =
+                    "photo-item";
+
+
+                const image =
+                    document.createElement("img");
+
+
+                const previewURL =
+                    URL.createObjectURL(photo);
+
+
+                previewURLs.push(
+                    previewURL
+                );
+
+
+                image.src =
+                    previewURL;
+
+                image.alt =
+                    "Photo " + (index + 1);
+
+
+                const name =
+                    document.createElement("div");
+
+                name.className =
+                    "photo-name";
+
+                name.textContent =
+                    "Photo " + (index + 1);
+
+
+                const check =
+                    document.createElement("div");
+
+                check.className =
+                    "check";
+
+                check.textContent =
+                    "✓";
+
+
+                const remove =
+                    document.createElement("button");
+
+                remove.className =
+                    "delete";
+
+                remove.type =
+                    "button";
+
+                remove.textContent =
+                    "×";
+
+                remove.setAttribute(
+                    "aria-label",
+                    "Remove Photo " + (index + 1)
+                );
+
+
+                remove.addEventListener(
+                    "click",
+                    () => {
+
+                        photos.splice(
+                            index,
+                            1
+                        );
+
+                        renderPhotos();
+                    }
+                );
+
+
+                item.appendChild(image);
+                item.appendChild(name);
+                item.appendChild(check);
+                item.appendChild(remove);
+
+                photoList.appendChild(item);
+            }
+        );
+
+
+        updateSendButton();
+    }
+
+
+    // ==============================================
+    // SEND BUTTON
+    // ==============================================
+
+    function updateSendButton() {
+
+        if (photos.length === 0) {
+
+            sendButton.disabled =
+                true;
+
+            sendButton.textContent =
+                "SEND PHOTOS";
+
+            return;
+        }
+
+
+        sendButton.disabled =
+            false;
+
+
+        sendButton.textContent =
+            photos.length === 1
+                ? "SEND 1 PHOTO"
+                : "SEND " +
+                  photos.length +
+                  " PHOTOS";
+    }
+
+
+    // ==============================================
+    // OPEN CONFIRMATION
+    // ==============================================
+
+    sendButton.addEventListener(
+        "click",
+        () => {
+
+            const customer =
+                customerInput.value.trim();
+
+            const shipment =
+                shipmentInput.value.trim();
+
+            const destination =
+                getDestinationEmail();
+
+            const userEmail =
+                getUserEmail();
+
+
+            if (!customer) {
+
+                alert(
+                    "Please enter the Customer Name."
+                );
+
+                customerInput.focus();
+
+                return;
+            }
+
+
+            if (!shipment) {
+
+                alert(
+                    "Please enter the Shipment / PO."
+                );
+
+                shipmentInput.focus();
+
+                return;
+            }
+
+
+            if (photos.length === 0) {
+
+                alert(
+                    "Please add at least one photo."
+                );
+
+                return;
+            }
+
+
+            if (
+                !isValidEmail(destination) ||
+                !isValidEmail(userEmail)
+            ) {
+
+                alert(
+                    "Please verify your email settings."
+                );
+
+                return;
+            }
+
+
+            confirmCustomer.textContent =
+                customer;
+
+            confirmShipment.textContent =
+                shipment;
+
+            confirmPhotos.textContent =
+                photos.length === 1
+                    ? "1 photo"
+                    : photos.length +
+                      " photos";
+
+            confirmDestination.textContent =
+                destination;
+
+            confirmUserEmail.textContent =
+                userEmail;
+
+
+            confirmModal.classList.add(
+                "active"
+            );
+        }
+    );
+
+
+    // ==============================================
+    // CANCEL CONFIRMATION
+    // ==============================================
+
+    cancelButton.addEventListener(
+        "click",
+        () => {
+
+            confirmModal.classList.remove(
+                "active"
+            );
+        }
+    );
+
+
+    // ==============================================
+    // CONFIRM & UPLOAD
+    // ==============================================
+
+    confirmButton.addEventListener(
+        "click",
+        async () => {
+
+            const customer =
+                customerInput.value.trim();
+
+            const shipment =
+                shipmentInput.value.trim();
+
+            const destination =
+                getDestinationEmail();
+
+            const userEmail =
+                getUserEmail();
+
+
+            if (
+                !customer ||
+                !shipment ||
+                !isValidEmail(destination) ||
+                !isValidEmail(userEmail) ||
+                photos.length === 0
+            ) {
+
+                confirmModal.classList.remove(
+                    "active"
+                );
+
+                return;
+            }
+
+
+            confirmButton.disabled =
+                true;
+
+            confirmButton.textContent =
+                "SENDING...";
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "customer",
+                customer
+            );
+
+
+            formData.append(
+                "shipment",
+                shipment
+            );
+
+
+            formData.append(
+                "destination",
+                destination
+            );
+
+
+            /*
+             * This is NOT the actual SMTP From address.
+             *
+             * Go will later use this as:
+             * Submitted By + Reply-To.
+             */
+            formData.append(
+                "user_email",
+                userEmail
+            );
+
+
+            photos.forEach(
+                (photo) => {
+
+                    formData.append(
+                        "photos",
+                        photo
+                    );
+                }
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/upload",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !result.success
+                ) {
+
+                    throw new Error(
+                        result.message ||
+                        "Upload failed"
+                    );
+                }
+
+
+                confirmModal.classList.remove(
+                    "active"
+                );
+
+
+                successCustomer.textContent =
+                    result.customer;
+
+
+                successShipment.textContent =
+                    "Shipment / PO: " +
+                    result.shipment;
+
+
+                successPhotos.textContent =
+                    result.photos === 1
+                        ? "1 photo successfully processed"
+                        : result.photos +
+                          " photos successfully processed";
+
+
+                successEmail.textContent =
+                    "Destination: " +
+                    destination;
+
+
+                successSender.textContent =
+                    "Submitted by: " +
+                    userEmail;
+
+
+                mainScreen.style.display =
+                    "none";
+
+
+                successScreen.classList.add(
+                    "active"
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                confirmModal.classList.remove(
+                    "active"
+                );
+
+
+                alert(
+                    "Unable to send photos.\n\n" +
+                    error.message
+                );
+
+
+            } finally {
+
+                confirmButton.disabled =
+                    false;
+
+                confirmButton.textContent =
+                    "CONFIRM & SEND";
+            }
+        }
+    );
+
+
+    // ==============================================
+    // NEW SHIPMENT
+    // ==============================================
+
+    newShipmentButton.addEventListener(
+        "click",
+        () => {
+
+            photos = [];
+
+
+            previewURLs.forEach(
+                (url) => {
+
+                    URL.revokeObjectURL(url);
+                }
+            );
+
+
+            previewURLs = [];
+
+
+            customerInput.value = "";
+            shipmentInput.value = "";
+            cameraInput.value = "";
+
+
+            renderPhotos();
+
+
+            successScreen.classList.remove(
+                "active"
+            );
+
+
+            mainScreen.style.display =
+                "block";
+
+
+            updateEmailDisplay();
+
+
+            customerInput.focus();
+        }
+    );
+
+
+    // ==============================================
+    // START
+    // ==============================================
+
+    renderPhotos();
+
+    initializeApp();
+
+</script>
+
+</body>
+</html>
