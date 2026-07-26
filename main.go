@@ -688,18 +688,24 @@ func uploadHandler(
 	// ==================================================
 
 	emailSubject := fmt.Sprintf(
-		"%s - Shipment %s",
+		"Quick Shipping Tool - %s - Shipment %s",
 		customer,
 		shipmentOriginal,
 	)
 
 	emailBody := fmt.Sprintf(
-		"Quick Shipping Tool\n\n"+
+		"Quick Shipping Tool\n"+
+			"Shipping Photo Documentation\n\n"+
 			"Customer: %s\n"+
 			"Shipment / PO: %s\n"+
 			"Submitted by: %s\n"+
 			"Date: %s\n"+
-			"Photos: %d\n",
+			"Photos attached: %d\n\n"+
+			"The attached photos were submitted through Quick Shipping Tool "+
+			"for shipment documentation and record-keeping purposes.\n\n"+
+			"Quick Shipping Tool\n"+
+			"Shipping Documentation System\n"+
+			"quickquotetool.ca\n",
 		customer,
 		shipmentOriginal,
 		userEmail,
@@ -710,16 +716,50 @@ func uploadHandler(
 	emailHTML := fmt.Sprintf(
 		`<!DOCTYPE html>
 <html>
-<body style="font-family: Arial, sans-serif; color: #1f2937;">
-	<h2>Quick Shipping Tool</h2>
+<body style="margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; color:#1f2937; background:#ffffff;">
+	<div style="max-width:600px; margin:0 auto; padding:24px;">
+		<h2 style="margin:0 0 4px 0;">Quick Shipping Tool</h2>
 
-	<p>
-		<strong>Customer:</strong> %s<br>
-		<strong>Shipment / PO:</strong> %s<br>
-		<strong>Submitted by:</strong> %s<br>
-		<strong>Date:</strong> %s<br>
-		<strong>Photos:</strong> %d
-	</p>
+		<p style="margin:0 0 24px 0; color:#4b5563;">
+			Shipping Photo Documentation
+		</p>
+
+		<table style="border-collapse:collapse; width:100%%;">
+			<tr>
+				<td style="padding:6px 12px 6px 0;"><strong>Customer:</strong></td>
+				<td style="padding:6px 0;">%s</td>
+			</tr>
+			<tr>
+				<td style="padding:6px 12px 6px 0;"><strong>Shipment / PO:</strong></td>
+				<td style="padding:6px 0;">%s</td>
+			</tr>
+			<tr>
+				<td style="padding:6px 12px 6px 0;"><strong>Submitted by:</strong></td>
+				<td style="padding:6px 0;">%s</td>
+			</tr>
+			<tr>
+				<td style="padding:6px 12px 6px 0;"><strong>Date:</strong></td>
+				<td style="padding:6px 0;">%s</td>
+			</tr>
+			<tr>
+				<td style="padding:6px 12px 6px 0;"><strong>Photos attached:</strong></td>
+				<td style="padding:6px 0;">%d</td>
+			</tr>
+		</table>
+
+		<p style="margin-top:24px;">
+			The attached photos were submitted through Quick Shipping Tool
+			for shipment documentation and record-keeping purposes.
+		</p>
+
+		<hr style="border:0; border-top:1px solid #e5e7eb; margin:24px 0;">
+
+		<p style="font-size:12px; color:#6b7280;">
+			Quick Shipping Tool<br>
+			Shipping Documentation System<br>
+			quickquotetool.ca
+		</p>
+	</div>
 </body>
 </html>`,
 		htmlEscape(customer),
