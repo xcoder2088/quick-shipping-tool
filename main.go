@@ -96,6 +96,16 @@ func main() {
 	)
 
 	http.HandleFunc(
+		"/manifest.webmanifest",
+		manifestHandler,
+	)
+
+	http.HandleFunc(
+		"/service-worker.js",
+		serviceWorkerHandler,
+	)
+
+	http.HandleFunc(
 		"/api/upload",
 		uploadHandler,
 	)
@@ -135,6 +145,40 @@ func main() {
 		),
 	)
 }
+
+// ==================================================
+// PWA FILES
+// ==================================================
+
+func manifestHandler(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	if r.URL.Path != "/manifest.webmanifest" {
+		http.NotFound(w, r)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/manifest+json; charset=utf-8")
+	w.Header().Set("Cache-Control", "no-cache")
+	http.ServeFile(w, r, "./static/manifest.webmanifest")
+}
+
+func serviceWorkerHandler(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	if r.URL.Path != "/service-worker.js" {
+		http.NotFound(w, r)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/javascript; charset=utf-8")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Service-Worker-Allowed", "/")
+	http.ServeFile(w, r, "./static/service-worker.js")
+}
+
 
 // ==================================================
 // HOME

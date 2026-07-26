@@ -10,6 +10,18 @@
 
     <title>Quick Shipping Tool</title>
 
+    <!-- PWA -->
+    <meta name="theme-color" content="#061a3a">
+    <meta name="application-name" content="Quick Shipping Tool">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Quick Shipping">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/icons/icon-512.png">
+    <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
+
+
     <style>
         * {
             box-sizing: border-box;
@@ -1873,6 +1885,17 @@
 
     initializeApp();
 
+</script>
+
+
+<script>
+    // PWA service worker
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker.register("/service-worker.js")
+                .catch((error) => console.error("Service worker registration failed:", error));
+        });
+    }
 </script>
 
 </body>
