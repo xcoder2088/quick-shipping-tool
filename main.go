@@ -19,7 +19,7 @@ import (
 
 const (
 	maxUploadSize = 50 << 20 // 50 MB
-	maxPhotos     = 10
+	maxPhotos     = 5
 
 	mailerSendURL = "https://api.mailersend.com/v1/email"
 )
@@ -29,14 +29,15 @@ const (
 // ==================================================
 
 type UploadResponse struct {
-	Success     bool   `json:"success"`
-	Message     string `json:"message"`
-	Customer    string `json:"customer,omitempty"`
-	Shipment    string `json:"shipment,omitempty"`
-	Destination string `json:"destination,omitempty"`
-	UserEmail   string `json:"user_email,omitempty"`
-	Photos      int    `json:"photos,omitempty"`
-	MessageID   string `json:"message_id,omitempty"`
+	Success      bool     `json:"success"`
+	Message      string   `json:"message"`
+	Customer     string   `json:"customer,omitempty"`
+	Shipment     string   `json:"shipment,omitempty"`
+	Destination  string   `json:"destination,omitempty"`
+	Destinations []string `json:"destinations,omitempty"`
+	UserEmail    string   `json:"user_email,omitempty"`
+	Photos       int      `json:"photos,omitempty"`
+	MessageID    string   `json:"message_id,omitempty"`
 }
 
 // ==================================================
@@ -57,6 +58,7 @@ type MailerSendAttachment struct {
 type MailerSendRequest struct {
 	From        MailerSendAddress      `json:"from"`
 	To          []MailerSendAddress    `json:"to"`
+	Cc          []MailerSendAddress    `json:"cc,omitempty"`
 	ReplyTo     MailerSendAddress      `json:"reply_to"`
 	Subject     string                 `json:"subject"`
 	Text        string                 `json:"text"`
@@ -178,7 +180,6 @@ func serviceWorkerHandler(
 	w.Header().Set("Service-Worker-Allowed", "/")
 	http.ServeFile(w, r, "./static/service-worker.js")
 }
-
 
 // ==================================================
 // HOME
@@ -413,6 +414,18 @@ func uploadHandler(
 		r.FormValue("destination"),
 	)
 
+	// V3 supports multiple recipients through repeated "destinations" form fields.
+	// Keep the legacy single "destination" field as a fallback so the current
+	// frontend remains fully compatible during the transition.
+	destinations := uniqueValidDestinations(r.MultipartForm.Value["destinations"])
+	if len(destinations) == 0 && destination != "" {
+		destinations = uniqueValidDestinations([]string{destination})
+	}
+
+	if destination == "" && len(destinations) > 0 {
+		destination = destinations[0]
+	}
+
 	if destination == "" {
 
 		writeJSON(
@@ -427,7 +440,7 @@ func uploadHandler(
 		return
 	}
 
-	if !validEmail(destination) {
+	if len(destinations) == 0 {
 
 		writeJSON(
 			w,
@@ -504,7 +517,7 @@ func uploadHandler(
 			http.StatusBadRequest,
 			UploadResponse{
 				Success: false,
-				Message: "Maximum 10 photos per shipment",
+				Message: "Maximum 5 photos per shipment",
 			},
 		)
 
@@ -827,7 +840,7 @@ func uploadHandler(
 
 	log.Println(
 		"TO:",
-		destination,
+		strings.Join(destinations, ", "),
 	)
 
 	log.Println(
@@ -861,10 +874,21 @@ func uploadHandler(
 	// SEND EMAIL THROUGH MAILERSEND
 	// ==================================================
 
+	// Send ONE MailerSend message.
+	// The first selected department is TO; any additional departments are CC.
+	toRecipient := destinations[0]
+	ccRecipients := destinations[1:]
+
+	log.Println("TO:", toRecipient)
+	if len(ccRecipients) > 0 {
+		log.Println("CC:", strings.Join(ccRecipients, ", "))
+	}
+
 	messageID, err := sendMailerSendEmail(
 		apiKey,
 		fromEmail,
-		destination,
+		toRecipient,
+		ccRecipients,
 		userEmail,
 		emailSubject,
 		emailBody,
@@ -887,13 +911,14 @@ func uploadHandler(
 			w,
 			http.StatusBadGateway,
 			UploadResponse{
-				Success:     false,
-				Message:     "Unable to send email: " + err.Error(),
-				Customer:    customer,
-				Shipment:    shipmentOriginal,
-				Destination: destination,
-				UserEmail:   userEmail,
-				Photos:      saved,
+				Success:      false,
+				Message:      "Unable to send email: " + err.Error(),
+				Customer:     customer,
+				Shipment:     shipmentOriginal,
+				Destination:  destination,
+				Destinations: destinations,
+				UserEmail:    userEmail,
+				Photos:       saved,
 			},
 		)
 
@@ -997,14 +1022,15 @@ func uploadHandler(
 		w,
 		http.StatusOK,
 		UploadResponse{
-			Success:     true,
-			Message:     message,
-			Customer:    customer,
-			Shipment:    shipmentOriginal,
-			Destination: destination,
-			UserEmail:   userEmail,
-			Photos:      saved,
-			MessageID:   messageID,
+			Success:      true,
+			Message:      message,
+			Customer:     customer,
+			Shipment:     shipmentOriginal,
+			Destination:  destination,
+			Destinations: destinations,
+			UserEmail:    userEmail,
+			Photos:       saved,
+			MessageID:    messageID,
 		},
 	)
 }
@@ -1017,6 +1043,7 @@ func sendMailerSendEmail(
 	apiKey string,
 	fromEmail string,
 	destination string,
+	ccDestinations []string,
 	replyTo string,
 	subject string,
 	textBody string,
@@ -1075,10 +1102,10 @@ func sendMailerSendEmail(
 		},
 
 		To: []MailerSendAddress{
-			{
-				Email: destination,
-			},
+			{Email: destination},
 		},
+
+		Cc: buildMailerSendRecipients(ccDestinations),
 
 		ReplyTo: MailerSendAddress{
 			Email: replyTo,
@@ -1221,6 +1248,32 @@ func sendMailerSendEmail(
 	)
 
 	return messageID, nil
+}
+
+// ==================================================
+// MULTIPLE RECIPIENTS - V3
+// ==================================================
+func uniqueValidDestinations(values []string) []string {
+	result := make([]string, 0, len(values))
+	seen := make(map[string]bool)
+	for _, value := range values {
+		value = strings.TrimSpace(value)
+		key := strings.ToLower(value)
+		if value == "" || !validEmail(value) || seen[key] {
+			continue
+		}
+		seen[key] = true
+		result = append(result, value)
+	}
+	return result
+}
+
+func buildMailerSendRecipients(destinations []string) []MailerSendAddress {
+	result := make([]MailerSendAddress, 0, len(destinations))
+	for _, destination := range destinations {
+		result = append(result, MailerSendAddress{Email: destination})
+	}
+	return result
 }
 
 // ==================================================
