@@ -471,6 +471,328 @@
                 order: 2;
             }
         }
+    
+/* ===== Quick Shipping Tool V3 ===== */
+:root { --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); }
+body { min-height: 100dvh; }
+.app {
+    min-height: 100dvh;
+    padding-top: calc(18px + var(--safe-top)) !important;
+    padding-bottom: calc(36px + var(--safe-bottom)) !important;
+}
+.header {
+    position: relative;
+    padding-top: 0 !important;
+    text-align: center;
+}
+.app-logo {
+    display: block;
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin: 0 auto 8px;
+}
+.settings-button {
+    top: 0 !important;
+    right: 0 !important;
+    z-index: 20;
+}
+.recipient-list-v3 { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+.recipient-choice-v3 {
+    display:flex; align-items:center; gap:10px; padding:9px 10px;
+    border:1px solid #bfdbfe; border-radius:10px; background:#fff;
+}
+.recipient-choice-v3 input { width:20px; height:20px; flex:0 0 auto; }
+.recipient-choice-v3 span { min-width:0; word-break:break-word; }
+.recipient-editor-row-v3 { background:#f3f4f6; border-radius:12px; padding:10px; margin-bottom:10px; }
+.recipient-editor-row-v3 input { margin-bottom:8px; }
+.warning-v3 {
+    margin:20px 0; padding:14px 15px; border:1px solid #f59e0b;
+    background:#fffbeb; color:#78350f; border-radius:12px; text-align:left;
+    font-size:14px; line-height:1.45;
+}
+.warning-v3 strong { display:block; margin-bottom:4px; }
+@media (max-width: 480px) {
+    .app { padding-left:16px !important; padding-right:16px !important; }
+    .app-logo { width:58px; height:58px; }
+}
+
+
+/* ===== V3.2 clean recipient interface ===== */
+.recipient-panel-v32 {
+    margin: 0 0 22px;
+    padding: 14px;
+    background: #eff6ff;
+    border-radius: 12px;
+}
+.recipient-panel-title-v32 {
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #1e3a8a;
+}
+.recipient-choice-v32 {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-top: 1px solid #dbeafe;
+}
+.recipient-choice-v32:first-of-type { border-top: 0; }
+.recipient-choice-v32 input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 2px 0 0;
+    flex: 0 0 auto;
+}
+.recipient-choice-text-v32 { min-width: 0; }
+.recipient-choice-name-v32 {
+    display: block;
+    font-weight: 700;
+    color: #1f2937;
+}
+.recipient-choice-email-v32 {
+    display: block;
+    margin-top: 2px;
+    color: #4b5563;
+    font-size: 13px;
+    word-break: break-word;
+}
+.recipient-editor-v32 {
+    margin: 0 0 20px;
+}
+.recipient-editor-title-v32 {
+    margin-bottom: 6px;
+    font-weight: 800;
+    color: #1f2937;
+}
+.recipient-editor-help-v32 {
+    margin: 0 0 14px;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.4;
+}
+.recipient-card-v32 {
+    padding: 14px;
+    margin-bottom: 12px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+.recipient-card-heading-v32 {
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #374151;
+}
+.recipient-card-v32 label {
+    margin: 8px 0 6px;
+    font-size: 13px;
+}
+.recipient-card-v32 input {
+    width: 100%;
+    height: 50px;
+    padding: 0 14px;
+    border: 2px solid #d1d5db;
+    border-radius: 10px;
+    background: white;
+    color: #1f2937;
+    font-size: 16px;
+}
+.recipient-card-v32 input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+.recipient-remove-v32 {
+    width: 100%;
+    height: 42px;
+    margin-top: 10px;
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 0;
+    border-radius: 9px;
+    font-size: 14px;
+}
+.add-recipient-v32 {
+    width: 100%;
+    height: 50px;
+    border: 2px dashed #93c5fd;
+    border-radius: 10px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 14px;
+    font-weight: 800;
+}
+.add-recipient-v32:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+.recipient-count-v32 {
+    margin-top: 8px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 12px;
+}
+#settingsDestinationEmail,
+label[for="settingsDestinationEmail"] {
+    display: none !important;
+}
+
+        /* Compact responsive first-time setup */
+        #setupScreen .setup-content {
+            padding-top: clamp(16px, 3vh, 28px);
+            padding-bottom: clamp(16px, 3vh, 28px);
+        }
+
+        #setupScreen .app-logo {
+            width: clamp(54px, 8vh, 64px);
+            height: clamp(54px, 8vh, 64px);
+            margin-bottom: clamp(8px, 1.4vh, 14px);
+        }
+
+        #setupScreen h1 {
+            margin-bottom: clamp(5px, 0.8vh, 8px);
+        }
+
+        #setupScreen .setup-subtitle {
+            margin-bottom: clamp(18px, 2.8vh, 30px);
+        }
+
+        #setupScreen .setup-section {
+            margin-bottom: clamp(14px, 2vh, 22px);
+        }
+
+        #setupScreen .department-card {
+            padding: clamp(11px, 1.6vh, 16px);
+            margin-bottom: clamp(9px, 1.3vh, 12px);
+        }
+
+        #setupScreen .department-card label {
+            margin-bottom: 6px;
+        }
+
+        #setupScreen input[type="email"] {
+            min-height: 46px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        #setupScreen .setup-help {
+            margin-top: clamp(8px, 1.2vh, 12px);
+            margin-bottom: clamp(12px, 1.8vh, 18px);
+        }
+
+        @media (max-height: 850px) {
+            #setupScreen .setup-content {
+                padding-top: 10px;
+                padding-bottom: 12px;
+            }
+
+            #setupScreen .app-logo {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 6px;
+            }
+
+            #setupScreen h1 {
+                font-size: 26px;
+                margin-bottom: 3px;
+            }
+
+            #setupScreen .setup-subtitle {
+                margin-bottom: 12px;
+                line-height: 1.25;
+            }
+
+            #setupScreen .setup-section {
+                margin-bottom: 10px;
+            }
+
+            #setupScreen .department-card {
+                padding: 9px 12px;
+                margin-bottom: 7px;
+            }
+
+            #setupScreen input[type="email"] {
+                min-height: 42px;
+                padding: 8px 12px;
+            }
+
+            #setupScreen .setup-help {
+                margin: 7px 0 10px;
+                line-height: 1.3;
+            }
+        }
+
+        @media (max-width: 600px) {
+            #setupScreen .setup-content {
+                width: 100%;
+                max-width: none;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            #setupScreen .department-card {
+                border-radius: 12px;
+            }
+        }
+
+    
+        /* Parent QuickQuoteTool link hint */
+        .quickquote-home-link {
+            display: flex;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .quickquote-home-hint {
+            display: inline-block;
+            margin-top: -2px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #2563eb;
+            letter-spacing: .01em;
+        }
+
+        .quickquote-home-link .app-logo {
+            transition: transform .18s ease, filter .18s ease;
+        }
+
+        .quickquote-home-link:hover .app-logo,
+        .quickquote-home-link:focus-visible .app-logo {
+            transform: scale(1.06);
+        }
+
+        .quickquote-home-link:focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 4px;
+            border-radius: 10px;
+        }
+
+        /* Draw attention only briefly after page load, not continuously. */
+        .quickquote-home-link {
+            animation: quickquote-link-pulse 1s ease-in-out 3;
+        }
+
+        @keyframes quickquote-link-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.035); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .quickquote-home-link {
+                animation: none;
+            }
+        }
+
     </style>
 </head>
 
@@ -488,6 +810,19 @@
     >
 
         <div class="setup-content">
+
+            <a href="https://quickquotetool.ca/"
+               target="_blank"
+               rel="noopener noreferrer"
+   class="quickquote-home-link"
+               title="QuickQuoteTool.ca"
+               aria-label="Open QuickQuoteTool.ca">
+                <img src="/static/icons/icon-original.png"
+                     class="app-logo"
+                     alt="Quick Shipping Tool"
+                     onerror="this.onerror=null;this.src='/static/icons/icon-192.png';">
+    <span class="quickquote-home-hint">Have you tried our QuickQuote Tool? ↗</span>
+            </a>
 
             <h1>Quick Shipping Tool</h1>
 
@@ -547,7 +882,19 @@
 
         <div class="header">
 
-            <h1>Quick Shipping Tool</h1>
+            <a href="https://quickquotetool.ca/"
+               target="_blank"
+               rel="noopener noreferrer"
+   class="quickquote-home-link"
+               title="QuickQuoteTool.ca"
+               aria-label="Open QuickQuoteTool.ca">
+                <img src="/static/icons/icon-original.png"
+                     class="app-logo"
+                     alt="Quick Shipping Tool"
+                     onerror="this.onerror=null;this.src='/static/icons/icon-192.png';">
+    <span class="quickquote-home-hint">Have you tried our QuickQuote Tool? ↗</span>
+            </a>
+<h1>Quick Shipping Tool</h1>
 
             <p>Shipment documentation</p>
 
@@ -692,7 +1039,12 @@
                 id="successSender"
             ></p>
 
-            <button
+            
+        <div class="warning-v3" id="spamWarningV3">
+            <strong>⚠ <span id="spamWarningTitleV3">Important</span></strong>
+            <span id="spamWarningTextV3"></span>
+        </div>
+<button
                 type="button"
                 class="new-shipment"
                 id="newShipmentButton"
@@ -871,6 +1223,64 @@
 
 
 <script>
+
+    // ==============================================
+    // V3 - AUTOMATIC LANGUAGE (FR / EN / ES / DE)
+    // ==============================================
+    const I18N = {
+      en: {
+        shipmentDocumentation:"Shipment documentation", photosSentTo:"Send photos to:",
+        submittedBy:"Submitted by", customerName:"Customer Name", shipmentPO:"Shipment / PO",
+        photos:"PHOTOS", takePhoto:"TAKE PHOTO", photoLibrary:"PHOTO LIBRARY",
+        sendPhotos:"SEND PHOTOS", send1:"SEND 1 PHOTO", sendN:n=>`SEND ${n} PHOTOS`,
+        maxPhotos:"Maximum 5 photos per shipment.", selectRecipient:"Please select at least one recipient.",
+        spamTitle:"Important", spamText:"The email may occasionally be classified as Junk/Spam by the recipient's email provider. If it is not visible in the inbox, please check the Junk/Spam folder.",
+        recipients:"Recipients", addRecipient:"+ ADD RECIPIENT", recipientName:"Recipient name (optional)",
+        recipientEmail:"Email address", remove:"REMOVE", settings:"Settings"
+      },
+      fr: {
+        shipmentDocumentation:"Documentation d'expédition", photosSentTo:"Envoyer les photos à :",
+        submittedBy:"Soumis par", customerName:"Nom du client", shipmentPO:"Expédition / PO",
+        photos:"PHOTOS", takePhoto:"PRENDRE UNE PHOTO", photoLibrary:"PHOTOTHÈQUE",
+        sendPhotos:"ENVOYER LES PHOTOS", send1:"ENVOYER 1 PHOTO", sendN:n=>`ENVOYER ${n} PHOTOS`,
+        maxPhotos:"Maximum de 5 photos par expédition.", selectRecipient:"Sélectionnez au moins un destinataire.",
+        spamTitle:"Important", spamText:"Le courriel peut parfois être classé comme indésirable (Spam) par le fournisseur de messagerie du destinataire. S'il n'apparaît pas dans la boîte de réception, vérifiez le dossier Courrier indésirable/Spam.",
+        recipients:"Destinataires", addRecipient:"+ AJOUTER UN DESTINATAIRE", recipientName:"Nom du destinataire (facultatif)",
+        recipientEmail:"Adresse courriel", remove:"SUPPRIMER", settings:"Réglages"
+      },
+      es: {
+        shipmentDocumentation:"Documentación del envío", photosSentTo:"Enviar fotos a:",
+        submittedBy:"Enviado por", customerName:"Nombre del cliente", shipmentPO:"Envío / PO",
+        photos:"FOTOS", takePhoto:"TOMAR FOTO", photoLibrary:"BIBLIOTECA DE FOTOS",
+        sendPhotos:"ENVIAR FOTOS", send1:"ENVIAR 1 FOTO", sendN:n=>`ENVIAR ${n} FOTOS`,
+        maxPhotos:"Máximo 5 fotos por envío.", selectRecipient:"Seleccione al menos un destinatario.",
+        spamTitle:"Importante", spamText:"El correo puede ser clasificado ocasionalmente como correo no deseado/Spam. Si no aparece en la bandeja de entrada, revise la carpeta de Spam.",
+        recipients:"Destinatarios", addRecipient:"+ AÑADIR DESTINATARIO", recipientName:"Nombre del destinatario (opcional)",
+        recipientEmail:"Correo electrónico", remove:"ELIMINAR", settings:"Configuración"
+      },
+      de: {
+        shipmentDocumentation:"Versanddokumentation", photosSentTo:"Fotos senden an:",
+        submittedBy:"Eingereicht von", customerName:"Kundenname", shipmentPO:"Sendung / PO",
+        photos:"FOTOS", takePhoto:"FOTO AUFNEHMEN", photoLibrary:"FOTOBIBLIOTHEK",
+        sendPhotos:"FOTOS SENDEN", send1:"1 FOTO SENDEN", sendN:n=>`${n} FOTOS SENDEN`,
+        maxPhotos:"Maximal 5 Fotos pro Sendung.", selectRecipient:"Bitte mindestens einen Empfänger auswählen.",
+        spamTitle:"Wichtig", spamText:"Die E-Mail kann gelegentlich als Junk/Spam eingestuft werden. Falls sie nicht im Posteingang erscheint, prüfen Sie bitte den Junk-/Spam-Ordner.",
+        recipients:"Empfänger", addRecipient:"+ EMPFÄNGER HINZUFÜGEN", recipientName:"Empfängername (optional)",
+        recipientEmail:"E-Mail-Adresse", remove:"ENTFERNEN", settings:"Einstellungen"
+      }
+    };
+    function detectAppLanguage() {
+        const langs = navigator.languages || [navigator.language || "en"];
+        for (const item of langs) {
+            const code = String(item).toLowerCase().split("-")[0];
+            if (I18N[code]) return code;
+        }
+        return "en";
+    }
+    const appLanguage = detectAppLanguage();
+    const tr = I18N[appLanguage];
+    document.documentElement.lang = appLanguage;
+
 
     // ==============================================
     // LOCAL STORAGE KEYS
@@ -1284,7 +1694,7 @@
     // PHOTO PICKER
     // ==============================================
 
-    const maxPhotos = 10;
+    const maxPhotos = 5;
 
 
     function addSelectedPhotos(fileList) {
@@ -1549,8 +1959,13 @@
             const shipment =
                 shipmentInput.value.trim();
 
+            const selectedDestinations =
+                window.quickShippingGetSelectedRecipients
+                    ? window.quickShippingGetSelectedRecipients()
+                    : [getDestinationEmail()].filter(Boolean);
+
             const destination =
-                getDestinationEmail();
+                selectedDestinations[0] || "";
 
             const userEmail =
                 getUserEmail();
@@ -1616,7 +2031,7 @@
                       " photos";
 
             confirmDestination.textContent =
-                destination;
+                selectedDestinations.join("\n");
 
             confirmUserEmail.textContent =
                 userEmail;
@@ -1658,8 +2073,13 @@
             const shipment =
                 shipmentInput.value.trim();
 
+            const selectedDestinations =
+                window.quickShippingGetSelectedRecipients
+                    ? window.quickShippingGetSelectedRecipients()
+                    : [getDestinationEmail()].filter(Boolean);
+
             const destination =
-                getDestinationEmail();
+                selectedDestinations[0] || "";
 
             const userEmail =
                 getUserEmail();
@@ -1782,9 +2202,14 @@
                           " photos successfully processed";
 
 
+                // The backend may still expose legacy destination data.
+                // The browser already knows the exact departments selected
+                // for this shipment, so use that selection on the success page.
+                const sentDestinations = selectedDestinations.slice();
+
                 successEmail.textContent =
                     "Destination: " +
-                    destination;
+                    sentDestinations.join(", ");
 
 
                 successSender.textContent =
@@ -1881,6 +2306,13 @@
     // START
     // ==============================================
 
+    
+    // V3 runtime translations
+    const warningTitleV3 = document.getElementById("spamWarningTitleV3");
+    const warningTextV3 = document.getElementById("spamWarningTextV3");
+    if (warningTitleV3) warningTitleV3.textContent = tr.spamTitle;
+    if (warningTextV3) warningTextV3.textContent = tr.spamText;
+
     renderPhotos();
 
     initializeApp();
@@ -1896,6 +2328,375 @@
                 .catch((error) => console.error("Service worker registration failed:", error));
         });
     }
+</script>
+
+
+<script>
+(() => {
+    "use strict";
+
+    const RECIPIENTS_KEY = "quickShippingDepartmentEmailsV33";
+    const LEGACY_KEY = "shippingPhotosDestinationEmail";
+
+    const DEPARTMENTS = [
+        { id: "logistics", en: "Logistics Department", fr: "Département Logistique", es: "Departamento de Logística", de: "Logistikabteilung" },
+        { id: "quality", en: "Quality Department", fr: "Département Qualité", es: "Departamento de Calidad", de: "Qualitätsabteilung" },
+        { id: "customerService", en: "Customer Service Department", fr: "Département Service à la clientèle", es: "Departamento de Servicio al Cliente", de: "Kundendienst" }
+    ];
+
+    const TEXT = {
+        en: {
+            sendTo: "Send Photos To",
+            settingsTitle: "Department Emails",
+            settingsHelp: "Enter or remove the email address for each department.",
+            email: "Email Address",
+            emailPlaceholder: "Enter email address",
+            notConfigured: "Email not configured",
+            select: "Please select at least one department.",
+            invalid: "Please enter a valid email address.",
+            setupTitle: "Department Emails",
+            setupHelp: "Enter the email address for the departments that should receive shipping photos. You can leave a department blank and add it later in Settings."
+        },
+        fr: {
+            sendTo: "Envoyer les photos à",
+            settingsTitle: "Courriels des départements",
+            settingsHelp: "Entrez ou retirez l’adresse courriel de chaque département.",
+            email: "Adresse courriel",
+            emailPlaceholder: "Entrer l’adresse courriel",
+            notConfigured: "Courriel non configuré",
+            select: "Sélectionnez au moins un département.",
+            invalid: "Entrez une adresse courriel valide.",
+            setupTitle: "Courriels des départements",
+            setupHelp: "Entrez l’adresse courriel des départements qui doivent recevoir les photos d’expédition. Vous pouvez laisser un département vide et l’ajouter plus tard dans Réglages."
+        },
+        es: {
+            sendTo: "Enviar fotos a",
+            settingsTitle: "Correos de los departamentos",
+            settingsHelp: "Introduzca o elimine el correo electrónico de cada departamento.",
+            email: "Correo electrónico",
+            emailPlaceholder: "Introducir correo electrónico",
+            notConfigured: "Correo no configurado",
+            select: "Seleccione al menos un departamento.",
+            invalid: "Introduzca un correo electrónico válido.",
+            setupTitle: "Correos de los departamentos",
+            setupHelp: "Introduzca los correos de los departamentos que deben recibir las fotos. Puede dejar un departamento vacío y añadirlo después."
+        },
+        de: {
+            sendTo: "Fotos senden an",
+            settingsTitle: "Abteilungs-E-Mails",
+            settingsHelp: "E-Mail-Adresse für jede Abteilung eingeben oder entfernen.",
+            email: "E-Mail-Adresse",
+            emailPlaceholder: "E-Mail-Adresse eingeben",
+            notConfigured: "E-Mail nicht konfiguriert",
+            select: "Bitte mindestens eine Abteilung auswählen.",
+            invalid: "Bitte eine gültige E-Mail-Adresse eingeben.",
+            setupTitle: "Abteilungs-E-Mails",
+            setupHelp: "Geben Sie die E-Mail-Adressen der Abteilungen ein, die Versandfotos erhalten sollen. Felder können leer bleiben und später ergänzt werden."
+        }
+    };
+
+    const lang = ((navigator.languages && navigator.languages[0]) || navigator.language || "en")
+        .toLowerCase().split("-")[0];
+    const t = TEXT[lang] || TEXT.en;
+    const departmentName = d => d[lang] || d.en;
+    const validEmail = value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
+
+    function emptyState() {
+        return {
+            logistics: "",
+            quality: "",
+            customerService: ""
+        };
+    }
+
+    function loadState() {
+        const state = emptyState();
+
+        try {
+            const stored = JSON.parse(localStorage.getItem(RECIPIENTS_KEY) || "{}");
+            for (const d of DEPARTMENTS) {
+                const value = String(stored[d.id] || "").trim().toLowerCase();
+                if (validEmail(value)) state[d.id] = value;
+            }
+        } catch (_) {}
+
+        // Migrate the previous V3.2 recipient data if present.
+        if (!Object.values(state).some(Boolean)) {
+            try {
+                const old = JSON.parse(localStorage.getItem("quickShippingRecipientsV32") || "[]");
+                const emails = (Array.isArray(old) ? old : [])
+                    .map(x => String((x && x.email) || "").trim().toLowerCase())
+                    .filter(validEmail)
+                    .slice(0, 3);
+                emails.forEach((email, i) => state[DEPARTMENTS[i].id] = email);
+            } catch (_) {}
+        }
+
+        // Migrate the original single destination as Logistics.
+        if (!Object.values(state).some(Boolean)) {
+            const legacy = String(localStorage.getItem(LEGACY_KEY) || "").trim().toLowerCase();
+            if (validEmail(legacy)) state.logistics = legacy;
+        }
+
+        return state;
+    }
+
+    let state = loadState();
+    let selected = new Set(
+        DEPARTMENTS.filter(d => state[d.id]).map(d => d.id)
+    );
+
+    function saveState(next) {
+        state = emptyState();
+        for (const d of DEPARTMENTS) {
+            const email = String(next[d.id] || "").trim().toLowerCase();
+            state[d.id] = validEmail(email) ? email : "";
+        }
+
+        localStorage.setItem(RECIPIENTS_KEY, JSON.stringify(state));
+
+        const first = DEPARTMENTS.map(d => state[d.id]).find(Boolean);
+        if (first) localStorage.setItem(LEGACY_KEY, first);
+        else localStorage.removeItem(LEGACY_KEY);
+
+        selected = new Set(
+            [...selected].filter(id => state[id])
+        );
+        if (!selected.size) {
+            DEPARTMENTS.filter(d => state[d.id]).forEach(d => selected.add(d.id));
+        }
+    }
+
+    function renderSelector() {
+        const info = document.querySelector(".destination-info");
+        if (!info) return;
+
+        const oldDisplay = document.getElementById("destinationDisplay");
+        if (oldDisplay) oldDisplay.style.display = "none";
+
+        let host = document.getElementById("recipientSelectorV32");
+        if (!host) {
+            host = document.createElement("div");
+            host.id = "recipientSelectorV32";
+            host.className = "recipient-panel-v32";
+            info.insertAdjacentElement("afterend", host);
+        }
+
+        host.innerHTML = `<div class="recipient-panel-title-v32">${t.sendTo}</div>`;
+
+        DEPARTMENTS.forEach((d, index) => {
+            const email = state[d.id];
+            const row = document.createElement("div");
+            row.className = "recipient-choice-v32";
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.id = `department_${d.id}`;
+            checkbox.disabled = !email;
+            checkbox.checked = !!email && selected.has(d.id);
+            checkbox.addEventListener("change", () => {
+                checkbox.checked ? selected.add(d.id) : selected.delete(d.id);
+            });
+
+            const label = document.createElement("label");
+            label.htmlFor = checkbox.id;
+            label.style.margin = "0";
+            label.className = "recipient-choice-text-v32";
+            label.innerHTML =
+                `<span class="recipient-choice-name-v32"></span>` +
+                `<span class="recipient-choice-email-v32"></span>`;
+            label.querySelector(".recipient-choice-name-v32").textContent = departmentName(d);
+            label.querySelector(".recipient-choice-email-v32").textContent = email || t.notConfigured;
+
+            row.append(checkbox, label);
+            host.appendChild(row);
+        });
+    }
+
+    function editorHTML(context) {
+        const cards = DEPARTMENTS.map(d => `
+            <div class="recipient-card-v32" data-department="${d.id}">
+                <div class="recipient-card-heading-v32">${departmentName(d)}</div>
+                <label>${t.email}</label>
+                <input
+                    type="email"
+                    class="departmentEmailV33"
+                    data-department="${d.id}"
+                    autocomplete="email"
+                    placeholder="${t.emailPlaceholder}"
+                >
+            </div>
+        `).join("");
+
+        return `
+            <div class="recipient-editor-title-v32">${context === "setup" ? t.setupTitle : t.settingsTitle}</div>
+            <p class="recipient-editor-help-v32">${context === "setup" ? t.setupHelp : t.settingsHelp}</p>
+            <div>${cards}</div>
+        `;
+    }
+
+    function fillEditor(root) {
+        DEPARTMENTS.forEach(d => {
+            const input = root.querySelector(`.departmentEmailV33[data-department="${d.id}"]`);
+            if (input) input.value = state[d.id] || "";
+        });
+    }
+
+    function readEditor(root) {
+        const next = emptyState();
+        for (const d of DEPARTMENTS) {
+            const input = root.querySelector(`.departmentEmailV33[data-department="${d.id}"]`);
+            const value = String(input?.value || "").trim();
+            if (value && !validEmail(value)) {
+                input?.focus();
+                alert(t.invalid);
+                return null;
+            }
+            next[d.id] = value;
+        }
+        return next;
+    }
+
+    function buildSettingsEditor() {
+        const modal = document.getElementById("settingsModal");
+        if (!modal) return;
+
+        let editor = document.getElementById("recipientEditorV32");
+        if (!editor) {
+            editor = document.createElement("div");
+            editor.id = "recipientEditorV32";
+            editor.className = "recipient-editor-v32";
+            const oldLabel = modal.querySelector('label[for="settingsDestinationEmail"]');
+            if (oldLabel) oldLabel.insertAdjacentElement("beforebegin", editor);
+            else modal.querySelector(".modal-buttons")?.insertAdjacentElement("beforebegin", editor);
+        }
+
+        editor.innerHTML = editorHTML("settings");
+        fillEditor(editor);
+    }
+
+    function enhanceFirstSetup() {
+        const setup = document.querySelector(".setup-content");
+        const destination = document.getElementById("setupDestinationEmail");
+        if (!setup || !destination || document.getElementById("setupDepartmentsV33")) return;
+
+        const destinationLabel = setup.querySelector('label[for="setupDestinationEmail"]');
+
+        const editor = document.createElement("div");
+        editor.id = "setupDepartmentsV33";
+        editor.className = "recipient-editor-v32";
+        editor.innerHTML = editorHTML("setup");
+
+        destinationLabel?.insertAdjacentElement("beforebegin", editor);
+
+        // Hide the obsolete single-recipient field entirely.
+        if (destinationLabel) destinationLabel.style.display = "none";
+        destination.style.display = "none";
+        destination.removeAttribute("required");
+
+        fillEditor(editor);
+    }
+
+    // First-use: store fixed department emails before the legacy handler.
+    document.getElementById("saveSetupButton")?.addEventListener("click", event => {
+        const editor = document.getElementById("setupDepartmentsV33");
+        if (!editor) return;
+
+        const next = readEditor(editor);
+        if (!next) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return;
+        }
+
+        const configured = DEPARTMENTS.map(d => next[d.id]).filter(Boolean);
+        if (!configured.length) {
+            alert(t.select);
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return;
+        }
+
+        saveState(next);
+
+        // Feed the first configured email to the existing setup logic.
+        const legacyField = document.getElementById("setupDestinationEmail");
+        if (legacyField) legacyField.value = configured[0];
+
+        renderSelector();
+    }, true);
+
+    document.getElementById("settingsButton")?.addEventListener("click", () => {
+        buildSettingsEditor();
+    }, true);
+
+    document.getElementById("settingsSaveButton")?.addEventListener("click", event => {
+        const editor = document.getElementById("recipientEditorV32");
+        if (!editor) return;
+
+        const next = readEditor(editor);
+        if (!next) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return;
+        }
+
+        const configured = DEPARTMENTS.map(d => next[d.id]).filter(Boolean);
+        if (!configured.length) {
+            alert(t.select);
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return;
+        }
+
+        saveState(next);
+
+        const legacyField = document.getElementById("settingsDestinationEmail");
+        if (legacyField) legacyField.value = configured[0];
+
+        renderSelector();
+    }, true);
+
+    // Expose the exact current department selection to the original handlers.
+    window.quickShippingGetSelectedRecipients = function() {
+        return DEPARTMENTS
+            .filter(d => selected.has(d.id) && state[d.id])
+            .map(d => state[d.id]);
+    };
+
+    // Add selected department emails to every FormData used by the upload code.
+    const NativeFormData = window.FormData;
+    window.FormData = function(form) {
+        const fd = new NativeFormData(form);
+        const chosen = DEPARTMENTS
+            .filter(d => selected.has(d.id) && state[d.id])
+            .map(d => state[d.id]);
+
+        if (chosen.length) {
+            fd.set("destination", chosen[0]);
+            fd.delete("destinations");
+            chosen.forEach(email => fd.append("destinations", email));
+        }
+        return fd;
+    };
+    window.FormData.prototype = NativeFormData.prototype;
+
+    document.getElementById("sendButton")?.addEventListener("click", event => {
+        const chosen = DEPARTMENTS.filter(d => selected.has(d.id) && state[d.id]);
+        if (!chosen.length) {
+            alert(t.select);
+            event.preventDefault();
+            event.stopImmediatePropagation();
+        }
+    }, true);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        state = loadState();
+        selected = new Set(DEPARTMENTS.filter(d => state[d.id]).map(d => d.id));
+        enhanceFirstSetup();
+        renderSelector();
+    });
+})();
 </script>
 
 </body>
