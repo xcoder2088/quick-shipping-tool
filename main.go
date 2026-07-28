@@ -126,7 +126,7 @@ func main() {
 
 	fmt.Println("=================================")
 	fmt.Println("  Quick Shipping Tool")
-	fmt.Println("  http://localhost:8081")
+	fmt.Println("  http://localhost:8181")
 
 	if apiKey != "" && fromEmail != "" {
 		fmt.Println("  MailerSend: READY")
@@ -142,7 +142,7 @@ func main() {
 
 	log.Fatal(
 		http.ListenAndServe(
-			":8081",
+			":8181",
 			nil,
 		),
 	)
