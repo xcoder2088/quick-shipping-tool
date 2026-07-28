@@ -255,8 +255,49 @@
         }
 
         .photo-library {
-            background: #e5e7eb;
-            color: #111827;
+            background: #dc2626;
+            color: white;
+        }
+
+        .take-photo {
+            background: #dc2626;
+            color: white;
+        }
+
+        .take-photo.photo-ready,
+        .photo-library.photo-ready {
+            background: #16a34a;
+            color: white;
+        }
+
+        .send {
+            background: #2563eb;
+            color: white;
+        }
+
+        .send:disabled {
+            background: #93b4f5;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        #customer.field-warning,
+        #shipment.field-warning {
+            border: 2px solid #dc2626 !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.10);
+            background: #fffafa;
+        }
+
+        #customer.field-warning:focus,
+        #shipment.field-warning:focus {
+            border-color: #dc2626 !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.16);
+        }
+
+        .either-required-note {
+            margin: -4px 0 14px;
+            color: #6b7280;
+            font-size: 13px;
         }
 
         @media (max-width: 420px) {
@@ -754,12 +795,28 @@ label[for="settingsDestinationEmail"] {
 
         .quickquote-home-hint {
             display: inline-block;
-            margin-top: -2px;
-            margin-bottom: 8px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
             font-size: 12px;
             font-weight: 700;
             color: #2563eb;
             letter-spacing: .01em;
+            line-height: 1.25;
+            transition: background .18s ease, border-color .18s ease,
+                        box-shadow .18s ease, transform .18s ease;
+        }
+
+        .quickquote-home-link:hover .quickquote-home-hint,
+        .quickquote-home-link:focus-visible .quickquote-home-hint {
+            background: #dbeafe;
+            border-color: #93c5fd;
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.14);
+            transform: translateY(-1px);
+            text-decoration: underline;
         }
 
         .quickquote-home-link .app-logo {
@@ -821,7 +878,7 @@ label[for="settingsDestinationEmail"] {
                      class="app-logo"
                      alt="Quick Shipping Tool"
                      onerror="this.onerror=null;this.src='/static/icons/icon-192.png';">
-    <span class="quickquote-home-hint">Have you tried our QuickQuote Tool? ↗</span>
+    <span class="quickquote-home-hint">Have you tried our QuickQuote Tool?</span>
             </a>
 
             <h1>Quick Shipping Tool</h1>
@@ -892,7 +949,7 @@ label[for="settingsDestinationEmail"] {
                      class="app-logo"
                      alt="Quick Shipping Tool"
                      onerror="this.onerror=null;this.src='/static/icons/icon-192.png';">
-    <span class="quickquote-home-hint">Have you tried our QuickQuote Tool? ↗</span>
+    <span class="quickquote-home-hint">Have you tried our QuickQuote Tool?</span>
             </a>
 <h1>Quick Shipping Tool</h1>
 
@@ -1267,6 +1324,16 @@ label[for="settingsDestinationEmail"] {
         spamTitle:"Wichtig", spamText:"Die E-Mail kann gelegentlich als Junk/Spam eingestuft werden. Falls sie nicht im Posteingang erscheint, prüfen Sie bitte den Junk-/Spam-Ordner.",
         recipients:"Empfänger", addRecipient:"+ EMPFÄNGER HINZUFÜGEN", recipientName:"Empfängername (optional)",
         recipientEmail:"E-Mail-Adresse", remove:"ENTFERNEN", settings:"Einstellungen"
+      },
+      zh: {
+        shipmentDocumentation:"货运文件", photosSentTo:"照片将发送至：",
+        submittedBy:"提交者", customerName:"客户名称", shipmentPO:"货运 / PO",
+        photos:"照片", takePhoto:"拍照", photoLibrary:"照片库",
+        sendPhotos:"发送照片", send1:"发送 1 张照片", sendN:n=>`发送 ${n} 张照片`,
+        maxPhotos:"每次货运最多 5 张照片。", selectRecipient:"请至少选择一个部门。",
+        spamTitle:"重要", spamText:"邮件有时可能会被收件人的邮件服务商归类为垃圾邮件。如果收件箱中没有看到，请检查垃圾邮件文件夹。",
+        recipients:"收件人", addRecipient:"+ 添加收件人", recipientName:"收件人名称（可选）",
+        recipientEmail:"电子邮件地址", remove:"删除", settings:"设置"
       }
     };
     function detectAppLanguage() {
@@ -1280,6 +1347,41 @@ label[for="settingsDestinationEmail"] {
     const appLanguage = detectAppLanguage();
     const tr = I18N[appLanguage];
     document.documentElement.lang = appLanguage;
+
+
+    const UI_TEXT = {
+      en: {hint:"Have you tried our QuickQuote Tool?", first:"First time setup", configure:"Configure your shipping email preferences.", yourEmail:"Your Email", emailHelp:"Your email will identify who submitted the shipment and will later be used as the reply address. Both addresses are saved on this device.", saveContinue:"SAVE & CONTINUE", confirmTitle:"Confirm Shipment", verify:"Please verify before sending.", customer:"Customer", sendTo:"Send To", sentBy:"Sent By", cancel:"CANCEL", confirmSend:"CONFIRM & SEND", settingsSubtitle:"Change your email preferences.", save:"SAVE", photosSent:"PHOTOS SENT", newShipment:"NEW SHIPMENT", customerPlaceholder:"Enter customer name", shipmentPlaceholder:"Enter shipment / PO", eitherRequired:"* Customer Name or Shipment / PO — at least one is required", referenceWarning:"Please enter a Customer Name or a Shipment / PO."},
+      fr: {hint:"Avez-vous essayé notre outil QuickQuote ?", first:"Première configuration", configure:"Configurez vos préférences de courriel pour les expéditions.", yourEmail:"Votre courriel", emailHelp:"Votre courriel permet d’identifier la personne qui a soumis l’expédition et sera utilisé comme adresse de réponse. Les adresses sont enregistrées sur cet appareil.", saveContinue:"ENREGISTRER ET CONTINUER", confirmTitle:"Confirmer l’expédition", verify:"Veuillez vérifier avant l’envoi.", customer:"Client", sendTo:"Envoyer à", sentBy:"Envoyé par", cancel:"ANNULER", confirmSend:"CONFIRMER ET ENVOYER", settingsSubtitle:"Modifiez vos préférences de courriel.", save:"ENREGISTRER", photosSent:"PHOTOS ENVOYÉES", newShipment:"NOUVELLE EXPÉDITION", customerPlaceholder:"Entrer le nom du client", shipmentPlaceholder:"Entrer l’expédition / PO", eitherRequired:"* Nom du client ou Expédition / PO — au moins un des deux est obligatoire", referenceWarning:"Veuillez entrer un nom de client ou un numéro d’expédition / PO."},
+      es: {hint:"¿Has probado nuestra herramienta QuickQuote?", first:"Configuración inicial", configure:"Configure sus preferencias de correo para los envíos.", yourEmail:"Su correo electrónico", emailHelp:"Su correo identifica quién envió el envío y se utilizará como dirección de respuesta. Las direcciones se guardan en este dispositivo.", saveContinue:"GUARDAR Y CONTINUAR", confirmTitle:"Confirmar envío", verify:"Verifique la información antes de enviar.", customer:"Cliente", sendTo:"Enviar a", sentBy:"Enviado por", cancel:"CANCELAR", confirmSend:"CONFIRMAR Y ENVIAR", settingsSubtitle:"Cambie sus preferencias de correo electrónico.", save:"GUARDAR", photosSent:"FOTOS ENVIADAS", newShipment:"NUEVO ENVÍO", customerPlaceholder:"Introducir nombre del cliente", shipmentPlaceholder:"Introducir envío / PO", eitherRequired:"* Nombre del cliente o Envío / PO — al menos uno es obligatorio", referenceWarning:"Introduzca un nombre de cliente o un envío / PO."},
+      de: {hint:"Haben Sie unser QuickQuote-Tool ausprobiert?", first:"Ersteinrichtung", configure:"Konfigurieren Sie Ihre E-Mail-Einstellungen für Sendungen.", yourEmail:"Ihre E-Mail-Adresse", emailHelp:"Ihre E-Mail-Adresse kennzeichnet, wer die Sendung eingereicht hat, und wird später als Antwortadresse verwendet. Die Adressen werden auf diesem Gerät gespeichert.", saveContinue:"SPEICHERN & WEITER", confirmTitle:"Sendung bestätigen", verify:"Bitte vor dem Senden überprüfen.", customer:"Kunde", sendTo:"Senden an", sentBy:"Gesendet von", cancel:"ABBRECHEN", confirmSend:"BESTÄTIGEN & SENDEN", settingsSubtitle:"Ändern Sie Ihre E-Mail-Einstellungen.", save:"SPEICHERN", photosSent:"FOTOS GESENDET", newShipment:"NEUE SENDUNG", customerPlaceholder:"Kundenname eingeben", shipmentPlaceholder:"Sendung / PO eingeben", eitherRequired:"* Kundenname oder Sendung / PO — mindestens eines ist erforderlich", referenceWarning:"Bitte geben Sie einen Kundennamen oder eine Sendung / PO ein."},
+      zh: {hint:"试过我们的 QuickQuote 工具吗？", first:"首次设置", configure:"配置您的货运邮件偏好。", yourEmail:"您的电子邮件", emailHelp:"您的电子邮件用于识别提交货运资料的人员，并将作为回复地址。所有地址都会保存在此设备上。", saveContinue:"保存并继续", confirmTitle:"确认货运", verify:"发送前请核对信息。", customer:"客户", sendTo:"发送至", sentBy:"提交者", cancel:"取消", confirmSend:"确认并发送", settingsSubtitle:"更改您的电子邮件偏好。", save:"保存", photosSent:"照片已发送", newShipment:"新建货运", customerPlaceholder:"输入客户名称", shipmentPlaceholder:"输入货运 / PO", eitherRequired:"* 客户名称或货运 / PO — 至少填写一项", referenceWarning:"请输入客户名称或货运 / PO。"}
+    };
+    const ui = UI_TEXT[appLanguage] || UI_TEXT.en;
+    function applyStaticTranslations() {
+      document.querySelectorAll('.quickquote-home-hint').forEach(el => el.textContent = ui.hint);
+      const setupSubtitle = document.querySelector('.setup-subtitle');
+      if (setupSubtitle) setupSubtitle.innerHTML = `${ui.first}<br>${ui.configure}`;
+      const mainHeaderP = document.querySelector('#mainScreen .header > p'); if (mainHeaderP) mainHeaderP.textContent = tr.shipmentDocumentation;
+      const destStrong = document.querySelector('.destination-info > strong'); if (destStrong) destStrong.textContent = tr.photosSentTo;
+      const senderInfo = document.querySelector('.sender-info'); if (senderInfo && senderInfo.firstChild) senderInfo.firstChild.textContent = ui.sentBy + ': ';
+      const labelText = (sel, text) => { const el=document.querySelector(sel); if(el && el.firstChild) el.firstChild.textContent='\n                '+text+'\n                '; };
+      labelText('label[for="setupUserEmail"]', ui.yourEmail); labelText('label[for="customer"]', tr.customerName); labelText('label[for="shipment"]', tr.shipmentPO); labelText('label[for="settingsUserEmail"]', ui.yourEmail);
+      const help=document.querySelector('.email-help'); if(help) help.textContent=ui.emailHelp;
+      const set=(sel,text)=>{const el=document.querySelector(sel); if(el) el.textContent=text;};
+      set('#saveSetupButton',ui.saveContinue); set('.photo-title',tr.photos); set('#takePhotoButton',tr.takePhoto); set('#libraryButton',tr.photoLibrary); set('#sendButton',tr.sendPhotos); set('#successScreen h2',ui.photosSent); set('#newShipmentButton',ui.newShipment);
+      set('#confirmModal h2',ui.confirmTitle); set('#confirmModal .modal-subtitle',ui.verify);
+      const cl=document.querySelectorAll('#confirmModal .confirm-label'); [ui.customer,tr.shipmentPO,tr.photos,ui.sendTo,ui.sentBy].forEach((x,i)=>{if(cl[i]) cl[i].textContent=x;});
+      set('#cancelButton',ui.cancel); set('#confirmButton',ui.confirmSend); set('#settingsModal h2',tr.settings); set('#settingsModal .modal-subtitle',ui.settingsSubtitle); set('#settingsCancelButton',ui.cancel); set('#settingsSaveButton',ui.save);
+      const settingsBtn=document.getElementById('settingsButton'); if(settingsBtn){settingsBtn.title=tr.settings;settingsBtn.setAttribute('aria-label',tr.settings);}
+      const customer=document.getElementById('customer'); if(customer) customer.placeholder=ui.customerPlaceholder;
+      const shipment=document.getElementById('shipment'); if(shipment) shipment.placeholder=ui.shipmentPlaceholder;
+      document.querySelectorAll('label[for="customer"] .required, label[for="shipment"] .required').forEach(el => el.style.display='none');
+      if (shipment && !document.getElementById('eitherRequiredNote')) {
+        const note=document.createElement('div'); note.id='eitherRequiredNote'; note.className='either-required-note'; note.textContent=ui.eitherRequired; shipment.insertAdjacentElement('afterend', note);
+      }
+      const setupUser=document.getElementById('setupUserEmail'); if(setupUser) setupUser.placeholder=tr.recipientEmail;
+    }
+    applyStaticTranslations();
 
 
     // ==============================================
@@ -1347,6 +1449,9 @@ label[for="settingsDestinationEmail"] {
 
     const photoList =
         document.getElementById("photoList");
+
+    customerInput.addEventListener("input", updateSendButton);
+    shipmentInput.addEventListener("input", updateSendButton);
 
 
     // Confirmation
@@ -1920,30 +2025,29 @@ label[for="settingsDestinationEmail"] {
 
     function updateSendButton() {
 
-        if (photos.length === 0) {
+        const hasPhoto = photos.length > 0;
+        const hasReference = customerInput.value.trim() !== "" || shipmentInput.value.trim() !== "";
 
-            sendButton.disabled =
-                true;
-
-            sendButton.textContent =
-                "SEND PHOTOS";
-
-            return;
+        // If either reference field is completed, clear the red warning from both.
+        if (hasReference) {
+            customerInput.classList.remove("field-warning");
+            shipmentInput.classList.remove("field-warning");
         }
 
+        // Photo action buttons are red until at least one photo is present.
+        // Once a photo is taken or loaded, both become green.
+        takePhotoButton.classList.toggle("photo-ready", hasPhoto);
+        libraryButton.classList.toggle("photo-ready", hasPhoto);
 
-        sendButton.disabled =
-            false;
-
+        sendButton.disabled = !(hasPhoto && hasReference);
 
         sendButton.textContent =
-            photos.length === 1
-                ? "SEND 1 PHOTO"
-                : "SEND " +
-                  photos.length +
-                  " PHOTOS";
+            photos.length === 0
+                ? tr.sendPhotos
+                : photos.length === 1
+                    ? tr.send1
+                    : tr.sendN(photos.length);
     }
-
 
     // ==============================================
     // OPEN CONFIRMATION
@@ -1971,25 +2075,14 @@ label[for="settingsDestinationEmail"] {
                 getUserEmail();
 
 
-            if (!customer) {
+            if (!customer && !shipment) {
 
-                alert(
-                    "Please enter the Customer Name."
-                );
+                customerInput.classList.add("field-warning");
+                shipmentInput.classList.add("field-warning");
+
+                alert(ui.referenceWarning);
 
                 customerInput.focus();
-
-                return;
-            }
-
-
-            if (!shipment) {
-
-                alert(
-                    "Please enter the Shipment / PO."
-                );
-
-                shipmentInput.focus();
 
                 return;
             }
@@ -2339,9 +2432,9 @@ label[for="settingsDestinationEmail"] {
     const LEGACY_KEY = "shippingPhotosDestinationEmail";
 
     const DEPARTMENTS = [
-        { id: "logistics", en: "Logistics Department", fr: "Département Logistique", es: "Departamento de Logística", de: "Logistikabteilung" },
-        { id: "quality", en: "Quality Department", fr: "Département Qualité", es: "Departamento de Calidad", de: "Qualitätsabteilung" },
-        { id: "customerService", en: "Customer Service Department", fr: "Département Service à la clientèle", es: "Departamento de Servicio al Cliente", de: "Kundendienst" }
+        { id: "logistics", en: "Logistics Department", fr: "Département Logistique", es: "Departamento de Logística", de: "Logistikabteilung", zh: "物流部门" },
+        { id: "quality", en: "Quality Department", fr: "Département Qualité", es: "Departamento de Calidad", de: "Qualitätsabteilung", zh: "质量部门" },
+        { id: "customerService", en: "Customer Service Department", fr: "Département Service à la clientèle", es: "Departamento de Servicio al Cliente", de: "Kundendienst", zh: "客户服务部门" }
     ];
 
     const TEXT = {
@@ -2392,6 +2485,18 @@ label[for="settingsDestinationEmail"] {
             invalid: "Bitte eine gültige E-Mail-Adresse eingeben.",
             setupTitle: "Abteilungs-E-Mails",
             setupHelp: "Geben Sie die E-Mail-Adressen der Abteilungen ein, die Versandfotos erhalten sollen. Felder können leer bleiben und später ergänzt werden."
+        },
+        zh: {
+            sendTo: "发送照片至",
+            settingsTitle: "部门邮箱",
+            settingsHelp: "输入或删除各部门的电子邮件地址。",
+            email: "电子邮件地址",
+            emailPlaceholder: "输入电子邮件地址",
+            notConfigured: "尚未配置邮箱",
+            select: "请至少选择一个部门。",
+            invalid: "请输入有效的电子邮件地址。",
+            setupTitle: "部门邮箱",
+            setupHelp: "请输入需要接收货运照片的部门邮箱。您可以将某个部门留空，之后在设置中添加。"
         }
     };
 
