@@ -491,6 +491,19 @@ func uploadHandler(
 	}
 
 	// ==================================================
+	// OPTIONAL NOTES / COMMENTS
+	// ==================================================
+
+	notes := strings.TrimSpace(r.FormValue("notes"))
+	if len([]rune(notes)) > 500 {
+		writeJSON(w, http.StatusBadRequest, UploadResponse{
+			Success: false,
+			Message: "Notes / Comments cannot exceed 500 characters",
+		})
+		return
+	}
+
+	// ==================================================
 	// PHOTOS
 	// ==================================================
 
@@ -750,6 +763,19 @@ func uploadHandler(
 		shipmentOriginal,
 	)
 
+	notesText := ""
+	notesHTML := ""
+	if notes != "" {
+		notesText = fmt.Sprintf("Notes / Comments:\n%s\n\n", notes)
+		notesHTML = fmt.Sprintf(
+			`<div style="margin-top:20px; padding:14px 16px; background:#f3f4f6; border-radius:10px;">
+				<strong>Notes / Comments:</strong><br>
+				<span style="white-space:pre-wrap;">%s</span>
+			</div>`,
+			htmlEscape(notes),
+		)
+	}
+
 	emailBody := fmt.Sprintf(
 		"Quick Shipping Tool\n"+
 			"Shipping Photo Documentation\n\n"+
@@ -758,6 +784,7 @@ func uploadHandler(
 			"Submitted by: %s\n"+
 			"Date: %s\n"+
 			"Photos attached: %d\n\n"+
+			"%s"+
 			"The attached photos were submitted through Quick Shipping Tool "+
 			"for shipment documentation and record-keeping purposes.\n\n"+
 			"Quick Shipping Tool\n"+
@@ -768,6 +795,7 @@ func uploadHandler(
 		userEmail,
 		now.Format("2006-01-02 15:04:05"),
 		saved,
+		notesText,
 	)
 
 	emailHTML := fmt.Sprintf(
@@ -804,6 +832,8 @@ func uploadHandler(
 			</tr>
 		</table>
 
+		%s
+
 		<p style="margin-top:24px;">
 			The attached photos were submitted through Quick Shipping Tool
 			for shipment documentation and record-keeping purposes.
@@ -824,6 +854,7 @@ func uploadHandler(
 		htmlEscape(userEmail),
 		htmlEscape(now.Format("2006-01-02 15:04:05")),
 		saved,
+		notesHTML,
 	)
 
 	// ==================================================
