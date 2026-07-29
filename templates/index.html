@@ -418,6 +418,43 @@
             word-break: break-word;
         }
 
+        .confirm-notes {
+            margin: 0 0 22px;
+        }
+
+        .confirm-notes label {
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            text-transform: uppercase;
+        }
+
+        #confirmNotes {
+            width: 100%;
+            min-height: 96px;
+            resize: vertical;
+            border: 2px solid #d1d5db;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font: inherit;
+            font-size: 16px;
+            color: #111827;
+            background: white;
+        }
+
+        #confirmNotes:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .notes-help {
+            margin: 6px 0 0;
+            color: #6b7280;
+            font-size: 12px;
+            text-align: right;
+        }
+
         .modal-buttons {
             display: flex;
             gap: 10px;
@@ -1192,6 +1229,12 @@ label[for="settingsDestinationEmail"] {
 
         </div>
 
+        <div class="confirm-notes">
+            <label for="confirmNotes">Notes / Comments (optional)</label>
+            <textarea id="confirmNotes" maxlength="500" placeholder="Add a note or comment..."></textarea>
+            <p class="notes-help"><span id="notesCount">0</span>/500</p>
+        </div>
+
         <div class="modal-buttons">
 
             <button
@@ -1479,6 +1522,16 @@ label[for="settingsDestinationEmail"] {
 
     const confirmButton =
         document.getElementById("confirmButton");
+
+    const confirmNotes =
+        document.getElementById("confirmNotes");
+
+    const notesCount =
+        document.getElementById("notesCount");
+
+    confirmNotes.addEventListener("input", () => {
+        notesCount.textContent = confirmNotes.value.length;
+    });
 
 
     // Settings
@@ -2234,6 +2287,11 @@ label[for="settingsDestinationEmail"] {
                 userEmail
             );
 
+            formData.append(
+                "notes",
+                confirmNotes.value.trim()
+            );
+
 
             photos.forEach(
                 (photo) => {
@@ -2370,6 +2428,8 @@ label[for="settingsDestinationEmail"] {
 
             customerInput.value = "";
             shipmentInput.value = "";
+            confirmNotes.value = "";
+            notesCount.textContent = "0";
             cameraInput.value = "";
             libraryInput.value = "";
 
