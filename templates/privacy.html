@@ -16,7 +16,12 @@ footer{
 footer p{margin:6px 0}
 footer a{color:#1565d8;text-decoration:none;font-weight:600}
 footer a:hover{text-decoration:underline}
+.top-nav{background:#050f28;padding:12px 20px}
+.back-link{color:#fff;text-decoration:none;font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.back-link:hover{text-decoration:underline}
+.back-link .arrow{font-size:18px;line-height:1}
 </style></head><body>
+<div class="top-nav"><a href="https://shipping.quickquotetool.ca/" id="backLink" class="back-link"><span class="arrow" aria-hidden="true">←</span><span id="backLabel"></span></a></div>
 <header><img src="/static/icons/icon-192.png" onerror="this.style.display='none'"><h2>Quick Shipping Tool</h2></header>
 <div class="wrap">
 <h1 id="h1"></h1>
@@ -56,7 +61,7 @@ footer a:hover{text-decoration:underline}
       liNoAnalytics:"No analytics.", liNoGps:"No GPS location.", liNoCloud:"No cloud storage of shipment photos.",
       h2HowPhotos:"How photos are used",
       howPhotosText:"Photos are attached only to the email created by the user and are never uploaded to Quick Shipping Tool servers.",
-      h2Contact:"Contact", poweredBy:"Powered by " },
+      h2Contact:"Contact", poweredBy:"Powered by ", backLabel:"Back" },
     fr: { pageTitle:"Politique de confidentialité", h1:"Politique de confidentialité",
       intro:"Quick Shipping Tool permet aux utilisateurs de documenter leurs expéditions en prenant des photos et en les envoyant par courriel.",
       h2Info:"Renseignements recueillis", liPhotos:"Photos sélectionnées ou prises par l'utilisateur.",
@@ -65,7 +70,7 @@ footer a:hover{text-decoration:underline}
       liNoAnalytics:"Aucune analyse (analytics).", liNoGps:"Aucune localisation GPS.", liNoCloud:"Aucun stockage infonuagique des photos d'expédition.",
       h2HowPhotos:"Utilisation des photos",
       howPhotosText:"Les photos sont jointes uniquement au courriel créé par l'utilisateur et ne sont jamais téléversées vers les serveurs de Quick Shipping Tool.",
-      h2Contact:"Contact", poweredBy:"Propulsé par " },
+      h2Contact:"Contact", poweredBy:"Propulsé par ", backLabel:"Retour" },
     es: { pageTitle:"Política de privacidad", h1:"Política de privacidad",
       intro:"Quick Shipping Tool permite a los usuarios documentar envíos tomando fotos y enviándolas por correo electrónico.",
       h2Info:"Información recopilada", liPhotos:"Fotos seleccionadas o tomadas por el usuario.",
@@ -74,7 +79,7 @@ footer a:hover{text-decoration:underline}
       liNoAnalytics:"Sin análisis (analytics).", liNoGps:"Sin ubicación GPS.", liNoCloud:"Sin almacenamiento en la nube de las fotos de envío.",
       h2HowPhotos:"Uso de las fotos",
       howPhotosText:"Las fotos se adjuntan únicamente al correo creado por el usuario y nunca se cargan a los servidores de Quick Shipping Tool.",
-      h2Contact:"Contacto", poweredBy:"Desarrollado por " },
+      h2Contact:"Contacto", poweredBy:"Desarrollado por ", backLabel:"Volver" },
     de: { pageTitle:"Datenschutzrichtlinie", h1:"Datenschutzrichtlinie",
       intro:"Mit Quick Shipping Tool können Benutzer Sendungen dokumentieren, indem sie Fotos aufnehmen und per E-Mail versenden.",
       h2Info:"Erhobene Informationen", liPhotos:"Vom Benutzer ausgewählte oder aufgenommene Fotos.",
@@ -83,7 +88,7 @@ footer a:hover{text-decoration:underline}
       liNoAnalytics:"Keine Analysen (Analytics).", liNoGps:"Keine GPS-Standortdaten.", liNoCloud:"Keine Cloud-Speicherung von Sendungsfotos.",
       h2HowPhotos:"Verwendung der Fotos",
       howPhotosText:"Fotos werden ausschließlich der vom Benutzer erstellten E-Mail angehängt und niemals auf die Server von Quick Shipping Tool hochgeladen.",
-      h2Contact:"Kontakt", poweredBy:"Bereitgestellt von " },
+      h2Contact:"Kontakt", poweredBy:"Bereitgestellt von ", backLabel:"Zurück" },
     zh: { pageTitle:"隐私政策", h1:"隐私政策",
       intro:"Quick Shipping Tool 允许用户通过拍照并通过电子邮件发送来记录货运信息。",
       h2Info:"收集的信息", liPhotos:"用户选择或拍摄的照片。",
@@ -92,7 +97,7 @@ footer a:hover{text-decoration:underline}
       liNoAnalytics:"无分析统计。", liNoGps:"无 GPS 定位。", liNoCloud:"不在云端存储货运照片。",
       h2HowPhotos:"照片的使用方式",
       howPhotosText:"照片仅附加在用户创建的电子邮件中，绝不会上传到 Quick Shipping Tool 的服务器。",
-      h2Contact:"联系方式", poweredBy:"技术支持：" }
+      h2Contact:"联系方式", poweredBy:"技术支持：", backLabel:"返回" }
   };
 
   function detectLang(){
@@ -119,6 +124,17 @@ footer a:hover{text-decoration:underline}
       el.textContent = t[key];
     }
   });
+
+  var backLink = document.getElementById("backLink");
+  if (backLink) {
+    backLink.addEventListener("click", function(e){
+      if (window.history.length > 1) {
+        e.preventDefault();
+        window.history.back();
+      }
+      // otherwise let the default href send the user back to the app
+    });
+  }
 })();
 </script>
 </body></html>

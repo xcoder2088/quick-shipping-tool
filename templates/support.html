@@ -16,8 +16,13 @@ footer{
 footer p{margin:6px 0}
 footer a{color:#1565d8;text-decoration:none;font-weight:600}
 footer a:hover{text-decoration:underline}
+.top-nav{background:#050f28;padding:12px 20px}
+.back-link{color:#fff;text-decoration:none;font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.back-link:hover{text-decoration:underline}
+.back-link .arrow{font-size:18px;line-height:1}
 @media(max-width:600px){header{padding:16px}header h2{font-size:22px}.wrap{border-radius:14px}}
 </style></head><body>
+<div class="top-nav"><a href="https://shipping.quickquotetool.ca/" id="backLink" class="back-link"><span class="arrow" aria-hidden="true">←</span><span id="backLabel"></span></a></div>
 <header><img src="/static/icons/icon-192.png" onerror="this.style.display='none'"><h2>Quick Shipping Tool</h2></header>
 <div class="wrap">
 <h1 id="h1"></h1>
@@ -44,27 +49,27 @@ footer a:hover{text-decoration:underline}
       emailLabel:"Email:", h2ResponseTime:"Typical response time", responseTimeText:"Within 48 business hours.",
       h2CommonIssues:"Common issues", liConfigEmail:"Configuring email recipients.",
       liTakePhotos:"Taking shipment photos.", liSendDocs:"Sending shipment documentation.",
-      poweredBy:"Powered by " },
+      poweredBy:"Powered by ", backLabel:"Back" },
     fr: { pageTitle:"Assistance", h1:"Assistance", intro:"Besoin d'aide avec Quick Shipping Tool ?",
       emailLabel:"Courriel :", h2ResponseTime:"Délai de réponse habituel", responseTimeText:"Dans un délai de 48 heures ouvrables.",
       h2CommonIssues:"Problèmes fréquents", liConfigEmail:"Configuration des destinataires courriel.",
       liTakePhotos:"Prise de photos d'expédition.", liSendDocs:"Envoi de la documentation d'expédition.",
-      poweredBy:"Propulsé par " },
+      poweredBy:"Propulsé par ", backLabel:"Retour" },
     es: { pageTitle:"Soporte", h1:"Soporte", intro:"¿Necesita ayuda con Quick Shipping Tool?",
       emailLabel:"Correo electrónico:", h2ResponseTime:"Tiempo de respuesta habitual", responseTimeText:"En un plazo de 48 horas hábiles.",
       h2CommonIssues:"Problemas comunes", liConfigEmail:"Configuración de destinatarios de correo.",
       liTakePhotos:"Toma de fotos de envío.", liSendDocs:"Envío de la documentación de envío.",
-      poweredBy:"Desarrollado por " },
+      poweredBy:"Desarrollado por ", backLabel:"Volver" },
     de: { pageTitle:"Support", h1:"Support", intro:"Benötigen Sie Hilfe mit Quick Shipping Tool?",
       emailLabel:"E-Mail:", h2ResponseTime:"Übliche Antwortzeit", responseTimeText:"Innerhalb von 48 Werktagsstunden.",
       h2CommonIssues:"Häufige Probleme", liConfigEmail:"Konfiguration der E-Mail-Empfänger.",
       liTakePhotos:"Aufnahme von Sendungsfotos.", liSendDocs:"Versand der Sendungsdokumentation.",
-      poweredBy:"Bereitgestellt von " },
+      poweredBy:"Bereitgestellt von ", backLabel:"Zurück" },
     zh: { pageTitle:"支持", h1:"支持", intro:"需要 Quick Shipping Tool 的帮助吗？",
       emailLabel:"电子邮件：", h2ResponseTime:"通常响应时间", responseTimeText:"48 个工作小时内。",
       h2CommonIssues:"常见问题", liConfigEmail:"配置电子邮件收件人。",
       liTakePhotos:"拍摄货运照片。", liSendDocs:"发送货运文档。",
-      poweredBy:"技术支持：" }
+      poweredBy:"技术支持：", backLabel:"返回" }
   };
 
   function detectLang(){
@@ -91,6 +96,16 @@ footer a:hover{text-decoration:underline}
       el.textContent = t[key];
     }
   });
+
+  var backLink = document.getElementById("backLink");
+  if (backLink) {
+    backLink.addEventListener("click", function(e){
+      if (window.history.length > 1) {
+        e.preventDefault();
+        window.history.back();
+      }
+    });
+  }
 })();
 </script>
 </body></html>

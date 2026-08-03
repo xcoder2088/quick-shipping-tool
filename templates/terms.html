@@ -16,6 +16,10 @@ footer{
 footer p{margin:6px 0}
 footer a{color:#1565d8;text-decoration:none;font-weight:600}
 footer a:hover{text-decoration:underline}
+.top-nav{background:#050f28;padding:12px 20px}
+.back-link{color:#fff;text-decoration:none;font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.back-link:hover{text-decoration:underline}
+.back-link .arrow{font-size:18px;line-height:1}
 @media (max-width:768px){
 header{padding:16px;flex-wrap:wrap}
 header h2{font-size:20px}
@@ -25,6 +29,7 @@ h2{font-size:20px}
 footer{padding:22px 16px}
 }
 </style></head><body>
+<div class="top-nav"><a href="https://shipping.quickquotetool.ca/" id="backLink" class="back-link"><span class="arrow" aria-hidden="true">←</span><span id="backLabel"></span></a></div>
 <header><img src="/static/icons/icon-192.png" onerror="this.style.display='none'"><h2>Quick Shipping Tool</h2></header>
 <div class="wrap">
 <h1 id="h1"></h1>
@@ -50,35 +55,35 @@ footer{padding:22px 16px}
       li2:"Users are responsible for recipient email addresses.",
       li3:"The application must not be used for illegal or abusive purposes.",
       li4:"The service is provided without guarantee of uninterrupted availability.",
-      poweredBy:"Powered by " },
+      poweredBy:"Powered by ", backLabel:"Back" },
     fr: { pageTitle:"Conditions d'utilisation", h1:"Conditions d'utilisation",
       intro:"Quick Shipping Tool est destiné uniquement à la documentation légale des expéditions.",
       li1:"Les utilisateurs sont responsables des photos et informations envoyées.",
       li2:"Les utilisateurs sont responsables des adresses courriel des destinataires.",
       li3:"L'application ne doit pas être utilisée à des fins illégales ou abusives.",
       li4:"Le service est fourni sans garantie de disponibilité ininterrompue.",
-      poweredBy:"Propulsé par " },
+      poweredBy:"Propulsé par ", backLabel:"Retour" },
     es: { pageTitle:"Términos de servicio", h1:"Términos de servicio",
       intro:"Quick Shipping Tool está destinado únicamente a la documentación legal de envíos.",
       li1:"Los usuarios son responsables de las fotos e información que envían.",
       li2:"Los usuarios son responsables de las direcciones de correo de los destinatarios.",
       li3:"La aplicación no debe utilizarse con fines ilegales o abusivos.",
       li4:"El servicio se proporciona sin garantía de disponibilidad ininterrumpida.",
-      poweredBy:"Desarrollado por " },
+      poweredBy:"Desarrollado por ", backLabel:"Volver" },
     de: { pageTitle:"Nutzungsbedingungen", h1:"Nutzungsbedingungen",
       intro:"Quick Shipping Tool ist ausschließlich für die rechtmäßige Dokumentation von Sendungen bestimmt.",
       li1:"Benutzer sind für die von ihnen gesendeten Fotos und Informationen verantwortlich.",
       li2:"Benutzer sind für die E-Mail-Adressen der Empfänger verantwortlich.",
       li3:"Die Anwendung darf nicht für illegale oder missbräuchliche Zwecke verwendet werden.",
       li4:"Der Dienst wird ohne Garantie einer unterbrechungsfreien Verfügbarkeit bereitgestellt.",
-      poweredBy:"Bereitgestellt von " },
+      poweredBy:"Bereitgestellt von ", backLabel:"Zurück" },
     zh: { pageTitle:"服务条款", h1:"服务条款",
       intro:"Quick Shipping Tool 仅用于合法的货运文档记录。",
       li1:"用户对其发送的照片和信息负责。",
       li2:"用户对收件人的电子邮件地址负责。",
       li3:"本应用程序不得用于非法或滥用目的。",
       li4:"本服务的提供不保证不间断可用性。",
-      poweredBy:"技术支持：" }
+      poweredBy:"技术支持：", backLabel:"返回" }
   };
 
   function detectLang(){
@@ -105,6 +110,16 @@ footer{padding:22px 16px}
       el.textContent = t[key];
     }
   });
+
+  var backLink = document.getElementById("backLink");
+  if (backLink) {
+    backLink.addEventListener("click", function(e){
+      if (window.history.length > 1) {
+        e.preventDefault();
+        window.history.back();
+      }
+    });
+  }
 })();
 </script>
 </body></html>
