@@ -112,6 +112,21 @@ func main() {
 		uploadHandler,
 	)
 
+	http.HandleFunc(
+		"/privacy",
+		privacyHandler,
+	)
+
+	http.HandleFunc(
+		"/support",
+		supportHandler,
+	)
+
+	http.HandleFunc(
+		"/terms",
+		termsHandler,
+	)
+
 	// ==================================================
 	// CHECK MAILERSEND CONFIGURATION
 	// ==================================================
@@ -205,6 +220,39 @@ func homeHandler(
 		r,
 		"./templates/index.html",
 	)
+}
+
+func privacyHandler(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	if r.URL.Path != "/privacy" {
+		http.NotFound(w, r)
+		return
+	}
+	http.ServeFile(w, r, "./templates/privacy.html")
+}
+
+func supportHandler(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	if r.URL.Path != "/support" {
+		http.NotFound(w, r)
+		return
+	}
+	http.ServeFile(w, r, "./templates/support.html")
+}
+
+func termsHandler(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	if r.URL.Path != "/terms" {
+		http.NotFound(w, r)
+		return
+	}
+	http.ServeFile(w, r, "./templates/terms.html")
 }
 
 // ==================================================
