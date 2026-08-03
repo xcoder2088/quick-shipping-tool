@@ -365,12 +365,15 @@
         }
 
         .modal {
-            width: 100%;
-            max-width: 430px;
-            background: white;
-            border-radius: 18px;
-            padding: 26px 22px 22px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            width:min(95vw,430px);
+            max-height:calc(100dvh - 32px);
+            background:white;
+            border-radius:18px;
+            padding:26px 22px 22px;
+            box-shadow:0 20px 60px rgba(0,0,0,.25);
+            overflow-y:auto;
+            overflow-x:hidden;
+            -webkit-overflow-scrolling:touch;
         }
 
         .modal h2 {
@@ -456,8 +459,14 @@
         }
 
         .modal-buttons {
-            display: flex;
-            gap: 10px;
+            display:flex;
+            gap:10px;
+            position:sticky;
+            bottom:-22px;
+            background:white;
+            padding-top:16px;
+            padding-bottom:max(8px,env(safe-area-inset-bottom));
+            margin-top:18px;
         }
 
         .cancel-button {
@@ -886,8 +895,40 @@ label[for="settingsDestinationEmail"] {
                 animation: none;
             }
         }
+.settings-links{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
 
-    </style>
+.settings-link{
+    display:block;
+    padding:12px 14px;
+    border:1px solid #dbeafe;
+    border-radius:10px;
+    background:#f8fbff;
+    color:#2563eb;
+    text-decoration:none;
+    font-weight:600;
+    transition:.15s;
+}
+
+.settings-link:hover{
+    background:#eff6ff;
+}
+    
+@media (max-width:600px){
+.modal-overlay{align-items:flex-end;padding:0;}
+.modal{
+width:100%;
+max-width:none;
+max-height:100dvh;
+border-radius:18px 18px 0 0;
+padding:20px 16px calc(20px + env(safe-area-inset-bottom));
+}
+}
+
+</style>
 </head>
 
 <body>
@@ -990,7 +1031,8 @@ label[for="settingsDestinationEmail"] {
             </a>
 <h1>Quick Shipping Tool</h1>
 
-            <p>Shipment documentation</p>
+            <p>Shipment Photos
+         Proof | Email | Archive</p>
 
             <button
                 type="button"
@@ -1271,13 +1313,13 @@ label[for="settingsDestinationEmail"] {
 
     <div class="modal">
 
-        <h2>Settings</h2>
+        <h2 id="settingsTitle">Settings</h2>
 
-        <p class="modal-subtitle">
+        <p class="modal-subtitle" id="settingsSubtitle">
             Change your email preferences.
         </p>
 
-        <label for="settingsDestinationEmail">
+        <label for="settingsDestinationEmail" id="lblSettingsDestination">
             Send Photos To
         </label>
 
@@ -1287,7 +1329,7 @@ label[for="settingsDestinationEmail"] {
             autocomplete="email"
         >
 
-        <label for="settingsUserEmail">
+        <label for="settingsUserEmail" id="lblSettingsUser">
             Your Email
         </label>
 
@@ -1297,21 +1339,64 @@ label[for="settingsDestinationEmail"] {
             autocomplete="email"
         >
 
+        <hr style="margin:22px 0;border:none;border-top:1px solid #e5e7eb;">
+
+        <div class="settings-links">
+
+            <a href="/privacy"
+               target="_blank"
+               class="settings-link"
+               id="settingsPrivacy">
+                Privacy Policy
+            </a>
+
+            <a href="/terms"
+               target="_blank"
+               class="settings-link"
+               id="settingsTerms">
+                Terms of Service
+            </a>
+
+            <a href="/support"
+               target="_blank"
+               class="settings-link"
+               id="settingsSupport">
+                Support
+            </a>
+
+        </div>
+
+        <hr style="margin:22px 0;border:none;border-top:1px solid #e5e7eb;">
+
+        <div style="text-align:center;font-size:13px;color:#6b7280;line-height:1.6">
+
+            <strong>
+                Powered by
+                <a href="https://quickquotetool.ca"
+                   target="_blank">
+                    QuickQuoteTool.ca
+                </a>
+            </strong>
+
+            <br>
+
+            Version 1.0.0
+
+        </div>
+
         <div class="modal-buttons">
 
             <button
                 type="button"
                 class="cancel-button"
-                id="settingsCancelButton"
-            >
+                id="settingsCancelButton">
                 CANCEL
             </button>
 
             <button
                 type="button"
                 class="confirm-button"
-                id="settingsSaveButton"
-            >
+                id="settingsSaveButton">
                 SAVE
             </button>
 
@@ -1329,7 +1414,7 @@ label[for="settingsDestinationEmail"] {
     // ==============================================
     const I18N = {
       en: {
-        shipmentDocumentation:"Shipment documentation", photosSentTo:"Send photos to:",
+        shipmentDocumentation:"Shipment Photos", photosSentTo:"Send photos to:",
         submittedBy:"Submitted by", customerName:"Customer Name", shipmentPO:"Shipment / PO",
         photos:"PHOTOS", takePhoto:"TAKE PHOTO", photoLibrary:"PHOTO LIBRARY",
         sendPhotos:"SEND PHOTOS", send1:"SEND 1 PHOTO", sendN:n=>`SEND ${n} PHOTOS`,
@@ -1339,7 +1424,7 @@ label[for="settingsDestinationEmail"] {
         recipientEmail:"Email address", remove:"REMOVE", settings:"Settings"
       },
       fr: {
-        shipmentDocumentation:"Documentation d'expédition", photosSentTo:"Envoyer les photos à :",
+        shipmentDocumentation:"Photos d'expédition", photosSentTo:"Envoyer les photos à :",
         submittedBy:"Soumis par", customerName:"Nom du client", shipmentPO:"Expédition / PO",
         photos:"PHOTOS", takePhoto:"PRENDRE UNE PHOTO", photoLibrary:"PHOTOTHÈQUE",
         sendPhotos:"ENVOYER LES PHOTOS", send1:"ENVOYER 1 PHOTO", sendN:n=>`ENVOYER ${n} PHOTOS`,
@@ -1349,7 +1434,7 @@ label[for="settingsDestinationEmail"] {
         recipientEmail:"Adresse courriel", remove:"SUPPRIMER", settings:"Réglages"
       },
       es: {
-        shipmentDocumentation:"Documentación del envío", photosSentTo:"Enviar fotos a:",
+        shipmentDocumentation:"Fotos del envío", photosSentTo:"Enviar fotos a:",
         submittedBy:"Enviado por", customerName:"Nombre del cliente", shipmentPO:"Envío / PO",
         photos:"FOTOS", takePhoto:"TOMAR FOTO", photoLibrary:"BIBLIOTECA DE FOTOS",
         sendPhotos:"ENVIAR FOTOS", send1:"ENVIAR 1 FOTO", sendN:n=>`ENVIAR ${n} FOTOS`,
@@ -1359,7 +1444,7 @@ label[for="settingsDestinationEmail"] {
         recipientEmail:"Correo electrónico", remove:"ELIMINAR", settings:"Configuración"
       },
       de: {
-        shipmentDocumentation:"Versanddokumentation", photosSentTo:"Fotos senden an:",
+        shipmentDocumentation:"Versandfotos", photosSentTo:"Fotos senden an:",
         submittedBy:"Eingereicht von", customerName:"Kundenname", shipmentPO:"Sendung / PO",
         photos:"FOTOS", takePhoto:"FOTO AUFNEHMEN", photoLibrary:"FOTOBIBLIOTHEK",
         sendPhotos:"FOTOS SENDEN", send1:"1 FOTO SENDEN", sendN:n=>`${n} FOTOS SENDEN`,
@@ -1369,7 +1454,7 @@ label[for="settingsDestinationEmail"] {
         recipientEmail:"E-Mail-Adresse", remove:"ENTFERNEN", settings:"Einstellungen"
       },
       zh: {
-        shipmentDocumentation:"货运文件", photosSentTo:"照片将发送至：",
+        shipmentDocumentation:"货运照片", photosSentTo:"照片将发送至：",
         submittedBy:"提交者", customerName:"客户名称", shipmentPO:"货运 / PO",
         photos:"照片", takePhoto:"拍照", photoLibrary:"照片库",
         sendPhotos:"发送照片", send1:"发送 1 张照片", sendN:n=>`发送 ${n} 张照片`,
@@ -1393,18 +1478,22 @@ label[for="settingsDestinationEmail"] {
 
 
     const UI_TEXT = {
-      en: {hint:"Have you tried our QuickQuote Tool?", first:"First time setup", configure:"Configure your shipping email preferences.", yourEmail:"Your Email", emailHelp:"Your email will identify who submitted the shipment and will later be used as the reply address. Both addresses are saved on this device.", saveContinue:"SAVE & CONTINUE", confirmTitle:"Confirm Shipment", verify:"Please verify before sending.", customer:"Customer", sendTo:"Send To", sentBy:"Sent By", cancel:"CANCEL", confirmSend:"CONFIRM & SEND", settingsSubtitle:"Change your email preferences.", save:"SAVE", photosSent:"PHOTOS SENT", newShipment:"NEW SHIPMENT", successShipmentLabel:"Shipment / PO", successPhoto1:"1 photo successfully processed", successPhotoN:n=>`${n} photos successfully processed`, successDestination:"Destination", successSubmittedBy:"Submitted by", customerPlaceholder:"Enter customer name", shipmentPlaceholder:"Enter shipment / PO", eitherRequired:"* Customer Name or Shipment / PO — at least one is required", referenceWarning:"Please enter a Customer Name or a Shipment / PO."},
-      fr: {hint:"Avez-vous essayé notre outil QuickQuote ?", first:"Première configuration", configure:"Configurez vos préférences de courriel pour les expéditions.", yourEmail:"Votre courriel", emailHelp:"Votre courriel permet d’identifier la personne qui a soumis l’expédition et sera utilisé comme adresse de réponse. Les adresses sont enregistrées sur cet appareil.", saveContinue:"ENREGISTRER ET CONTINUER", confirmTitle:"Confirmer l’expédition", verify:"Veuillez vérifier avant l’envoi.", customer:"Client", sendTo:"Envoyer à", sentBy:"Envoyé par", cancel:"ANNULER", confirmSend:"CONFIRMER ET ENVOYER", settingsSubtitle:"Modifiez vos préférences de courriel.", save:"ENREGISTRER", photosSent:"PHOTOS ENVOYÉES", newShipment:"NOUVELLE EXPÉDITION", successShipmentLabel:"Expédition / PO", successPhoto1:"1 photo traitée avec succès", successPhotoN:n=>`${n} photos traitées avec succès`, successDestination:"Destination", successSubmittedBy:"Soumis par", customerPlaceholder:"Entrer le nom du client", shipmentPlaceholder:"Entrer l’expédition / PO", eitherRequired:"* Nom du client ou Expédition / PO — au moins un des deux est obligatoire", referenceWarning:"Veuillez entrer un nom de client ou un numéro d’expédition / PO."},
-      es: {hint:"¿Has probado nuestra herramienta QuickQuote?", first:"Configuración inicial", configure:"Configure sus preferencias de correo para los envíos.", yourEmail:"Su correo electrónico", emailHelp:"Su correo identifica quién envió el envío y se utilizará como dirección de respuesta. Las direcciones se guardan en este dispositivo.", saveContinue:"GUARDAR Y CONTINUAR", confirmTitle:"Confirmar envío", verify:"Verifique la información antes de enviar.", customer:"Cliente", sendTo:"Enviar a", sentBy:"Enviado por", cancel:"CANCELAR", confirmSend:"CONFIRMAR Y ENVIAR", settingsSubtitle:"Cambie sus preferencias de correo electrónico.", save:"GUARDAR", photosSent:"FOTOS ENVIADAS", newShipment:"NUEVO ENVÍO", successShipmentLabel:"Envío / PO", successPhoto1:"1 foto procesada correctamente", successPhotoN:n=>`${n} fotos procesadas correctamente`, successDestination:"Destino", successSubmittedBy:"Enviado por", customerPlaceholder:"Introducir nombre del cliente", shipmentPlaceholder:"Introducir envío / PO", eitherRequired:"* Nombre del cliente o Envío / PO — al menos uno es obligatorio", referenceWarning:"Introduzca un nombre de cliente o un envío / PO."},
-      de: {hint:"Haben Sie unser QuickQuote-Tool ausprobiert?", first:"Ersteinrichtung", configure:"Konfigurieren Sie Ihre E-Mail-Einstellungen für Sendungen.", yourEmail:"Ihre E-Mail-Adresse", emailHelp:"Ihre E-Mail-Adresse kennzeichnet, wer die Sendung eingereicht hat, und wird später als Antwortadresse verwendet. Die Adressen werden auf diesem Gerät gespeichert.", saveContinue:"SPEICHERN & WEITER", confirmTitle:"Sendung bestätigen", verify:"Bitte vor dem Senden überprüfen.", customer:"Kunde", sendTo:"Senden an", sentBy:"Gesendet von", cancel:"ABBRECHEN", confirmSend:"BESTÄTIGEN & SENDEN", settingsSubtitle:"Ändern Sie Ihre E-Mail-Einstellungen.", save:"SPEICHERN", photosSent:"FOTOS GESENDET", newShipment:"NEUE SENDUNG", successShipmentLabel:"Sendung / PO", successPhoto1:"1 Foto erfolgreich verarbeitet", successPhotoN:n=>`${n} Fotos erfolgreich verarbeitet`, successDestination:"Ziel", successSubmittedBy:"Eingereicht von", customerPlaceholder:"Kundenname eingeben", shipmentPlaceholder:"Sendung / PO eingeben", eitherRequired:"* Kundenname oder Sendung / PO — mindestens eines ist erforderlich", referenceWarning:"Bitte geben Sie einen Kundennamen oder eine Sendung / PO ein."},
-      zh: {hint:"试过我们的 QuickQuote 工具吗？", first:"首次设置", configure:"配置您的货运邮件偏好。", yourEmail:"您的电子邮件", emailHelp:"您的电子邮件用于识别提交货运资料的人员，并将作为回复地址。所有地址都会保存在此设备上。", saveContinue:"保存并继续", confirmTitle:"确认货运", verify:"发送前请核对信息。", customer:"客户", sendTo:"发送至", sentBy:"提交者", cancel:"取消", confirmSend:"确认并发送", settingsSubtitle:"更改您的电子邮件偏好。", save:"保存", photosSent:"照片已发送", newShipment:"新建货运", successShipmentLabel:"货运 / PO", successPhoto1:"已成功处理 1 张照片", successPhotoN:n=>`已成功处理 ${n} 张照片`, successDestination:"发送至", successSubmittedBy:"提交者", customerPlaceholder:"输入客户名称", shipmentPlaceholder:"输入货运 / PO", eitherRequired:"* 客户名称或货运 / PO — 至少填写一项", referenceWarning:"请输入客户名称或货运 / PO。"}
+      en: {hint:"Have you tried our QuickQuote Tool?", first:"First time setup", configure:"Configure your shipping email preferences.", yourEmail:"Your Email", emailHelp:"Your email will identify who submitted the shipment and will later be used as the reply address. Both addresses are saved on this device.", saveContinue:"SAVE & CONTINUE", confirmTitle:"Confirm Shipment", verify:"Please verify before sending.", customer:"Customer", sendTo:"Send To", sentBy:"Sent By", cancel:"CANCEL", confirmSend:"CONFIRM & SEND", settingsSubtitle:"Change your email preferences.", save:"SAVE", photosSent:"PHOTOS SENT", newShipment:"NEW SHIPMENT", successShipmentLabel:"Shipment / PO", successPhoto1:"1 photo successfully processed", successPhotoN:n=>`${n} photos successfully processed`, successDestination:"Destination", successSubmittedBy:"Submitted by", customerPlaceholder:"Enter customer name", shipmentPlaceholder:"Enter shipment / PO", eitherRequired:"* Customer Name or Shipment / PO — at least one is required", referenceWarning:"Please enter a Customer Name or a Shipment / PO.", linkPrivacy:"Privacy Policy", linkTerms:"Terms of Service", linkSupport:"Support"},
+      fr: {hint:"Avez-vous essayé notre outil QuickQuote ?", first:"Première configuration", configure:"Configurez vos préférences de courriel pour les expéditions.", yourEmail:"Votre courriel", emailHelp:"Votre courriel permet d’identifier la personne qui a soumis l’expédition et sera utilisé comme adresse de réponse. Les adresses sont enregistrées sur cet appareil.", saveContinue:"ENREGISTRER ET CONTINUER", confirmTitle:"Confirmer l’expédition", verify:"Veuillez vérifier avant l’envoi.", customer:"Client", sendTo:"Envoyer à", sentBy:"Envoyé par", cancel:"ANNULER", confirmSend:"CONFIRMER ET ENVOYER", settingsSubtitle:"Modifiez vos préférences de courriel.", save:"ENREGISTRER", photosSent:"PHOTOS ENVOYÉES", newShipment:"NOUVELLE EXPÉDITION", successShipmentLabel:"Expédition / PO", successPhoto1:"1 photo traitée avec succès", successPhotoN:n=>`${n} photos traitées avec succès`, successDestination:"Destination", successSubmittedBy:"Soumis par", customerPlaceholder:"Entrer le nom du client", shipmentPlaceholder:"Entrer l’expédition / PO", eitherRequired:"* Nom du client ou Expédition / PO — au moins un des deux est obligatoire", referenceWarning:"Veuillez entrer un nom de client ou un numéro d’expédition / PO.", linkPrivacy:"Politique de confidentialité", linkTerms:"Conditions d’utilisation", linkSupport:"Assistance"},
+      es: {hint:"¿Has probado nuestra herramienta QuickQuote?", first:"Configuración inicial", configure:"Configure sus preferencias de correo para los envíos.", yourEmail:"Su correo electrónico", emailHelp:"Su correo identifica quién envió el envío y se utilizará como dirección de respuesta. Las direcciones se guardan en este dispositivo.", saveContinue:"GUARDAR Y CONTINUAR", confirmTitle:"Confirmar envío", verify:"Verifique la información antes de enviar.", customer:"Cliente", sendTo:"Enviar a", sentBy:"Enviado por", cancel:"CANCELAR", confirmSend:"CONFIRMAR Y ENVIAR", settingsSubtitle:"Cambie sus preferencias de correo electrónico.", save:"GUARDAR", photosSent:"FOTOS ENVIADAS", newShipment:"NUEVO ENVÍO", successShipmentLabel:"Envío / PO", successPhoto1:"1 foto procesada correctamente", successPhotoN:n=>`${n} fotos procesadas correctamente`, successDestination:"Destino", successSubmittedBy:"Enviado por", customerPlaceholder:"Introducir nombre del cliente", shipmentPlaceholder:"Introducir envío / PO", eitherRequired:"* Nombre del cliente o Envío / PO — al menos uno es obligatorio", referenceWarning:"Introduzca un nombre de cliente o un envío / PO.", linkPrivacy:"Política de privacidad", linkTerms:"Términos de servicio", linkSupport:"Soporte"},
+      de: {hint:"Haben Sie unser QuickQuote-Tool ausprobiert?", first:"Ersteinrichtung", configure:"Konfigurieren Sie Ihre E-Mail-Einstellungen für Sendungen.", yourEmail:"Ihre E-Mail-Adresse", emailHelp:"Ihre E-Mail-Adresse kennzeichnet, wer die Sendung eingereicht hat, und wird später als Antwortadresse verwendet. Die Adressen werden auf diesem Gerät gespeichert.", saveContinue:"SPEICHERN & WEITER", confirmTitle:"Sendung bestätigen", verify:"Bitte vor dem Senden überprüfen.", customer:"Kunde", sendTo:"Senden an", sentBy:"Gesendet von", cancel:"ABBRECHEN", confirmSend:"BESTÄTIGEN & SENDEN", settingsSubtitle:"Ändern Sie Ihre E-Mail-Einstellungen.", save:"SPEICHERN", photosSent:"FOTOS GESENDET", newShipment:"NEUE SENDUNG", successShipmentLabel:"Sendung / PO", successPhoto1:"1 Foto erfolgreich verarbeitet", successPhotoN:n=>`${n} Fotos erfolgreich verarbeitet`, successDestination:"Ziel", successSubmittedBy:"Eingereicht von", customerPlaceholder:"Kundenname eingeben", shipmentPlaceholder:"Sendung / PO eingeben", eitherRequired:"* Kundenname oder Sendung / PO — mindestens eines ist erforderlich", referenceWarning:"Bitte geben Sie einen Kundennamen oder eine Sendung / PO ein.", linkPrivacy:"Datenschutzrichtlinie", linkTerms:"Nutzungsbedingungen", linkSupport:"Support"},
+      zh: {hint:"试过我们的 QuickQuote 工具吗？", first:"首次设置", configure:"配置您的货运邮件偏好。", yourEmail:"您的电子邮件", emailHelp:"您的电子邮件用于识别提交货运资料的人员，并将作为回复地址。所有地址都会保存在此设备上。", saveContinue:"保存并继续", confirmTitle:"确认货运", verify:"发送前请核对信息。", customer:"客户", sendTo:"发送至", sentBy:"提交者", cancel:"取消", confirmSend:"确认并发送", settingsSubtitle:"更改您的电子邮件偏好。", save:"保存", photosSent:"照片已发送", newShipment:"新建货运", successShipmentLabel:"货运 / PO", successPhoto1:"已成功处理 1 张照片", successPhotoN:n=>`已成功处理 ${n} 张照片`, successDestination:"发送至", successSubmittedBy:"提交者", customerPlaceholder:"输入客户名称", shipmentPlaceholder:"输入货运 / PO", eitherRequired:"* 客户名称或货运 / PO — 至少填写一项", referenceWarning:"请输入客户名称或货运 / PO。", linkPrivacy:"隐私政策", linkTerms:"服务条款", linkSupport:"支持"}
     };
     const ui = UI_TEXT[appLanguage] || UI_TEXT.en;
     function applyStaticTranslations() {
       document.querySelectorAll('.quickquote-home-hint').forEach(el => el.textContent = ui.hint);
       const setupSubtitle = document.querySelector('.setup-subtitle');
       if (setupSubtitle) setupSubtitle.innerHTML = `${ui.first}<br>${ui.configure}`;
-      const mainHeaderP = document.querySelector('#mainScreen .header > p'); if (mainHeaderP) mainHeaderP.textContent = tr.shipmentDocumentation;
+      const mainHeaderP = document.querySelector('#mainScreen .header > p');
+      if (mainHeaderP){
+        const tagline={en:"Proof • Email • Archive",fr:"Preuve • Courriel • Archivage",es:"Prueba • Correo • Archivo",de:"Nachweis • E-Mail • Archiv",zh:"拍照 • 邮件 • 存档"};
+        mainHeaderP.innerHTML=tr.shipmentDocumentation+"<br><small style=\"font-size:16px;color:#6b7280;\">"+(tagline[appLanguage]||tagline.en)+"</small>";
+      }
       const destStrong = document.querySelector('.destination-info > strong'); if (destStrong) destStrong.textContent = tr.photosSentTo;
       const senderInfo = document.querySelector('.sender-info'); if (senderInfo && senderInfo.firstChild) senderInfo.firstChild.textContent = ui.sentBy + ': ';
       const labelText = (sel, text) => { const el=document.querySelector(sel); if(el && el.firstChild) el.firstChild.textContent='\n                '+text+'\n                '; };
@@ -1423,6 +1512,7 @@ label[for="settingsDestinationEmail"] {
         const note=document.createElement('div'); note.id='eitherRequiredNote'; note.className='either-required-note'; note.textContent=ui.eitherRequired; shipment.insertAdjacentElement('afterend', note);
       }
       const setupUser=document.getElementById('setupUserEmail'); if(setupUser) setupUser.placeholder=tr.recipientEmail;
+      set('#settingsPrivacy',ui.linkPrivacy); set('#settingsTerms',ui.linkTerms); set('#settingsSupport',ui.linkSupport);
     }
     applyStaticTranslations();
 

@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title id="pageTitle">Terms of Service</title><style>
+body{margin:0;background:#eef3fb;font-family:system-ui,-apple-system,sans-serif;color:#223}
+header{background:#071d49;color:#fff;padding:18px 24px;display:flex;align-items:center;gap:14px}
+header img{width:42px;height:42px;border-radius:10px}
+header h2{margin:0}
+.wrap{max-width:900px;margin:40px auto;background:#fff;padding:42px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+h1{color:#071d49;margin-top:0}
+h2{color:#1565d8}
+footer{
+    text-align:center;
+    color:#666;
+    padding:30px;
+    margin-top:40px;
+    border-top:1px solid #e6e6e6;
+}
+footer p{margin:6px 0}
+footer a{color:#1565d8;text-decoration:none;font-weight:600}
+footer a:hover{text-decoration:underline}
+@media (max-width:768px){
+header{padding:16px;flex-wrap:wrap}
+header h2{font-size:20px}
+.wrap{width:94vw;margin:16px auto;padding:22px;border-radius:14px}
+h1{font-size:28px}
+h2{font-size:20px}
+footer{padding:22px 16px}
+}
+</style></head><body>
+<header><img src="/static/icons/icon-192.png" onerror="this.style.display='none'"><h2>Quick Shipping Tool</h2></header>
+<div class="wrap">
+<h1 id="h1"></h1>
+<p id="intro"></p>
+<ul>
+  <li id="li1"></li>
+  <li id="li2"></li>
+  <li id="li3"></li>
+  <li id="li4"></li>
+</ul>
+</div>
+<footer>
+<p><strong id="powered">Powered by <a href="https://quickquotetool.ca">QuickQuoteTool.ca</a></strong></p>
+<p id="copyright">© 2026 Quick Shipping Tool</p>
+</footer>
+
+<script>
+(function(){
+  var TEXT = {
+    en: { pageTitle:"Terms of Service", h1:"Terms of Service",
+      intro:"Quick Shipping Tool is intended only for lawful shipment documentation.",
+      li1:"Users are responsible for the photos and information they send.",
+      li2:"Users are responsible for recipient email addresses.",
+      li3:"The application must not be used for illegal or abusive purposes.",
+      li4:"The service is provided without guarantee of uninterrupted availability.",
+      poweredBy:"Powered by " },
+    fr: { pageTitle:"Conditions d'utilisation", h1:"Conditions d'utilisation",
+      intro:"Quick Shipping Tool est destiné uniquement à la documentation légale des expéditions.",
+      li1:"Les utilisateurs sont responsables des photos et informations envoyées.",
+      li2:"Les utilisateurs sont responsables des adresses courriel des destinataires.",
+      li3:"L'application ne doit pas être utilisée à des fins illégales ou abusives.",
+      li4:"Le service est fourni sans garantie de disponibilité ininterrompue.",
+      poweredBy:"Propulsé par " },
+    es: { pageTitle:"Términos de servicio", h1:"Términos de servicio",
+      intro:"Quick Shipping Tool está destinado únicamente a la documentación legal de envíos.",
+      li1:"Los usuarios son responsables de las fotos e información que envían.",
+      li2:"Los usuarios son responsables de las direcciones de correo de los destinatarios.",
+      li3:"La aplicación no debe utilizarse con fines ilegales o abusivos.",
+      li4:"El servicio se proporciona sin garantía de disponibilidad ininterrumpida.",
+      poweredBy:"Desarrollado por " },
+    de: { pageTitle:"Nutzungsbedingungen", h1:"Nutzungsbedingungen",
+      intro:"Quick Shipping Tool ist ausschließlich für die rechtmäßige Dokumentation von Sendungen bestimmt.",
+      li1:"Benutzer sind für die von ihnen gesendeten Fotos und Informationen verantwortlich.",
+      li2:"Benutzer sind für die E-Mail-Adressen der Empfänger verantwortlich.",
+      li3:"Die Anwendung darf nicht für illegale oder missbräuchliche Zwecke verwendet werden.",
+      li4:"Der Dienst wird ohne Garantie einer unterbrechungsfreien Verfügbarkeit bereitgestellt.",
+      poweredBy:"Bereitgestellt von " },
+    zh: { pageTitle:"服务条款", h1:"服务条款",
+      intro:"Quick Shipping Tool 仅用于合法的货运文档记录。",
+      li1:"用户对其发送的照片和信息负责。",
+      li2:"用户对收件人的电子邮件地址负责。",
+      li3:"本应用程序不得用于非法或滥用目的。",
+      li4:"本服务的提供不保证不间断可用性。",
+      poweredBy:"技术支持：" }
+  };
+
+  function detectLang(){
+    var langs = navigator.languages || [navigator.language || "en"];
+    for (var i = 0; i < langs.length; i++) {
+      var code = String(langs[i]).toLowerCase().split("-")[0];
+      if (TEXT[code]) return code;
+    }
+    return "en";
+  }
+
+  var lang = detectLang();
+  var t = TEXT[lang] || TEXT.en;
+  document.documentElement.lang = lang;
+  document.title = t.pageTitle;
+
+  Object.keys(t).forEach(function(key){
+    if (key === "pageTitle") return;
+    var el = document.getElementById(key);
+    if (!el) return;
+    if (key === "poweredBy") {
+      el.childNodes[0].textContent = t.poweredBy;
+    } else {
+      el.textContent = t[key];
+    }
+  });
+})();
+</script>
+</body></html>

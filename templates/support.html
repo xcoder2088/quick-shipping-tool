@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title id="pageTitle">Support</title><style>
+body{margin:0;background:#eef3fb;font-family:system-ui,-apple-system,sans-serif;color:#223}
+header{background:#071d49;color:#fff;padding:18px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header img{width:42px;height:42px;border-radius:10px}
+header h2{margin:0}
+.wrap{width:min(94vw,900px);margin:clamp(16px,4vw,40px) auto;background:#fff;padding:clamp(18px,4vw,42px);border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+h1{color:#071d49;margin-top:0}
+h2{color:#1565d8}
+footer{
+    text-align:center;
+    color:#666;
+    padding:30px;
+    margin-top:40px;
+    border-top:1px solid #e6e6e6;
+}
+footer p{margin:6px 0}
+footer a{color:#1565d8;text-decoration:none;font-weight:600}
+footer a:hover{text-decoration:underline}
+@media(max-width:600px){header{padding:16px}header h2{font-size:22px}.wrap{border-radius:14px}}
+</style></head><body>
+<header><img src="/static/icons/icon-192.png" onerror="this.style.display='none'"><h2>Quick Shipping Tool</h2></header>
+<div class="wrap">
+<h1 id="h1"></h1>
+<p id="intro"></p>
+<p id="emailLine"><span id="emailLabel"></span> <a href="mailto:quickquotetool@protonmail.com">quickquotetool@protonmail.com</a></p>
+<h2 id="h2ResponseTime"></h2>
+<p id="responseTimeText"></p>
+<h2 id="h2CommonIssues"></h2>
+<ul>
+  <li id="liConfigEmail"></li>
+  <li id="liTakePhotos"></li>
+  <li id="liSendDocs"></li>
+</ul>
+</div>
+<footer>
+<p><strong id="powered">Powered by <a href="https://quickquotetool.ca">QuickQuoteTool.ca</a></strong></p>
+<p id="copyright">© 2026 Quick Shipping Tool</p>
+</footer>
+
+<script>
+(function(){
+  var TEXT = {
+    en: { pageTitle:"Support", h1:"Support", intro:"Need help with Quick Shipping Tool?",
+      emailLabel:"Email:", h2ResponseTime:"Typical response time", responseTimeText:"Within 48 business hours.",
+      h2CommonIssues:"Common issues", liConfigEmail:"Configuring email recipients.",
+      liTakePhotos:"Taking shipment photos.", liSendDocs:"Sending shipment documentation.",
+      poweredBy:"Powered by " },
+    fr: { pageTitle:"Assistance", h1:"Assistance", intro:"Besoin d'aide avec Quick Shipping Tool ?",
+      emailLabel:"Courriel :", h2ResponseTime:"Délai de réponse habituel", responseTimeText:"Dans un délai de 48 heures ouvrables.",
+      h2CommonIssues:"Problèmes fréquents", liConfigEmail:"Configuration des destinataires courriel.",
+      liTakePhotos:"Prise de photos d'expédition.", liSendDocs:"Envoi de la documentation d'expédition.",
+      poweredBy:"Propulsé par " },
+    es: { pageTitle:"Soporte", h1:"Soporte", intro:"¿Necesita ayuda con Quick Shipping Tool?",
+      emailLabel:"Correo electrónico:", h2ResponseTime:"Tiempo de respuesta habitual", responseTimeText:"En un plazo de 48 horas hábiles.",
+      h2CommonIssues:"Problemas comunes", liConfigEmail:"Configuración de destinatarios de correo.",
+      liTakePhotos:"Toma de fotos de envío.", liSendDocs:"Envío de la documentación de envío.",
+      poweredBy:"Desarrollado por " },
+    de: { pageTitle:"Support", h1:"Support", intro:"Benötigen Sie Hilfe mit Quick Shipping Tool?",
+      emailLabel:"E-Mail:", h2ResponseTime:"Übliche Antwortzeit", responseTimeText:"Innerhalb von 48 Werktagsstunden.",
+      h2CommonIssues:"Häufige Probleme", liConfigEmail:"Konfiguration der E-Mail-Empfänger.",
+      liTakePhotos:"Aufnahme von Sendungsfotos.", liSendDocs:"Versand der Sendungsdokumentation.",
+      poweredBy:"Bereitgestellt von " },
+    zh: { pageTitle:"支持", h1:"支持", intro:"需要 Quick Shipping Tool 的帮助吗？",
+      emailLabel:"电子邮件：", h2ResponseTime:"通常响应时间", responseTimeText:"48 个工作小时内。",
+      h2CommonIssues:"常见问题", liConfigEmail:"配置电子邮件收件人。",
+      liTakePhotos:"拍摄货运照片。", liSendDocs:"发送货运文档。",
+      poweredBy:"技术支持：" }
+  };
+
+  function detectLang(){
+    var langs = navigator.languages || [navigator.language || "en"];
+    for (var i = 0; i < langs.length; i++) {
+      var code = String(langs[i]).toLowerCase().split("-")[0];
+      if (TEXT[code]) return code;
+    }
+    return "en";
+  }
+
+  var lang = detectLang();
+  var t = TEXT[lang] || TEXT.en;
+  document.documentElement.lang = lang;
+  document.title = t.pageTitle;
+
+  Object.keys(t).forEach(function(key){
+    if (key === "pageTitle") return;
+    var el = document.getElementById(key);
+    if (!el) return;
+    if (key === "poweredBy") {
+      el.childNodes[0].textContent = t.poweredBy;
+    } else {
+      el.textContent = t[key];
+    }
+  });
+})();
+</script>
+</body></html>
