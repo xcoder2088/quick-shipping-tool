@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="{{.Form.UiLang}}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- iOS Add to Home Screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="QuickQuoteTool">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- iOS splash screens (Add to Home Screen) -->
+    <link rel="apple-touch-startup-image" href="/static/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/static/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/static/splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/static/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/static/splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+
+
+  {{if eq .Form.UiLang "en"}}
+    <title>FAQ – FedEx Quotes | QuickQuoteTool</title>
+
+    <!-- Favicons / App icon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link rel="manifest" href="/static/site.webmanifest">
+    <meta name="theme-color" content="#0b2538">
+
+    <meta name="description" content="Frequently asked questions about FedEx quotes: how it works, rates, data security, and business use.">
+    <meta property="og:title" content="FAQ – FedEx Quotes | QuickQuoteTool">
+    <meta property="og:description" content="Frequently asked questions about FedEx quotes: how it works, rates, data security, and business use.">
+  {{else if eq .Form.UiLang "es"}}
+    <title>Preguntas frecuentes – Cotizaciones FedEx | QuickQuoteTool</title>
+    <meta name="description" content="Preguntas frecuentes sobre cotizaciones FedEx: funcionamiento, tarifas, seguridad de datos y uso empresarial.">
+    <meta property="og:title" content="Preguntas frecuentes – Cotizaciones FedEx | QuickQuoteTool">
+    <meta property="og:description" content="Preguntas frecuentes sobre cotizaciones FedEx: funcionamiento, tarifas, seguridad de datos y uso empresarial.">
+  {{else if eq .Form.UiLang "de"}}
+    <title>FAQ – FedEx-Angebote | QuickQuoteTool</title>
+    <meta name="description" content="Häufige Fragen zu FedEx-Angeboten: Funktionsweise, Preise, Datensicherheit und Nutzung im Unternehmen.">
+    <meta property="og:title" content="FAQ – FedEx-Angebote | QuickQuoteTool">
+    <meta property="og:description" content="Häufige Fragen zu FedEx-Angeboten: Funktionsweise, Preise, Datensicherheit und Nutzung im Unternehmen.">
+  {{else}}
+    <title>FAQ – Soumission FedEx | QuickQuoteTool</title>
+    <meta name="description" content="Questions fréquentes sur les soumissions FedEx : fonctionnement, tarifs, sécurité des données et utilisation pour entreprises et PME.">
+    <meta property="og:title" content="FAQ – Soumission FedEx | QuickQuoteTool">
+    <meta property="og:description" content="Questions fréquentes sur les soumissions FedEx : fonctionnement, tarifs, sécurité des données et utilisation pour entreprises et PME.">
+  {{end}}
+
+  <link rel="canonical" href="https://quickquotetool.ca/faq">
+  <meta name="robots" content="index,follow">
+  <meta property="og:url" content="https://quickquotetool.ca/faq">
+  <meta property="og:site_name" content="QuickQuoteTool">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/flatly/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body{background:#f4f6f9; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;}
+    .pnsi-header{background: linear-gradient(90deg, #204E82, #012844); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.25);}
+    .pnsi-header a{color:#fff; text-decoration:none;}
+    .brand-logo{height:46px; width:auto;}
+    .content-wrap{max-width: 980px;}
+    .card{box-shadow:0 2px 6px rgba(0,0,0,.08); border:1px solid #dde3ea; border-radius:10px; overflow:hidden;}
+    .card h2{font-size:1.15rem; margin-top:1.25rem;}
+    .muted{opacity:.8;}
+    footer{background: linear-gradient(90deg, #204E82, #012844); color:#fff;}
+    footer a{color:#fff;}
+
+    .nav-left{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
+    .nav-left .navlink{padding:8px 12px;color:rgba(255,255,255,.85);text-decoration:none !important;font-size:14px;font-weight:600;border-bottom:2px solid transparent;white-space:nowrap;}
+    .nav-left .navlink:hover{color:#fff;background:rgba(255,255,255,.08)}
+    .nav-left .navlink.active{color:#fff;border-bottom-color:#ffcc00}
+    .nav-guides{position:relative}
+    .nav-guides-menu{display:none;position:absolute;top:100%;left:0;background:#fff;color:#1c2733;min-width:280px;border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.22);padding:6px;z-index:30;}
+    .nav-guides.open .nav-guides-menu{display:block}
+    .nav-guides-menu a{display:block;padding:9px 12px;border-radius:7px;color:#1c2733 !important;text-decoration:none !important;font-size:13.5px}
+    .nav-guides-menu a:hover{background:#eef3fd;color:#1565d8 !important}
+.nav-guides-menu a.current{font-weight:700;color:#1565d8 !important;background:#eef3fd;}
+html[data-theme="dark"] .nav-guides-menu a.current{color:#ffcc00 !important;background:rgba(255,204,0,.12) !important;}
+    html[data-theme="dark"] .nav-guides-menu{background:#0f1a2c;color:#e5e7eb}
+    html[data-theme="dark"] .nav-guides-menu a{color:#e5e7eb !important}
+    html[data-theme="dark"] .nav-guides-menu a:hover{background:rgba(255,255,255,.08)}
+    .lang-switch-g{position:relative}
+    .lang-btn-g{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 10px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;font-weight:700;font-size:.85rem;}
+    .lang-menu-g{display:none;position:absolute;top:100%;right:0;background:#fff;color:#1c2733;min-width:110px;border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.22);padding:6px;z-index:30;margin-top:4px;list-style:none;}
+    .lang-switch-g.open .lang-menu-g{display:block}
+    .lang-menu-g li{padding:8px 10px;border-radius:7px;cursor:pointer;font-size:13.5px;font-weight:600}
+    .lang-menu-g li:hover{background:#eef3fd;color:#1565d8}
+    html[data-theme="dark"] .lang-menu-g{background:#0f1a2c;color:#e5e7eb}
+    html[data-theme="dark"] .lang-menu-g li:hover{background:rgba(255,255,255,.08)}
+  
+
+/* ===== THEME TOGGLE (Light/Dark) ===== */
+:root{
+  --qq-bg: #f4f6f9;
+  --qq-surface: #ffffff;
+  --qq-text: #111827;
+  --qq-muted: rgba(17,24,39,.75);
+  --qq-border: #dde3ea;
+  --qq-shadow: 0 2px 6px rgba(0,0,0,.08);
+  --qq-input-bg: #ffffff;
+  --qq-input-text: #111827;
+  --qq-table-stripe: rgba(0,0,0,.03);
+}
+
+/* Dark theme overrides (charcoal) */
+html[data-theme="dark"]{
+  --qq-bg: radial-gradient(1200px 700px at 50% -10%, rgba(255,255,255,.06), rgba(255,255,255,0) 55%), linear-gradient(180deg, #101419 0%, #0b0d10 100%);
+  --qq-surface: #151a21;
+  --qq-text: #ffffff;
+  --qq-muted: rgb(255, 255, 255);
+  --qq-border: rgba(255,255,255,.10);
+  --qq-shadow: 0 2px 10px rgba(0,0,0,.45);
+  --qq-input-bg: #0f131a;
+  --qq-input-text: #e7eaf0;
+  --qq-table-stripe: rgba(255,255,255,.04);
+}
+
+/* Apply variables without changing layout */
+body{ background: var(--qq-bg) !important; color: var(--qq-text); }
+.card{ background: var(--qq-surface); border-color: var(--qq-border) !important; box-shadow: var(--qq-shadow) !important; }
+.card-header{ border-bottom-color: var(--qq-border) !important; }
+.muted{ opacity: 1; color: var(--qq-muted); }
+hr{ border-color: var(--qq-border); opacity: 1; }
+
+
+/* Dark mode: force label/help text to be readable (Bootstrap sets some labels to dark) */
+html[data-theme="dark"] label,
+html[data-theme="dark"] .form-label,
+html[data-theme="dark"] .form-check-label{
+  color: var(--qq-text) !important;
+}
+html[data-theme="dark"] .text-muted,
+html[data-theme="dark"] .form-text{
+  color: rgba(231,234,240,.65) !important;
+}
+
+
+/* Form controls */
+.form-control, .form-select, .input-group-text{
+  background: var(--qq-input-bg) !important;
+  color: var(--qq-input-text) !important;
+  border-color: var(--qq-border) !important;
+}
+.form-control::placeholder{ color: rgba(231,234,240,.55); }
+.form-control:focus, .form-select:focus{
+  box-shadow: none !important;
+  border-color: rgba(255,255,255,.22) !important;
+}
+
+/* Tables + list groups */
+.table{ color: var(--qq-text); }
+.table > :not(caption) > * > *{ background: transparent; border-color: var(--qq-border); }
+.table-striped > tbody > tr:nth-of-type(odd) > *{ background: var(--qq-table-stripe) !important; }
+.list-group-item{
+  background: var(--qq-surface) !important;
+  color: var(--qq-text) !important;
+  border-color: var(--qq-border) !important;
+}
+
+/* Alerts: keep Bootstrap semantics but improve contrast */
+html[data-theme="dark"] .alert{
+  border-color: rgba(255,255,255,.10) !important;
+}
+
+/* Modal */
+html[data-theme="dark"] .modal-content{
+  background: var(--qq-surface) !important;
+  color: var(--qq-text) !important;
+  border-color: var(--qq-border) !important;
+}
+html[data-theme="dark"] .modal-body, 
+html[data-theme="dark"] .modal-footer{
+  border-top-color: var(--qq-border) !important;
+}
+html[data-theme="dark"] .btn-close{ filter: brightness(0) invert(1); opacity: .9; }
+
+/* Theme toggle button (matches header controls height) */
+.theme-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:34px;
+  padding:0 10px;
+  border-radius:10px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.25);
+  color:#fff;
+  cursor:pointer;
+  user-select:none;
+  font-weight:700;
+  font-size:.85rem;
+  gap:8px;
+}
+.theme-btn:focus{ outline:none; box-shadow:none; border-color: rgba(255,255,255,.55); }
+.theme-btn svg{ width:16px; height:16px; flex:0 0 16px; }
+html[data-theme="dark"] .theme-btn .icon-sun{ display:inline-block; }
+html[data-theme="dark"] .theme-btn .icon-moon{ display:none; }
+html[data-theme="light"] .theme-btn .icon-sun{ display:none; }
+html[data-theme="light"] .theme-btn .icon-moon{ display:inline-block; }
+
+
+
+/* ===== Dark theme readability fixes (FAQ / FedEx-Quote text) ===== */
+html[data-theme="dark"]{
+  color: var(--qq-text);
+}
+
+/* Ensure common text elements remain readable in dark mode */
+html[data-theme="dark"] body,
+html[data-theme="dark"] .card{
+  color: var(--qq-text) !important;
+}
+
+html[data-theme="dark"] .card p,
+html[data-theme="dark"] .card li,
+html[data-theme="dark"] .card span,
+html[data-theme="dark"] .card div{
+  color: var(--qq-text) !important;
+}
+
+/* Bootstrap text utility classes that can force dark/gray text */
+html[data-theme="dark"] .text-body-secondary,
+html[data-theme="dark"] .text-secondary,
+html[data-theme="dark"] .text-dark,
+html[data-theme="dark"] .link-dark{
+  color: var(--qq-text) !important;
+}
+
+html[data-theme="dark"] .text-muted,
+html[data-theme="dark"] .form-text,
+html[data-theme="dark"] small{
+  color: rgba(231,234,240,.72) !important;
+}
+
+/* Accordion (FAQ) */
+html[data-theme="dark"] .accordion-button,
+html[data-theme="dark"] .accordion-body{
+  color: var(--qq-text) !important;
+}
+html[data-theme="dark"] .accordion-button:not(.collapsed){
+  background: rgba(255,255,255,.06) !important;
+}
+
+/* ===== ENTERPRISE TYPOGRAPHY + TOKENS (SAFE) ===== */
+:root{
+  --qq-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+             Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --qq-radius: 12px;
+  --qq-radius-sm: 10px;
+  --qq-shadow-pro: 0 6px 18px rgba(0,0,0,.08);
+}
+
+html[data-theme="dark"]{
+  --qq-shadow-pro: 0 10px 26px rgba(0,0,0,.55);
+}
+
+/* Typography normalization (FR / EN / ES / DE) */
+body{
+  font-family: var(--qq-font) !important;
+  line-height: 1.45;
+  letter-spacing: .1px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+label, .form-label{
+  font-weight: 700;
+}
+
+/* Numeric alignment (rates, prices) */
+.table, .list-group{
+  font-variant-numeric: tabular-nums;
+}
+
+/* Token tightening */
+.card{
+  border-radius: var(--qq-radius) !important;
+  box-shadow: var(--qq-shadow-pro) !important;
+}
+
+.btn{
+  font-weight: 600;
+  letter-spacing: .15px;
+}
+
+.btn, .form-control, .form-select, .input-group-text{
+  border-radius: var(--qq-radius-sm);
+}
+
+
+/* =========================================================
+   MOBILE POLISH PASS (CSS-only, zero functional risk)
+   - one-column flow + safer spacing
+   - full-width primary actions
+   - improved touch targets & rate list readability
+   ========================================================= */
+@media (max-width: 576px){
+
+  /* Container breathing room */
+  .container, .container-xxl, .content-wrap{
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  /* Cards: reduce side padding, keep height natural */
+  .card{ border-radius: var(--qq-radius, 12px) !important; }
+  .card-body{ padding: 12px !important; }
+  .card-header{ padding: 10px 12px !important; }
+
+  /* Form rows: add vertical rhythm (no structural change) */
+  .row.g-3, .row.g-2{ --bs-gutter-y: .75rem; }
+
+  /* Make all action buttons easier to tap */
+  .btn, .theme-btn, .lang-btn{
+    min-height: 44px;
+  }
+
+  /* Prevent iOS zoom on focus */
+  input, select, textarea, button{ font-size: 16px !important; }
+
+  /* Footer/CTA button groups: stack full width */
+  .footer-actions, .action-row, .actions, .btn-row, .rate-actions{
+    flex-wrap: wrap !important;
+    justify-content: stretch !important;
+    gap: .5rem !important;
+  }
+  .footer-actions .btn,
+  .action-row .btn,
+  .actions .btn,
+  .btn-row .btn,
+  .rate-actions .btn{
+    width: 100% !important;
+  }
+
+  /* Rate list rows: larger hit area */
+  #rateList .list-group-item{
+    padding: 12px !important;
+    border-radius: 12px !important;
+    margin-bottom: 10px;
+  }
+
+  /* Keep long service names readable */
+  #rateList .list-group-item *{
+    word-break: break-word;
+  }
+
+  /* Reduce header crowding: keep logo + essentials */
+  .pnsi-header nav{ flex-wrap: wrap; gap: .5rem !important; }
+  .pnsi-header .small{ font-size: .95rem; }
+
+  /* If header contains a brand text next to logo, hide it on phones (logo-first look) */
+  .brand-name, .header-text{ display: none !important; }
+}
+
+
+/* ===== Brand focus ring (logo yellow) ===== */
+:root{ --qq-accent: #f5c400; --qq-accent-glow: rgba(245,196,0,.28); }
+.form-control:focus, .form-select:focus{
+  border-color: var(--qq-accent) !important;
+  box-shadow: 0 0 0 .18rem var(--qq-accent-glow) !important;
+}
+.form-check-input{ accent-color: var(--qq-accent); }
+.form-check-input:checked{
+  background-color: var(--qq-accent) !important;
+  border-color: var(--qq-accent) !important;
+}
+
+/* Mobile: use normal document flow so footer never "floats" mid-screen */
+@media (max-width: 768px){
+  html, body { height: auto !important; }
+  body.pnsi-body{
+    display: block !important;
+    min-height: auto !important;
+    overflow-y: auto !important;
+  }
+  .app-content,
+  .container.my-0,
+  .pnsi-main{
+    display: block !important;
+    min-height: auto !important;
+  }
+  .pnsi-main{ overflow: visible !important; }
+}
+
+
+/* ===== FAQ MODERN BRAND FIX 2026-07-28 ===== */
+.pnsi-header .faq-brand-logo{
+  height:62px !important;
+  width:250px !important;
+  max-width:42vw !important;
+  object-fit:contain !important;
+  object-position:left center !important;
+  margin:-7px 0 !important;
+}
+@media (max-width:768px){
+  .pnsi-header .faq-brand-logo{height:52px !important;width:205px !important;max-width:48vw !important;}
+}
+
+</style>
+
+  {{/* FAQPage JSON-LD localized */}}
+  <script type="application/ld+json">
+  {{if eq .Form.UiLang "en"}}
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"How do I get a FedEx quote online?","acceptedAnswer":{"@type":"Answer","text":"Enter the origin, destination, weight and dimensions in QuickQuoteTool to get an instant FedEx quote."}},
+      {"@type":"Question","name":"Is QuickQuoteTool an official FedEx service?","acceptedAnswer":{"@type":"Answer","text":"No. QuickQuoteTool is an independent tool that uses the official FedEx API to calculate rates, but it is not affiliated with FedEx."}},
+      {"@type":"Question","name":"Are the displayed rates reliable?","acceptedAnswer":{"@type":"Answer","text":"Rates come from the FedEx API and provide a precise estimate, subject to final conditions applied by FedEx."}},
+      {"@type":"Question","name":"Do I need to create an account to use the tool?","acceptedAnswer":{"@type":"Answer","text":"No account is required to get a quote. To use your negotiated discounts, use your own FedEx account number."}},
+      {"@type":"Question","name":"Are my shipment details stored?","acceptedAnswer":{"@type":"Answer","text":"No. The information entered is used only to generate the quote and is not stored."}},
+      {"@type":"Question","name":"Can I use QuickQuoteTool for my company?","acceptedAnswer":{"@type":"Answer","text":"Yes. The tool is suitable for SMEs, businesses and logistics teams that need to get FedEx rates quickly."}}
+    ]
+  }
+  {{else if eq .Form.UiLang "es"}}
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"¿Cómo obtengo una cotización FedEx en línea?","acceptedAnswer":{"@type":"Answer","text":"Ingresa origen, destino, peso y dimensiones en QuickQuoteTool para obtener una cotización FedEx instantánea."}},
+      {"@type":"Question","name":"¿QuickQuoteTool es un servicio oficial de FedEx?","acceptedAnswer":{"@type":"Answer","text":"No. QuickQuoteTool es una herramienta independiente que utiliza la API oficial de FedEx para calcular tarifas, pero no está afiliada a FedEx."}},
+      {"@type":"Question","name":"¿Las tarifas mostradas son confiables?","acceptedAnswer":{"@type":"Answer","text":"Las tarifas provienen de la API de FedEx y son una estimación precisa, sujeta a las condiciones finales aplicadas por FedEx."}},
+      {"@type":"Question","name":"¿Debo crear una cuenta para usar la herramienta?","acceptedAnswer":{"@type":"Answer","text":"No se requiere cuenta para obtener una cotización. Para usar tus descuentos negociados, utiliza tu propio número de cuenta FedEx."}},
+      {"@type":"Question","name":"¿Se guardan mis datos de envío?","acceptedAnswer":{"@type":"Answer","text":"No. La información ingresada se usa solo para generar la cotización y no se almacena."}},
+      {"@type":"Question","name":"¿Puedo usar QuickQuoteTool para mi empresa?","acceptedAnswer":{"@type":"Answer","text":"Sí. La herramienta es adecuada para pymes, empresas y equipos de logística que necesitan tarifas FedEx rápidamente."}}
+    ]
+  }
+  {{else if eq .Form.UiLang "de"}}
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Wie erhalte ich online ein FedEx-Angebot?","acceptedAnswer":{"@type":"Answer","text":"Geben Sie Absender, Empfänger, Gewicht und Maße in QuickQuoteTool ein, um ein sofortiges FedEx-Angebot zu erhalten."}},
+      {"@type":"Question","name":"Ist QuickQuoteTool ein offizieller FedEx-Service?","acceptedAnswer":{"@type":"Answer","text":"Nein. QuickQuoteTool ist ein unabhängiges Tool, das die offizielle FedEx-API nutzt, ist aber nicht mit FedEx verbunden."}},
+      {"@type":"Question","name":"Sind die angezeigten Preise zuverlässig?","acceptedAnswer":{"@type":"Answer","text":"Die Preise stammen aus der FedEx-API und sind eine genaue Schätzung, vorbehaltlich der finalen Bedingungen von FedEx."}},
+      {"@type":"Question","name":"Muss ich ein Konto erstellen?","acceptedAnswer":{"@type":"Answer","text":"Nein. Für ein Angebot ist kein Konto nötig. Für verhandelte Rabatte verwenden Sie Ihre eigene FedEx-Kontonummer."}},
+      {"@type":"Question","name":"Werden meine Versanddaten gespeichert?","acceptedAnswer":{"@type":"Answer","text":"Nein. Die eingegebenen Daten werden nur zur Angebotserstellung verwendet und nicht gespeichert."}},
+      {"@type":"Question","name":"Kann ich QuickQuoteTool für mein Unternehmen nutzen?","acceptedAnswer":{"@type":"Answer","text":"Ja. Das Tool eignet sich für KMU, Unternehmen und Logistikteams, die schnell FedEx-Preise benötigen."}}
+    ]
+  }
+  {{else}}
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Comment obtenir une soumission FedEx en ligne ?","acceptedAnswer":{"@type":"Answer","text":"Entrez l’origine, la destination, le poids et les dimensions dans QuickQuoteTool pour obtenir une soumission FedEx instantanée."}},
+      {"@type":"Question","name":"QuickQuoteTool est-il un service officiel FedEx ?","acceptedAnswer":{"@type":"Answer","text":"Non. QuickQuoteTool est un outil indépendant qui utilise l’API officielle FedEx pour calculer des tarifs, mais il n’est pas affilié à FedEx."}},
+      {"@type":"Question","name":"Les tarifs affichés sont-ils fiables ?","acceptedAnswer":{"@type":"Answer","text":"Les tarifs proviennent de l’API FedEx et constituent une estimation précise, sous réserve des conditions finales appliquées par FedEx."}},
+      {"@type":"Question","name":"Dois-je créer un compte pour utiliser l’outil ?","acceptedAnswer":{"@type":"Answer","text":"Non. Aucune création de compte n’est requise. Pour utiliser vos rabais/tarifs négociés, utilisez votre numéro de compte FedEx."}},
+      {"@type":"Question","name":"Mes données d’expédition sont-elles sauvegardées ?","acceptedAnswer":{"@type":"Answer","text":"Non. Les données saisies servent uniquement à générer la soumission et ne sont pas stockées."}},
+      {"@type":"Question","name":"Puis-je utiliser QuickQuoteTool pour mon entreprise ?","acceptedAnswer":{"@type":"Answer","text":"Oui. L’outil est adapté aux PME, entreprises et professionnels de la logistique pour obtenir rapidement des tarifs FedEx."}}
+    ]
+  }
+  {{end}}
+  </script>
+</head>
+<body>
+  <header class="pnsi-header">
+    <div class="container-xxl px-4 py-2 d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div class="nav-left">
+        <a href="/?lang={{.Form.UiLang}}" class="navlink">{{.Ui.NavCalculator}}</a>
+        <div class="nav-guides" id="navTools">
+          <a href="#" class="navlink" onclick="document.getElementById('navTools').classList.toggle('open');return false;">{{.Ui.NavTools}} <span style="font-size:10px;">▾</span></a>
+          <div class="nav-guides-menu">
+            <a href="https://shipping.quickquotetool.ca/" target="_blank" rel="noopener">QuickProof</a>
+            <a href="/outils/matieres-dangereuses?lang={{.Form.UiLang}}">{{if eq .Form.UiLang "fr"}}Déclaration matières dangereuses{{else if eq .Form.UiLang "es"}}Declaración de mercancías peligrosas{{else if eq .Form.UiLang "de"}}Gefahrgutdeklaration{{else}}Dangerous Goods Declaration{{end}}</a>
+          </div>
+        </div>
+        <div class="nav-guides" id="navGuides">
+          <a href="#" class="navlink" onclick="document.getElementById('navGuides').classList.toggle('open');return false;">{{.Ui.NavGuides}} <span style="font-size:10px;">▾</span></a>
+          <div class="nav-guides-menu">
+            {{if eq .Form.UiLang "fr"}}
+              <a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">Comment calculer les tarifs FedEx</a>
+              <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}">Poids volumétrique FedEx (DIM) expliqué</a>
+              <a href="/surcharges-fedex?lang={{.Form.UiLang}}">Surcharges FedEx expliquées</a>
+              <a href="/expedition-canada-usa?lang={{.Form.UiLang}}">Expédition Canada ↔ États‑Unis</a>
+            {{else}}
+              <a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">How to calculate FedEx shipping rates</a>
+              <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}">FedEx dimensional weight (DIM)</a>
+              <a href="/surcharges-fedex?lang={{.Form.UiLang}}">FedEx surcharges explained</a>
+              <a href="/expedition-canada-usa?lang={{.Form.UiLang}}">Canada ↔ US shipping</a>
+            {{end}}
+          </div>
+        </div>
+        <a href="/faq?lang={{.Form.UiLang}}" class="navlink active">{{.Ui.LinkFAQ}}</a>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+<button type="button" class="theme-btn" id="themeToggle" aria-label="Toggle theme">
+  <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+    <path d="M21.64 13.02A8.49 8.49 0 0 1 11 2.36a.75.75 0 0 0-.9-.9A10 10 0 1 0 22.54 13.9a.75.75 0 0 0-.9-.88z"/>
+  </svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" style="display:none">
+    <path d="M6.76 4.84l-1.8-1.8-1.06 1.06 1.8 1.8 1.06-1.06zm10.48 0 1.06 1.06 1.8-1.8-1.06-1.06-1.8 1.8zM12 4V1.5h-1.5V4H12zm0 18.5V20h-1.5v2.5H12zM4 13.5H1.5V12H4v1.5zm18.5 0H20V12h2.5v1.5zM6.76 19.16l-1.06-1.06-1.8 1.8 1.06 1.06 1.8-1.8zm12.54-1.06-1.06 1.06 1.8 1.8 1.06-1.06-1.8-1.8zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/>
+  </svg>
+  <span class="code" id="themeLabel">Dark</span>
+</button>
+        <div class="lang-switch-g" id="langSwitchG">
+          <button type="button" class="lang-btn-g" onclick="document.getElementById('langSwitchG').classList.toggle('open')">
+            {{if eq .Form.UiLang "fr"}}FR{{else if eq .Form.UiLang "es"}}ES{{else if eq .Form.UiLang "de"}}DE{{else}}EN{{end}} <span style="font-size:10px;">▾</span>
+          </button>
+          <ul class="lang-menu-g">
+            <li data-lang="fr">FR</li>
+            <li data-lang="en">EN</li>
+            <li data-lang="es">ES</li>
+            <li data-lang="de">DE</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-xxl px-4 py-4">
+    <div class="content-wrap mx-auto">
+      <div class="card p-4">
+
+        {{if eq .Form.UiLang "en"}}
+          <h1>Frequently asked questions about FedEx quotes</h1>
+          <p>Welcome to the QuickQuoteTool FAQ. Here you’ll find answers to the most common questions about using our tool to generate instant FedEx quotes.</p>
+
+          <h2>How do I get a FedEx quote online?</h2>
+          <p>Enter your shipment details (origin, destination, weight, dimensions) in QuickQuoteTool to get an <strong>instant FedEx quote</strong>.</p>
+
+          <h2>Is QuickQuoteTool an official FedEx service?</h2>
+          <p>No. QuickQuoteTool is an <strong>independent tool</strong> that uses the official FedEx API to calculate shipping rates, but it is not affiliated with FedEx.</p>
+
+          <h2>Are the displayed rates reliable?</h2>
+          <p>Yes. Rates are calculated from the FedEx API. They provide a <strong>precise estimate</strong>, subject to final conditions applied by FedEx.</p>
+
+          <h2>Do I need to create an account to use the tool?</h2>
+          <p>No. No account is required to get a quote. However, to use your negotiated discounts, you should use your own FedEx account number.</p>
+
+          <h2>Are my shipment details stored?</h2>
+          <p>No. The information you enter is only used to generate the quote and is not stored.</p>
+
+          <h2>Where are my personal presets saved?</h2>
+          <p>
+            Personal presets are stored <strong>locally in your browser</strong>. This design avoids conflicts when multiple users share the same FedEx account number.
+            Each user can therefore create and manage their own presets independently.
+          </p>
+
+          <h2>How do I add a personal preset?</h2>
+          <p>To add a personal (custom) preset:</p>
+          <ul>
+            <li>Enter your package dimensions and weight.</li>
+            <li>Click <strong>Add custom package</strong> in the predefined package section.</li>
+            <li>The preset is automatically saved in your browser for the currently entered FedEx account number.</li>
+            <li>You can reuse it instantly from <strong>My presets</strong> for future quotes.</li>
+          </ul>
+
+          <h2>Can I use QuickQuoteTool for my company?</h2>
+          <p>Yes. The tool is designed for <strong>SMEs, businesses and logistics professionals</strong> who want to obtain FedEx rates quickly.</p>
+
+          <h2>What types of shipments are supported?</h2>
+          <p>QuickQuoteTool supports domestic, cross-border and international shipments depending on available FedEx services.</p>
+
+          <hr class="my-4">
+          <p class="mb-0 muted small">Note: QuickQuoteTool is an independent tool using the FedEx API. It is not affiliated with FedEx.</p>
+
+        {{else if eq .Form.UiLang "es"}}
+          <h1>Preguntas frecuentes sobre las cotizaciones FedEx</h1>
+          <p>Bienvenido a la sección de preguntas frecuentes de QuickQuoteTool. Aquí encontrarás respuestas a las preguntas más comunes sobre el uso de nuestra herramienta para obtener cotizaciones FedEx instantáneas.</p>
+
+          <h2>¿Cómo obtener una cotización FedEx en línea?</h2>
+          <p>Ingresa los datos de tu envío (origen, destino, peso, dimensiones) en QuickQuoteTool para obtener una <strong>cotización FedEx instantánea</strong>.</p>
+
+          <h2>¿QuickQuoteTool es un servicio oficial de FedEx?</h2>
+          <p>No. QuickQuoteTool es una <strong>herramienta independiente</strong> que utiliza la API oficial de FedEx para calcular tarifas de envío, pero no está afiliada a FedEx.</p>
+
+          <h2>¿Las tarifas mostradas son confiables?</h2>
+          <p>Sí. Las tarifas se calculan a partir de la API de FedEx. Son una <strong>estimación precisa</strong>, sujeta a las condiciones finales aplicadas por FedEx.</p>
+
+          <h2>¿Debo crear una cuenta para usar la herramienta?</h2>
+          <p>No. No se requiere crear una cuenta para obtener una cotización. Para usar tus descuentos o tarifas negociadas, debes usar tu propio número de cuenta FedEx.</p>
+
+          <h2>¿Se guardan mis datos de envío?</h2>
+          <p>No. Los datos ingresados se usan únicamente para generar la cotización y no se almacenan.</p>
+
+          <h2>¿Dónde se guardan mis paquetes personalizados?</h2>
+          <p>
+            Los paquetes personalizados se guardan <strong>localmente en tu navegador</strong>. Este diseño evita conflictos cuando varios usuarios comparten el mismo número de cuenta FedEx.
+            Cada usuario puede crear y gestionar sus propios paquetes de forma independiente.
+          </p>
+
+          <h2>¿Cómo agrego un paquete personalizado?</h2>
+          <p>Para agregar un paquete personalizado:</p>
+          <ul>
+            <li>Ingresa las dimensiones y el peso del paquete.</li>
+            <li>Haz clic en <strong>Agregar paquete personalizado</strong> en la sección de paquetes predefinidos.</li>
+            <li>El paquete se guarda automáticamente en tu navegador para el número de cuenta FedEx ingresado.</li>
+            <li>Podrás reutilizarlo inmediatamente desde <strong>Mis paquetes</strong>.</li>
+          </ul>
+
+          <h2>¿Puedo usar QuickQuoteTool para mi empresa?</h2>
+          <p>Sí. La herramienta está pensada para <strong>pymes, empresas y profesionales de logística</strong> que desean obtener tarifas FedEx rápidamente.</p>
+
+          <h2>¿Qué tipos de envíos están soportados?</h2>
+          <p>QuickQuoteTool soporta envíos nacionales, transfronterizos e internacionales según los servicios FedEx disponibles.</p>
+
+          <hr class="my-4">
+          <p class="mb-0 muted small">Nota: QuickQuoteTool es una herramienta independiente que utiliza la API de FedEx. No está afiliada a FedEx.</p>
+
+        
+
+          <h2>¿Dónde se guardan mis preajustes personales?</h2>
+          <p>
+            Los preajustes personales se guardan <strong>localmente en tu navegador</strong> para evitar conflictos cuando varios usuarios comparten el mismo número de cuenta FedEx.
+            Por lo tanto, cada usuario puede crear y administrar sus propios preajustes de forma independiente.
+          </p>
+
+          <h2>¿Cómo agrego un preajuste personal?</h2>
+          <p>Para agregar un preajuste personal:</p>
+          <ul>
+            <li>Ingresa las dimensiones y el peso del paquete.</li>
+            <li>Haz clic en <strong>Agregar paquete personalizado</strong> en la sección de paquetes predefinidos.</li>
+            <li>El preajuste se guarda automáticamente en tu navegador para el número de cuenta FedEx ingresado.</li>
+            <li>Puedes reutilizarlo de inmediato desde <strong>Mis preajustes</strong> en futuras cotizaciones.</li>
+          </ul>
+
+{{else if eq .Form.UiLang "de"}}
+          <h1>Häufige Fragen zu FedEx-Angeboten</h1>
+          <p>Willkommen im QuickQuoteTool-FAQ. Hier finden Sie Antworten auf die häufigsten Fragen zur Nutzung unseres Tools für sofortige FedEx-Angebote.</p>
+
+          <h2>Wie erhalte ich online ein FedEx-Angebot?</h2>
+          <p>Geben Sie Ihre Sendungsdaten (Absender, Empfänger, Gewicht, Maße) in QuickQuoteTool ein, um ein <strong>sofortiges FedEx-Angebot</strong> zu erhalten.</p>
+
+          <h2>Ist QuickQuoteTool ein offizieller FedEx-Service?</h2>
+          <p>Nein. QuickQuoteTool ist ein <strong>unabhängiges Tool</strong>, das die offizielle FedEx-API nutzt, ist aber nicht mit FedEx verbunden.</p>
+
+          <h2>Sind die angezeigten Preise zuverlässig?</h2>
+          <p>Ja. Die Preise werden über die FedEx-API berechnet und sind eine <strong>genaue Schätzung</strong>, vorbehaltlich der finalen Bedingungen von FedEx.</p>
+
+          <h2>Muss ich ein Konto erstellen, um das Tool zu nutzen?</h2>
+          <p>Nein. Für ein Angebot ist kein Konto erforderlich. Für verhandelte Rabatte sollten Sie Ihre eigene FedEx-Kontonummer verwenden.</p>
+
+          <h2>Werden meine Versanddaten gespeichert?</h2>
+          <p>Nein. Die eingegebenen Daten werden nur zur Angebotserstellung verwendet und nicht gespeichert.</p>
+
+          <h2>Wo werden meine persönlichen Paketvorlagen gespeichert?</h2>
+          <p>
+            Persönliche Paketvorlagen werden <strong>lokal im Browser gespeichert</strong>. Dieses Design vermeidet Konflikte, wenn mehrere Nutzer dieselbe FedEx-Kontonummer verwenden.
+            Jeder Nutzer kann seine eigenen Vorlagen unabhängig verwalten.
+          </p>
+
+          <h2>Wie füge ich eine persönliche Paketvorlage hinzu?</h2>
+          <p>So fügen Sie eine persönliche Paketvorlage hinzu:</p>
+          <ul>
+            <li>Geben Sie Abmessungen und Gewicht des Pakets ein.</li>
+            <li>Klicken Sie im Bereich der vordefinierten Pakete auf <strong>Benutzerdefiniertes Paket hinzufügen</strong>.</li>
+            <li>Die Vorlage wird automatisch im Browser für die eingegebene FedEx-Kontonummer gespeichert.</li>
+            <li>Sie können sie sofort unter <strong>Meine Vorlagen</strong> wiederverwenden.</li>
+          </ul>
+
+          <h2>Kann ich QuickQuoteTool für mein Unternehmen nutzen?</h2>
+          <p>Ja. Das Tool ist für <strong>KMU, Unternehmen und Logistikprofis</strong> geeignet, die schnell FedEx-Preise benötigen.</p>
+
+          <h2>Welche Sendungen werden unterstützt?</h2>
+          <p>QuickQuoteTool unterstützt nationale, grenzüberschreitende und internationale Sendungen – abhängig von den verfügbaren FedEx-Services.</p>
+
+          <hr class="my-4">
+          <p class="mb-0 muted small">Hinweis: QuickQuoteTool ist ein unabhängiges Tool, das die FedEx-API nutzt. Es ist nicht mit FedEx verbunden.</p>
+
+        {{else}}
+          <h1>Questions fréquentes sur les soumissions FedEx</h1>
+          <p>Bienvenue dans la section FAQ de QuickQuoteTool. Ici, vous trouverez des réponses aux questions les plus courantes concernant l’utilisation de notre outil pour obtenir des soumissions FedEx instantanées.</p>
+
+          <h2>Comment obtenir une soumission FedEx en ligne&nbsp;?</h2>
+          <p>Il suffit d’entrer les informations de votre expédition (origine, destination, poids, dimensions) dans QuickQuoteTool pour obtenir une <strong>soumission FedEx instantanée</strong>.</p>
+
+          <h2>QuickQuoteTool est-il un service officiel FedEx&nbsp;?</h2>
+          <p>Non. QuickQuoteTool est un <strong>outil indépendant</strong> qui utilise l’API officielle FedEx pour calculer les tarifs d’expédition, mais il n’est pas affilié à FedEx.</p>
+
+          <h2>Les tarifs affichés sont-ils fiables&nbsp;?</h2>
+          <p>Oui. Les tarifs sont calculés à partir des données fournies par l’API FedEx. Ils constituent une <strong>estimation précise</strong>, sous réserve des conditions finales appliquées par FedEx.</p>
+
+          <h2>Dois-je créer un compte pour utiliser l’outil&nbsp;?</h2>
+          <p>Non. Aucune création de compte n’est requise pour obtenir une soumission FedEx avec QuickQuoteTool. Pour utiliser l’outil avec vos rabais ou tarifs négociés, vous devez utiliser votre propre numéro de compte FedEx.</p>
+
+          <h2>Mes données d’expédition sont-elles sauvegardées&nbsp;?</h2>
+          <p>Non. Les données saisies servent uniquement à générer la soumission et ne sont pas stockées.</p>
+
+          <h2>Où sont enregistrés mes colis personnalisés&nbsp;?</h2>
+          <p>
+            Les colis personnalisés sont enregistrés <strong>localement dans votre navigateur</strong>. Ce choix permet d’éviter les conflits lorsque plusieurs utilisateurs partagent le même numéro de compte FedEx.
+            Chaque utilisateur peut ainsi gérer ses propres colis de manière indépendante.
+          </p>
+
+          <h2>Comment ajouter un colis personnalisé&nbsp;?</h2>
+          <p>Pour ajouter un colis personnalisé&nbsp;:</p>
+          <ul>
+            <li>Entrez les dimensions et le poids du colis.</li>
+            <li>Cliquez sur <strong>Ajouter un colis personnalisé</strong> dans la section des colis prédéfinis.</li>
+            <li>Le colis est automatiquement sauvegardé dans votre navigateur pour le numéro de compte FedEx utilisé.</li>
+            <li>Il sera immédiatement disponible dans <strong>Mes colis</strong> pour vos prochaines soumissions.</li>
+          </ul>
+
+          <h2>Puis-je utiliser QuickQuoteTool pour mon entreprise&nbsp;?</h2>
+          <p>Oui. L’outil est conçu pour les <strong>PME, entreprises et professionnels de la logistique</strong> qui souhaitent obtenir rapidement des tarifs d’expédition FedEx.</p>
+
+          <h2>Quels types d’expéditions sont supportés&nbsp;?</h2>
+          <p>QuickQuoteTool supporte les expéditions domestiques, transfrontalières et internationales selon les services FedEx disponibles.</p>
+
+          <hr class="my-4">
+          <p class="mb-0 muted small">Note: QuickQuoteTool est un outil indépendant utilisant l’API FedEx. Il n’est pas affilié à FedEx.</p>
+        {{end}}
+
+      </div>
+    </div>
+  </main>
+
+  <hr>
+{{if eq .Form.UiLang "fr"}}
+<h2>Guides utiles</h2>
+<p>
+  Consultez notre guide complet :
+  <a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">Comment calculer les tarifs FedEx</a>.
+</p>
+<p>
+  Et notre article dédié au volumétrique :
+  <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}">Poids volumétrique FedEx (DIM) expliqué</a>.
+</p>
+{{else}}
+<h2>Helpful guides</h2>
+<p>
+  Read the complete guide:
+  <a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">How to calculate FedEx shipping rates</a>.
+</p>
+<p>
+  And our DIM article:
+  <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}">FedEx dimensional weight explained</a>.
+</p>
+{{end}}
+
+
+
+  <!-- Internal links: helpful guides (above footer) -->
+  <div class="container" style="max-width: 1100px;">
+    <div class="small text-center" style="margin: 14px 0 10px 0; opacity: .9;">
+      <span style="font-weight:600;">
+        {{if eq .Form.UiLang "fr"}}Guides utiles{{else if eq .Form.UiLang "es"}}Guías útiles{{else if eq .Form.UiLang "de"}}Nützliche Guides{{else}}Helpful guides{{end}}:
+      </span>
+      <span>
+        {{if eq .Form.UiLang "fr"}}
+          <a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">Comment calculer les tarifs FedEx</a>
+          · <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}">Poids volumétrique FedEx (DIM) expliqué</a>
+          · <a href="/surcharges-fedex?lang={{.Form.UiLang}}">Surcharges FedEx expliquées</a>
+          · <a href="/expedition-canada-usa?lang={{.Form.UiLang}}">Expédition Canada ↔ États‑Unis</a>
+        {{else}}
+          <a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">How to calculate FedEx shipping rates</a>
+          · <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}">FedEx dimensional weight (DIM)</a>
+          · <a href="/surcharges-fedex?lang={{.Form.UiLang}}">FedEx surcharges explained</a>
+          · <a href="/expedition-canada-usa?lang={{.Form.UiLang}}">Canada ↔ US shipping</a>
+        {{end}}
+      </span>
+    </div>
+  </div>
+
+<footer class="mt-4">
+    <div class="container-xxl px-4 py-3 d-flex flex-wrap gap-3 justify-content-between align-items-center">
+      <div class="small">
+        <a href="/sitemap.xml">Sitemap</a>
+      </div>
+      <div class="small opacity-75">© 2026 – QuickQuoteTool</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* ===== Theme toggle (charcoal/black) ===== */
+(function(){
+  var STORAGE_KEY = "qqt_theme";
+  function preferredTheme(){
+    try{
+      var saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === "dark" || saved === "light") return saved;
+    }catch(e){}
+    return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  }
+  function applyTheme(theme){
+    var t = (theme === "dark") ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", t);
+    var lbl = document.getElementById("themeLabel");
+    if (lbl) lbl.textContent = (t === "dark") ? "Light" : "Dark";
+    // Icon visibility (fallback for browsers without the CSS display rules)
+    var sun = document.querySelector("#themeToggle .icon-sun");
+    var moon = document.querySelector("#themeToggle .icon-moon");
+    if (sun && moon){
+      if (t === "dark"){ sun.style.display = "inline-block"; moon.style.display = "none"; }
+      else { sun.style.display = "none"; moon.style.display = "inline-block"; }
+    }
+  }
+  function setTheme(theme){
+    try{ localStorage.setItem(STORAGE_KEY, theme); }catch(e){}
+    applyTheme(theme);
+  }
+
+  // init
+  applyTheme(preferredTheme());
+
+  // bind
+  var btn = document.getElementById("themeToggle");
+  if (btn && !btn.dataset.boundTheme){
+    btn.dataset.boundTheme = "1";
+    btn.addEventListener("click", function(){
+      var current = document.documentElement.getAttribute("data-theme") || "light";
+      setTheme(current === "dark" ? "light" : "dark");
+    });
+  }
+})();
+
+/* Language switcher + dropdown outside-click close */
+(function(){
+  var langSw = document.getElementById("langSwitchG");
+  if (langSw){
+    langSw.querySelectorAll(".lang-menu-g li[data-lang]").forEach(function(li){
+      li.addEventListener("click", function(){
+        var chosen = li.getAttribute("data-lang");
+        try{ localStorage.setItem("qq_uiLang", chosen); }catch(e){}
+        var url = new URL(window.location.href);
+        url.searchParams.set("lang", chosen);
+        window.location.href = url.toString();
+      });
+    });
+  }
+  document.addEventListener("click", function(e){
+    var guides = document.getElementById("navGuides");
+    var tools = document.getElementById("navTools");
+    if (guides && !guides.contains(e.target)) guides.classList.remove("open");
+    if (tools && !tools.contains(e.target)) tools.classList.remove("open");
+    if (langSw && !langSw.contains(e.target)) langSw.classList.remove("open");
+  });
+})();
+</script>
+
+<script>
+/* Footer ticker: rotate one message per cycle (infinite) */
+(function(){
+  function parseMessages(raw){
+    if(!raw) return [];
+    return raw.split('||').map(function(s){ return (s||'').trim(); }).filter(Boolean);
+  }
+
+  async function fetchTickerConfig(lang){
+    try{
+      const res = await fetch('/api/ticker?lang=' + encodeURIComponent(lang || 'fr'), { cache: 'no-store' });
+      if(!res.ok) return null;
+      return await res.json();
+    }catch(e){
+      return null;
+    }
+  }
+
+  function applySpeed(track, seconds){
+    const n = Number(seconds);
+    if(!isFinite(n) || n <= 0) return;
+    track.style.setProperty('--footerTickerDuration', n + 's');
+  }
+
+  function initFooterTicker(){
+    const track = document.getElementById('footerTickerTrack');
+    if(!track) return;
+
+    const pageLang = (document.documentElement.getAttribute('lang') || 'fr').toLowerCase();
+    const fallbackMsgs = parseMessages(track.getAttribute('data-messages') || '');
+
+    fetchTickerConfig(pageLang).then(function(cfg){
+      let msgs = fallbackMsgs;
+      const speed = cfg && (cfg.speedSeconds || cfg.speed_seconds);
+
+      if(cfg && Array.isArray(cfg.messages)){
+        msgs = cfg.messages.map(function(s){ return String(s||'').trim(); }).filter(Boolean);
+      }
+      if(!msgs.length){ track.textContent=''; return; }
+
+      if(speed){ applySpeed(track, speed); }
+
+      let idx = 0;
+      track.textContent = msgs[idx];
+
+      track.addEventListener('animationiteration', function(){
+        idx = (idx + 1) % msgs.length;
+        track.textContent = msgs[idx];
+      }, { passive: true });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initFooterTicker);
+})();
+</script>
+
+</body>
+</html>

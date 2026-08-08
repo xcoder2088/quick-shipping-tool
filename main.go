@@ -140,7 +140,7 @@ func main() {
 	)
 
 	fmt.Println("=================================")
-	fmt.Println("  Quick Shipping Tool")
+	fmt.Println("  QuickProof")
 	fmt.Println("  http://localhost:8081")
 
 	if apiKey != "" && fromEmail != "" {
@@ -382,14 +382,24 @@ func uploadHandler(
 		r.FormValue("customer"),
 	)
 
-	if customer == "" {
+	// ==================================================
+	// SHIPMENT / PO
+	// ==================================================
+
+	shipmentOriginal := strings.TrimSpace(
+		r.FormValue("shipment"),
+	)
+
+	// Both fields are required (matches the client-side rule shown to the
+	// user: "* Customer Name and Shipment / PO are both required").
+	if customer == "" || shipmentOriginal == "" {
 
 		writeJSON(
 			w,
 			http.StatusBadRequest,
 			UploadResponse{
 				Success: false,
-				Message: "Customer Name is required",
+				Message: "Customer Name and Shipment / PO are both required",
 			},
 		)
 
@@ -408,28 +418,6 @@ func uploadHandler(
 			UploadResponse{
 				Success: false,
 				Message: "Invalid Customer Name",
-			},
-		)
-
-		return
-	}
-
-	// ==================================================
-	// SHIPMENT / PO
-	// ==================================================
-
-	shipmentOriginal := strings.TrimSpace(
-		r.FormValue("shipment"),
-	)
-
-	if shipmentOriginal == "" {
-
-		writeJSON(
-			w,
-			http.StatusBadRequest,
-			UploadResponse{
-				Success: false,
-				Message: "Shipment / PO is required",
 			},
 		)
 
@@ -805,10 +793,20 @@ func uploadHandler(
 	// PREPARE EMAIL
 	// ==================================================
 
+	customerDisplay := customer
+	if customerDisplay == "" {
+		customerDisplay = "N/A"
+	}
+
+	shipmentDisplay := shipmentOriginal
+	if shipmentDisplay == "" {
+		shipmentDisplay = "N/A"
+	}
+
 	emailSubject := fmt.Sprintf(
-		"Quick Shipping Tool - %s - Shipment %s",
-		customer,
-		shipmentOriginal,
+		"QuickProof - %s - Shipment %s",
+		customerDisplay,
+		shipmentDisplay,
 	)
 
 	notesText := ""
@@ -825,7 +823,7 @@ func uploadHandler(
 	}
 
 	emailBody := fmt.Sprintf(
-		"Quick Shipping Tool\n"+
+		"QuickProof\n"+
 			"Shipping Photo Documentation\n\n"+
 			"Customer: %s\n"+
 			"Shipment / PO: %s\n"+
@@ -833,13 +831,13 @@ func uploadHandler(
 			"Date: %s\n"+
 			"Photos attached: %d\n\n"+
 			"%s"+
-			"The attached photos were submitted through Quick Shipping Tool "+
+			"The attached photos were submitted through QuickProof "+
 			"for shipment documentation and record-keeping purposes.\n\n"+
-			"Quick Shipping Tool\n"+
+			"QuickProof\n"+
 			"Shipping Documentation System\n"+
 			"quickquotetool.ca\n",
-		customer,
-		shipmentOriginal,
+		customerDisplay,
+		shipmentDisplay,
 		userEmail,
 		now.Format("2006-01-02 15:04:05"),
 		saved,
@@ -851,7 +849,7 @@ func uploadHandler(
 <html>
 <body style="margin:0; padding:0; font-family:Arial,Helvetica,sans-serif; color:#1f2937; background:#ffffff;">
 	<div style="max-width:600px; margin:0 auto; padding:24px;">
-		<h2 style="margin:0 0 4px 0;">Quick Shipping Tool</h2>
+		<h2 style="margin:0 0 4px 0;">QuickProof</h2>
 
 		<p style="margin:0 0 24px 0; color:#4b5563;">
 			Shipping Photo Documentation
@@ -883,22 +881,22 @@ func uploadHandler(
 		%s
 
 		<p style="margin-top:24px;">
-			The attached photos were submitted through Quick Shipping Tool
+			The attached photos were submitted through QuickProof
 			for shipment documentation and record-keeping purposes.
 		</p>
 
 		<hr style="border:0; border-top:1px solid #e5e7eb; margin:24px 0;">
 
 		<p style="font-size:12px; color:#6b7280;">
-			Quick Shipping Tool<br>
+			QuickProof<br>
 			Shipping Documentation System<br>
 			quickquotetool.ca
 		</p>
 	</div>
 </body>
 </html>`,
-		htmlEscape(customer),
-		htmlEscape(shipmentOriginal),
+		htmlEscape(customerDisplay),
+		htmlEscape(shipmentDisplay),
 		htmlEscape(userEmail),
 		htmlEscape(now.Format("2006-01-02 15:04:05")),
 		saved,
@@ -1177,7 +1175,7 @@ func sendMailerSendEmail(
 	payload := MailerSendRequest{
 		From: MailerSendAddress{
 			Email: fromEmail,
-			Name:  "Quick Shipping Tool",
+			Name:  "QuickProof",
 		},
 
 		To: []MailerSendAddress{

@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="{{.Form.UiLang}}">
+<head>
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('qqt_theme')
+         || localStorage.getItem('qq_theme')
+         || localStorage.getItem('theme');
+    if(t === 'dark' || t === 'light'){
+      document.documentElement.setAttribute('data-theme', t);
+    }
+  }catch(e){}
+})();
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  {{if eq .Form.UiLang "fr"}}
+    <title>Déclaration de matières dangereuses | QuickQuoteTool</title>
+    <meta name="description" content="Générez un brouillon de déclaration de matières dangereuses FedEx (air) ou IMO (océan) — UN, quantité, poids, code IATA calculé automatiquement.">
+  {{else if eq .Form.UiLang "es"}}
+    <title>Declaración de mercancías peligrosas | QuickQuoteTool</title>
+    <meta name="description" content="Genere un borrador de declaración de mercancías peligrosas FedEx (aéreo) o IMO (marítimo) — UN, cantidad, peso, código IATA calculado automáticamente.">
+  {{else if eq .Form.UiLang "de"}}
+    <title>Gefahrgutdeklaration | QuickQuoteTool</title>
+    <meta name="description" content="Erstellen Sie einen Entwurf einer Gefahrgutdeklaration für FedEx (Luft) oder IMO (See) — UN, Menge, Gewicht, IATA-Code automatisch berechnet.">
+  {{else}}
+    <title>Dangerous Goods Declaration | QuickQuoteTool</title>
+    <meta name="description" content="Generate a draft dangerous goods declaration for FedEx (air) or IMO (ocean) — UN number, quantity, weight, IATA code calculated automatically.">
+  {{end}}
+
+  <link rel="canonical" href="https://quickquotetool.ca/outils/matieres-dangereuses">
+  <meta name="robots" content="noindex,follow">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body{ background:#f4f6f9; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .pnsi-header{ background: linear-gradient(90deg, #204E82, #012844); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.25); }
+    .pnsi-header a{ color:#fff; text-decoration:none; font-weight:600; }
+    .pnsi-header a:hover{ text-decoration:underline; }
+    .wrap{ max-width: 900px; }
+    .card{ box-shadow: 0 2px 10px rgba(0,0,0,.10); border: 1px solid #dde3ea; border-radius: 10px; }
+    .muted{ color: rgba(17,24,39,.75); }
+    a{ color:#204E82; }
+    a:hover{ color:#143a66; }
+
+    .nav-left{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
+    .nav-left .navlink{padding:8px 12px;color:rgba(255,255,255,.85);text-decoration:none !important;font-size:14px;font-weight:600;border-bottom:2px solid transparent;white-space:nowrap;}
+    .nav-left .navlink:hover{color:#fff;background:rgba(255,255,255,.08)}
+    .nav-left .navlink.active{color:#fff;border-bottom-color:#ffcc00}
+    .nav-guides{position:relative}
+    .nav-guides-menu{display:none;position:absolute;top:100%;left:0;background:#fff;color:#1c2733;min-width:280px;border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.22);padding:6px;z-index:30;}
+    .nav-guides.open .nav-guides-menu{display:block}
+    .nav-guides-menu a{display:block;padding:9px 12px;border-radius:7px;color:#1c2733 !important;text-decoration:none !important;font-size:13.5px}
+    .nav-guides-menu a:hover{background:#eef3fd;color:#1565d8 !important}
+    .nav-guides-menu a.current{font-weight:700;color:#1565d8 !important;background:#eef3fd;}
+    html[data-theme="dark"] .nav-guides-menu a.current{color:#ffcc00 !important;background:rgba(255,204,0,.12) !important;}
+    html[data-theme="dark"] .nav-guides-menu{background:#0f1a2c;color:#e5e7eb}
+    html[data-theme="dark"] .nav-guides-menu a{color:#e5e7eb !important}
+    html[data-theme="dark"] .nav-guides-menu a:hover{background:rgba(255,255,255,.08)}
+    .theme-btn{display:inline-flex;align-items:center;justify-content:center;height:34px;padding:0 10px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;user-select:none;font-weight:700;font-size:.85rem;gap:8px;}
+    .theme-btn svg{width:16px;height:16px}
+    .lang-switch-g{position:relative}
+    .lang-btn-g{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 10px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;font-weight:700;font-size:.85rem;}
+    .lang-menu-g{display:none;position:absolute;top:100%;right:0;background:#fff;color:#1c2733;min-width:110px;border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.22);padding:6px;z-index:30;margin-top:4px;list-style:none;}
+    .lang-switch-g.open .lang-menu-g{display:block}
+    .lang-menu-g li{padding:8px 10px;border-radius:7px;cursor:pointer;font-size:13.5px;font-weight:600}
+    .lang-menu-g li:hover{background:#eef3fd;color:#1565d8}
+    html[data-theme="dark"] .lang-menu-g{background:#0f1a2c;color:#e5e7eb}
+    html[data-theme="dark"] .lang-menu-g li:hover{background:rgba(255,255,255,.08)}
+
+:root{
+  --qq-bg: #eef1f6; --qq-text: #0f172a; --qq-muted: #475569; --qq-card: #fdfdfe;
+  --qq-border: rgba(15, 23, 42, 0.12); --qq-link: #0d6efd; --qq-link-hover: #084298;
+}
+html[data-theme="dark"]{
+  --qq-bg: #0b1220; --qq-text: #e5e7eb; --qq-muted: #9ca3af; --qq-card: #101b2d;
+  --qq-border: rgba(229,231,235,0.18); --qq-link: #ffcc00; --qq-link-hover: #ffe066;
+  --bs-body-bg: var(--qq-bg); --bs-body-color: var(--qq-text);
+  --bs-secondary-color: var(--qq-muted); --bs-border-color: var(--qq-border);
+}
+html, body{ height:100%; }
+body{ background: var(--qq-bg) !important; color: var(--qq-text) !important; min-height:100vh; display:flex; flex-direction:column; }
+main.wrap{ flex:1 0 auto; }
+.card{ background: var(--qq-card) !important; color: var(--qq-text) !important; border-color: var(--qq-border) !important; box-shadow: 0 4px 18px rgba(0,0,0,.06); }
+html[data-theme="dark"] .card{ box-shadow: 0 4px 18px rgba(0,0,0,.35); border-color: rgba(229,231,235,.10) !important; }
+
+/* ===== Footer (matches the rest of the site) ===== */
+.pnsi-footer{ flex:0 0 auto; margin-top:32px; background:#204E82; color:#fff; font-size:0.85rem; position:relative; }
+.footer-donate{ width:60px; height:auto; margin-right:0.6rem; }
+.footer-ticker{
+  position:absolute; left:0; right:0; top:0; bottom:0;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none; overflow:hidden;
+}
+.footer-ticker__viewport{ width:min(820px, 60vw); overflow:hidden; white-space:nowrap; }
+.footer-ticker__track{
+  display:inline-block; white-space:nowrap; will-change:transform;
+  font-size:0.96em; font-weight:inherit; font-family:inherit;
+  animation: footerTickerScroll var(--footerTickerDuration, 25s) linear infinite;
+}
+@keyframes footerTickerScroll{
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+@media (prefers-reduced-motion: reduce){
+  .footer-ticker__track{ animation: none; transform:none; }
+}
+@media (max-width: 768px){
+  .footer-ticker{ display:none; }
+}
+.text-muted, .small, small{ color: var(--qq-muted) !important; }
+a{ color: var(--qq-link); } a:hover{ color: var(--qq-link-hover); }
+.form-control, .form-select{ background: var(--qq-card); color: var(--qq-text); border-color: var(--qq-border); }
+html[data-theme="dark"] .form-control::placeholder{ color: #6b7280; }
+
+.mode-toggle{display:flex;gap:8px;margin-bottom:18px}
+.mode-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;border:2px solid var(--qq-border);background:var(--qq-card);color:var(--qq-text);cursor:pointer;font-size:14px;font-weight:700}
+.mode-btn.active{border-color:#1565d8;color:#1565d8}
+.chip{padding:6px 12px;border-radius:20px;border:1.5px solid var(--qq-border);background:transparent;cursor:pointer;font-size:12.5px;color:var(--qq-text)}
+.chip.selected{border-color:#1565d8;background:rgba(21,101,216,.12);color:#1565d8;font-weight:700}
+.chip-deletable{display:inline-flex;align-items:center;gap:6px;}
+.chip-del{color:#c0392b;font-weight:800;font-size:14px;line-height:1;padding:0 2px;}
+.chip-del:hover{background:rgba(192,57,43,.15);border-radius:4px;}
+.pi-result{margin-top:10px;padding:10px 12px;background:rgba(21,101,216,.08);border-radius:8px;font-size:13px}
+.warn-box{background:rgba(230,126,34,.12);color:#8a4b00;border-radius:8px;padding:8px 10px;font-size:12.5px;margin-top:8px}
+
+.hazard-diamond{width:46px;height:46px;flex:0 0 46px;box-shadow:0 1px 4px rgba(0,0,0,.35);border-radius:3px;overflow:hidden;background:#fff;}
+.hazard-diamond svg{width:100%;height:100%;display:block;}
+.hazard-diamond img{width:100%;height:100%;object-fit:contain;display:block;}
+
+.cao-badge{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--qq-border);border-radius:6px;padding:6px 10px;margin-top:8px;}
+.cao-badge img{height:34px;flex:0 0 auto;}
+.cao-badge span{font-weight:700;font-size:12px;color:#8a4b00;}
+html[data-theme="dark"] .warn-box{color:#ffcf9e}
+.draft-note{font-size:12.5px;color:var(--qq-muted);margin-top:14px}
+.addr-list{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;}
+.addr-row{display:flex;align-items:center;gap:8px;border:1px solid var(--qq-border);border-radius:8px;padding:6px 8px;background:var(--qq-card);}
+.addr-row-info{flex:1;display:flex;flex-direction:column;text-align:left;background:none;border:none;padding:2px 4px;cursor:pointer;color:var(--qq-text);}
+.addr-row-info b{font-size:13px}
+.addr-row-info span{font-size:11.5px;color:var(--qq-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:320px;}
+.addr-row-info:hover{background:rgba(21,101,216,.08);border-radius:6px}
+.addr-row-del{border:none;background:none;color:#c0392b;font-size:18px;line-height:1;cursor:pointer;padding:2px 8px;border-radius:6px;}
+.addr-row-del:hover{background:rgba(192,57,43,.12)}
+</style>
+</head>
+<body>
+  <header class="pnsi-header py-2">
+    <div class="container wrap d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="nav-left">
+        <a href="/?lang={{.Form.UiLang}}" class="navlink">{{.Ui.NavCalculator}}</a>
+        <div class="nav-guides" id="navTools">
+          <a href="#" class="navlink active" onclick="document.getElementById('navTools').classList.toggle('open');return false;">{{.Ui.NavTools}} <span style="font-size:10px;">▾</span></a>
+          <div class="nav-guides-menu">
+            <a href="https://shipping.quickquotetool.ca/" target="_blank" rel="noopener">QuickProof</a>
+            <a href="/outils/matieres-dangereuses?lang={{.Form.UiLang}}" class="current">
+              {{if eq .Form.UiLang "fr"}}Déclaration matières dangereuses{{else if eq .Form.UiLang "es"}}Declaración de mercancías peligrosas{{else if eq .Form.UiLang "de"}}Gefahrgutdeklaration{{else}}Dangerous Goods Declaration{{end}}
+            </a>
+          </div>
+        </div>
+        <div class="nav-guides" id="navGuides">
+          <a href="#" class="navlink" onclick="document.getElementById('navGuides').classList.toggle('open');return false;">{{.Ui.NavGuides}} <span style="font-size:10px;">▾</span></a>
+          <div class="nav-guides-menu">
+            {{if eq .Form.UiLang "fr"}}
+              <a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">Comment calculer les tarifs FedEx</a>
+              <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}">Poids volumétrique FedEx (DIM) expliqué</a>
+              <a href="/surcharges-fedex?lang={{.Form.UiLang}}">Surcharges FedEx expliquées</a>
+              <a href="/expedition-canada-usa?lang={{.Form.UiLang}}">Expédition Canada ↔ États‑Unis</a>
+            {{else if eq .Form.UiLang "es"}}<a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">Cómo calcular las tarifas de FedEx</a>
+              <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}">Peso volumétrico de FedEx (DIM) explicado</a>
+              <a href="/surcharges-fedex?lang={{.Form.UiLang}}">Recargos de FedEx explicados</a>
+              <a href="/expedition-canada-usa?lang={{.Form.UiLang}}">Envíos Canadá ↔ EE. UU.</a>{{else if eq .Form.UiLang "de"}}<a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">So berechnen Sie FedEx-Versandtarife</a>
+              <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}">FedEx-Volumengewicht (DIM) erklärt</a>
+              <a href="/surcharges-fedex?lang={{.Form.UiLang}}">FedEx-Zuschläge erklärt</a>
+              <a href="/expedition-canada-usa?lang={{.Form.UiLang}}">Versand Kanada ↔ USA</a>{{else}}
+              <a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">How to calculate FedEx shipping rates</a>
+              <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}">FedEx dimensional weight (DIM)</a>
+              <a href="/surcharges-fedex?lang={{.Form.UiLang}}">FedEx surcharges explained</a>
+              <a href="/expedition-canada-usa?lang={{.Form.UiLang}}">Canada ↔ US shipping</a>
+            {{end}}
+          </div>
+        </div>
+        <a href="/faq?lang={{.Form.UiLang}}" class="navlink">{{.Ui.LinkFAQ}}</a>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <button type="button" class="theme-btn" id="themeToggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M21.64 13.02A8.49 8.49 0 0 1 11 2.36a.75.75 0 0 0-.9-.9A10 10 0 1 0 22.54 13.9a.75.75 0 0 0-.9-.88z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" style="display:none"><path d="M6.76 4.84l-1.8-1.8-1.06 1.06 1.8 1.8 1.06-1.06zm10.48 0 1.06 1.06 1.8-1.8-1.06-1.06-1.8 1.8zM12 4V1.5h-1.5V4H12zm0 18.5V20h-1.5v2.5H12zM4 13.5H1.5V12H4v1.5zm18.5 0H20V12h2.5v1.5zM6.76 19.16l-1.06-1.06-1.8 1.8 1.06 1.06 1.8-1.8zm12.54-1.06-1.06 1.06 1.8 1.8 1.06-1.06-1.8-1.8zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/></svg>
+          <span class="code" id="themeLabel">Dark</span>
+        </button>
+        <div class="lang-switch-g" id="langSwitchG">
+          <button type="button" class="lang-btn-g" onclick="document.getElementById('langSwitchG').classList.toggle('open')">
+            {{if eq .Form.UiLang "fr"}}FR{{else if eq .Form.UiLang "es"}}ES{{else if eq .Form.UiLang "de"}}DE{{else}}EN{{end}} <span style="font-size:10px;">▾</span>
+          </button>
+          <ul class="lang-menu-g">
+            <li data-lang="fr">FR</li>
+            <li data-lang="en">EN</li>
+            <li data-lang="es">ES</li>
+            <li data-lang="de">DE</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container wrap my-4">
+    <article class="card p-4 p-md-5">
+
+{{if eq .Form.UiLang "fr"}}
+<h1>Déclaration de matières dangereuses</h1>
+<p class="muted">Brouillon généré automatiquement — à vérifier et signer par une personne formée avant remise au transporteur.</p>
+{{else if eq .Form.UiLang "es"}}<h1>Declaración de mercancías peligrosas</h1>
+<p class="muted">Borrador generado automáticamente — debe ser verificado y firmado por una persona capacitada antes de entregarlo al transportista.</p>{{else if eq .Form.UiLang "de"}}<h1>Gefahrgutdeklaration</h1>
+<p class="muted">Automatisch erstellter Entwurf — muss von einer geschulten Person überprüft und unterschrieben werden, bevor er dem Spediteur übergeben wird.</p>{{else}}
+<h1>Dangerous Goods Declaration</h1>
+<p class="muted">Auto-generated draft — must be verified and signed by a trained person before handing to the carrier.</p>
+{{end}}
+
+<div class="mode-toggle">
+  <button type="button" class="mode-btn active" id="modeAir">✈️ FedEx Express (air)</button>
+  <button type="button" class="mode-btn" id="modeOcean">🚢 IMO (ocean)</button>
+</div>
+
+<form id="hazForm" method="post" action="/outils/matieres-dangereuses/generate" target="_blank">
+  <input type="hidden" name="mode" id="modeInput" value="air">
+  <input type="hidden" name="pg" id="pgInput" value="II">
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-6">
+      <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Expéditeur{{else if eq .Form.UiLang "es"}}Remitente{{else if eq .Form.UiLang "de"}}Absender{{else}}Shipper{{end}}</label>
+      <input class="form-control mb-2" name="shipperName" id="shipperName" placeholder="{{if eq .Form.UiLang "fr"}}Nom / entreprise{{else if eq .Form.UiLang "es"}}Nombre / empresa{{else if eq .Form.UiLang "de"}}Name / Firma{{else}}Name / company{{end}}">
+      <textarea class="form-control mb-2" name="shipperAddr" id="shipperAddr" rows="3" placeholder="{{if eq .Form.UiLang "fr"}}Adresse (une ligne par ligne d'adresse, ex: rue / ville, province, code postal / pays){{else if eq .Form.UiLang "es"}}Dirección (una línea por línea de dirección, ej: calle / ciudad, provincia, código postal / país){{else if eq .Form.UiLang "de"}}Adresse (eine Zeile pro Adresszeile, z. B. Straße / Stadt, Provinz, Postleitzahl / Land){{else}}Address (one line per address line, e.g. street / city, province, postal code / country){{end}}"></textarea>
+      <input class="form-control mb-2" name="shipperPhone" id="shipperPhone" placeholder="{{if eq .Form.UiLang "fr"}}Téléphone{{else if eq .Form.UiLang "es"}}Teléfono{{else if eq .Form.UiLang "de"}}Telefon{{else}}Phone{{end}}">
+      <input type="email" class="form-control" name="shipperEmail" id="shipperEmail" placeholder="{{if eq .Form.UiLang "fr"}}Courriel{{else if eq .Form.UiLang "es"}}Correo electrónico{{else if eq .Form.UiLang "de"}}E-Mail{{else}}Email{{end}}">
+      <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="saveShipBtn">
+        {{if eq .Form.UiLang "fr"}}💾 Enregistrer comme mon expéditeur{{else if eq .Form.UiLang "es"}}💾 Guardar como mi remitente{{else if eq .Form.UiLang "de"}}💾 Als meinen Absender speichern{{else}}💾 Save as my shipper{{end}}
+      </button>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Destinataire{{else if eq .Form.UiLang "es"}}Destinatario{{else if eq .Form.UiLang "de"}}Empfänger{{else}}Consignee{{end}}</label>
+      <input class="form-control mb-2" name="consigneeName" id="consigneeName" placeholder="{{if eq .Form.UiLang "fr"}}Nom / entreprise{{else if eq .Form.UiLang "es"}}Nombre / empresa{{else if eq .Form.UiLang "de"}}Name / Firma{{else}}Name / company{{end}}">
+      <textarea class="form-control mb-2" name="consigneeAddr" id="consigneeAddr" rows="2" placeholder="{{if eq .Form.UiLang "fr"}}Adresse{{else if eq .Form.UiLang "es"}}Dirección{{else if eq .Form.UiLang "de"}}Adresse{{else}}Address{{end}}"></textarea>
+      <div class="d-flex gap-2 flex-wrap">
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="saveAddrBtn">
+          {{if eq .Form.UiLang "fr"}}💾 Enregistrer ce destinataire{{else if eq .Form.UiLang "es"}}💾 Guardar este destinatario{{else if eq .Form.UiLang "de"}}💾 Diesen Empfänger speichern{{else}}💾 Save this consignee{{end}}
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" id="openAddrModalBtn">
+          {{if eq .Form.UiLang "fr"}}📇 Destinataires enregistrés{{else if eq .Form.UiLang "es"}}📇 Destinatarios guardados{{else if eq .Form.UiLang "de"}}📇 Gespeicherte Empfänger{{else}}📇 Saved consignees{{end}} (<span id="addrCount">0</span>)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-6">
+      <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Marque du produit / Marks & Nos{{else if eq .Form.UiLang "es"}}Marca del producto / Marks & Nos{{else if eq .Form.UiLang "de"}}Produktmarke / Marks & Nos{{else}}Product marks / Marks & Nos{{end}}</label>
+      <input class="form-control" name="productMarks" id="productMarks" placeholder="{{if eq .Form.UiLang "fr"}}ex: CAPOL 485 C (optionnel){{else if eq .Form.UiLang "es"}}ej: CAPOL 485 C (opcional){{else if eq .Form.UiLang "de"}}z. B. CAPOL 485 C (optional){{else}}e.g. CAPOL 485 C (optional){{end}}">
+    </div>
+  </div>
+
+  <div id="airFields" class="row g-3 mb-3">
+    <div class="col-md-6"><label class="form-label small fw-bold">Airport of Departure</label><input class="form-control" name="airportDep" id="airportDep"></div>
+    <div class="col-md-6"><label class="form-label small fw-bold">Airport of Destination</label><input class="form-control" name="airportDest" id="airportDest"></div>
+    <div class="col-md-6"><label class="form-label small fw-bold">Air Waybill No.</label><input class="form-control" name="awb" id="awb"></div>
+    <div class="col-md-6"><label class="form-label small fw-bold">Shipper's Reference</label><input class="form-control" name="shipperRef" id="shipperRef"></div>
+  </div>
+
+  <div id="oceanFields" class="row g-3 mb-3" style="display:none">
+    <div class="col-md-4"><label class="form-label small fw-bold">Vessel / voyage No.</label><input class="form-control" name="vesselName" id="vesselName"></div>
+    <div class="col-md-4"><label class="form-label small fw-bold">Port of loading</label><input class="form-control" name="portLoading" id="portLoading"></div>
+    <div class="col-md-4"><label class="form-label small fw-bold">Port of discharge</label><input class="form-control" name="portDischarge" id="portDischarge"></div>
+    <div class="col-md-4">
+      <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Poids brut (kg){{else if eq .Form.UiLang "es"}}Peso bruto (kg){{else if eq .Form.UiLang "de"}}Bruttogewicht (kg){{else}}Gross weight (kg){{end}}</label>
+      <input type="number" class="form-control" name="grossWeight" id="grossWeight" step="0.01" min="0" placeholder="{{if eq .Form.UiLang "fr"}}calculé automatiquement si vide{{else if eq .Form.UiLang "es"}}calculado automáticamente si se deja vacío{{else if eq .Form.UiLang "de"}}wird automatisch berechnet, wenn leer gelassen{{else}}auto-calculated if left blank{{end}}">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Poids net (kg){{else if eq .Form.UiLang "es"}}Peso neto (kg){{else if eq .Form.UiLang "de"}}Nettogewicht (kg){{else}}Net weight (kg){{end}}</label>
+      <input type="number" class="form-control" name="netWeight" id="netWeight" step="0.01" min="0">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label small fw-bold">EmS No.</label>
+      <input class="form-control" name="emsNo" id="emsNo" placeholder="ex: F-A, S-F">
+    </div>
+    <div class="col-md-8">
+      <div class="form-check mt-4 pt-1">
+        <input class="form-check-input" type="checkbox" id="flashpointEnabled" name="flashpointEnabled" value="1">
+        <label class="form-check-label small fw-bold" for="flashpointEnabled">
+          {{if eq .Form.UiLang "fr"}}Point d'éclair applicable{{else if eq .Form.UiLang "es"}}Punto de inflamación aplicable{{else if eq .Form.UiLang "de"}}Flammpunkt anwendbar{{else}}Flashpoint applicable{{end}}
+        </label>
+      </div>
+      <div id="flashpointFields" class="input-group mt-1" style="display:none;max-width:220px;">
+        <input type="number" class="form-control" name="flashpointValue" id="flashpointValue" step="0.1" placeholder="85">
+        <select class="form-select" name="flashpointUnit" id="flashpointUnit" style="max-width:90px">
+          <option value="C">&deg;C</option>
+          <option value="F">&deg;F</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3 form-check" id="radioactiveWrap">
+    <input class="form-check-input" type="checkbox" id="radioactive" name="radioactive" value="1">
+    <label class="form-check-label" for="radioactive">{{if eq .Form.UiLang "fr"}}Matière radioactive{{else if eq .Form.UiLang "es"}}Materia radiactiva{{else if eq .Form.UiLang "de"}}Radioaktives Material{{else}}Radioactive material{{end}}</label>
+  </div>
+
+  <hr>
+
+  <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Numéro UN{{else if eq .Form.UiLang "es"}}Número UN{{else if eq .Form.UiLang "de"}}UN-Nummer{{else}}UN number{{end}}</label>
+  <div class="d-flex align-items-center gap-3 mb-2">
+    <select class="form-select" name="un" id="unSelect" style="flex:1">
+      <option value="1170">UN1170 — Ethanol, solution</option>
+      <option value="1197">UN1197 — Extracts, liquid for flavour or aroma</option>
+      <option value="3077">UN3077 — Environmentally hazardous substance, solid, n.o.s. (d-Limonene)</option>
+      <option value="1759">UN1759 — Corrosive solid, n.o.s.</option>
+    </select>
+    <div id="classBadge" class="hazard-diamond"></div>
+  </div>
+  <button type="button" class="btn btn-outline-secondary btn-sm mb-2" id="openCustomUnModalBtn">
+    {{if eq .Form.UiLang "fr"}}➕ Ajouter mon propre UN{{else if eq .Form.UiLang "es"}}➕ Añadir mi propio UN{{else if eq .Form.UiLang "de"}}➕ Eigene UN-Nummer hinzufügen{{else}}➕ Add my own UN{{end}}
+  </button>
+  <input type="hidden" name="customUN" id="customUN" value="">
+  <input type="hidden" name="customPSN" id="customPSN" value="">
+  <input type="hidden" name="customClass" id="customClass" value="">
+  <input type="hidden" name="customPI" id="customPI" value="">
+  <input type="hidden" name="customCAO" id="customCAO" value="">
+  <a href="https://cameochemicals.noaa.gov/search/simple" target="_blank" rel="noopener" class="small">
+    {{if eq .Form.UiLang "fr"}}🔎 Vérifier ce UN sur CAMEO Chemicals (NOAA){{else if eq .Form.UiLang "es"}}🔎 Verificar este UN en CAMEO Chemicals (NOAA){{else if eq .Form.UiLang "de"}}🔎 Diese UN-Nummer bei CAMEO Chemicals (NOAA) prüfen{{else}}🔎 Verify this UN on CAMEO Chemicals (NOAA){{end}}
+  </a>
+  <p class="draft-note" style="margin-top:2px">
+    {{if eq .Form.UiLang "fr"}}CAMEO n'offre pas de recherche automatique intégrable — ce lien ouvre leur outil pour une vérification manuelle rapide.{{else if eq .Form.UiLang "es"}}CAMEO no ofrece una búsqueda automática integrable — este enlace abre su herramienta para una verificación manual rápida.{{else if eq .Form.UiLang "de"}}CAMEO bietet keine einbettbare automatische Suche — dieser Link öffnet deren Tool für eine schnelle manuelle Prüfung.{{else}}CAMEO has no embeddable search API — this link opens their tool for a quick manual check.{{end}}
+  </p>
+  <div class="mb-3"></div>
+
+  <div id="pgBlock" class="mb-3">
+    <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Groupe d'emballage{{else if eq .Form.UiLang "es"}}Grupo de embalaje{{else if eq .Form.UiLang "de"}}Verpackungsgruppe{{else}}Packing group{{end}}</label>
+    <div class="d-flex gap-2" id="pgChips"></div>
+  </div>
+
+  <div class="row g-3 mb-2">
+    <div class="col-md-4">
+      <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Nombre de colis{{else if eq .Form.UiLang "es"}}Número de bultos{{else if eq .Form.UiLang "de"}}Anzahl der Packstücke{{else}}Number of packages{{end}}</label>
+      <input type="number" class="form-control" name="qtyPackages" id="qtyPackages" value="3" min="1">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Quantité par colis{{else if eq .Form.UiLang "es"}}Cantidad por bulto{{else if eq .Form.UiLang "de"}}Menge pro Packstück{{else}}Quantity per package{{end}}</label>
+      <div class="input-group">
+        <input type="number" class="form-control" name="qtyPerPackage" id="qtyPerPackage" value="10" min="0.1" step="0.1">
+        <select class="form-select" name="qtyUnit" id="qtyUnit" style="max-width:90px">
+          <option value="L">L</option>
+          <option value="KG">KG</option>
+        </select>
+      </div>
+      <div class="form-text" style="font-size:0.78rem;">
+        {{if eq .Form.UiLang "fr"}}⚠️ Les limites IATA (Packing Instructions) s'appliquent à la quantité nette PAR COLIS, pas au total de l'envoi. Le nombre de colis n'a pas de plafond agrégé dans cette table.{{else if eq .Form.UiLang "es"}}⚠️ Los límites IATA (Packing Instructions) se aplican a la cantidad neta POR BULTO, no al total del envío. El número de bultos no tiene un límite agregado en esta tabla.{{else if eq .Form.UiLang "de"}}⚠️ Die IATA-Grenzwerte (Packing Instructions) gelten für die Nettomenge PRO PACKSTÜCK, nicht für die Gesamtsendung. Die Anzahl der Packstücke hat in dieser Tabelle keine Gesamtobergrenze.{{else}}⚠️ IATA Packing Instruction limits apply to net quantity PER PACKAGE, not the shipment total. There is no aggregate cap across packages in this table.{{end}}
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-2" id="totalQtyInfo" style="font-size:0.85rem;color:#9fb3c8;"></div>
+
+  <div class="mb-3">
+    <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Type d'emballage{{else if eq .Form.UiLang "es"}}Tipo de embalaje{{else if eq .Form.UiLang "de"}}Verpackungsart{{else}}Packaging type{{end}}</label>
+    <div class="d-flex align-items-center gap-2">
+      <div class="form-control text-start" id="packagingCurrentDisplay" style="flex:1;">
+        <span id="packagingCurrentLabel">—</span>
+      </div>
+      <button type="button" class="btn btn-primary btn-sm" id="openPkgModalBtn" style="white-space:nowrap;">
+        {{if eq .Form.UiLang "fr"}}📦 Choisir / personnaliser{{else if eq .Form.UiLang "es"}}📦 Elegir / personalizar{{else if eq .Form.UiLang "de"}}📦 Auswählen / anpassen{{else}}📦 Choose / customize{{end}}
+      </button>
+    </div>
+    <input type="hidden" name="packagingType" id="packagingType" value="">
+  </div>
+
+  <div class="mb-3 form-check position-relative" id="overpackWrap">
+    <input class="form-check-input" type="checkbox" id="overpack" name="overpack" value="1">
+    <label class="form-check-label" for="overpack" id="overpackLabel">
+      {{if eq .Form.UiLang "fr"}}Suremballage (Overpack){{else if eq .Form.UiLang "es"}}Sobreembalaje (Overpack){{else if eq .Form.UiLang "de"}}Umverpackung (Overpack){{else}}Overpack{{end}}
+      <span style="opacity:0.6;cursor:help;" id="overpackInfoIcon">ℹ️</span>
+    </label>
+    <div id="overpackTooltip" class="overpack-tooltip" style="display:none;">
+      {{if eq .Form.UiLang "fr"}}
+      <b>Exemples de suremballages (overpack) :</b>
+      <ul class="mb-0 ps-3">
+        <li>Une palette filmée regroupant plusieurs cartons de produits chimiques.</li>
+        <li>Une caisse en bois ou un bac de chargement contenant divers petits contenants de matières dangereuses.</li>
+        <li>Un grand carton externe protégeant plusieurs bidons de liquides inflammables ou corrosifs.</li>
+      </ul>
+      {{else if eq .Form.UiLang "es"}}<b>Ejemplos de sobreembalajes (overpack):</b>
+      <ul class="mb-0 ps-3">
+        <li>Un palet retractilado que agrupa varias cajas de productos químicos.</li>
+        <li>Una caja de madera o contenedor de carga con varios envases pequeños de mercancías peligrosas.</li>
+        <li>Una caja exterior grande que protege varios bidones de líquidos inflamables o corrosivos.</li>
+      </ul>{{else if eq .Form.UiLang "de"}}<b>Beispiele für Umverpackungen (Overpack):</b>
+      <ul class="mb-0 ps-3">
+        <li>Eine eingeschweißte Palette mit mehreren Kartons Chemieprodukten.</li>
+        <li>Eine Holzkiste oder ein Ladebehälter mit mehreren kleinen Gefahrgutbehältern.</li>
+        <li>Ein großer Außenkarton, der mehrere Fässer mit entzündbaren oder ätzenden Flüssigkeiten schützt.</li>
+      </ul>{{else}}
+      <b>Overpack examples:</b>
+      <ul class="mb-0 ps-3">
+        <li>A shrink-wrapped pallet grouping several boxes of chemical products.</li>
+        <li>A wooden crate or load bin containing several small dangerous goods containers.</li>
+        <li>A large outer box protecting several drums of flammable or corrosive liquids.</li>
+      </ul>
+      {{end}}
+    </div>
+  </div>
+
+  <style>
+    .overpack-tooltip{
+      position:absolute; z-index:20; top:100%; left:0; margin-top:6px;
+      background:#0d1b2a; border:1px solid #3a4a5c; border-radius:8px;
+      padding:10px 14px; font-size:0.82rem; color:#dbe6f0; max-width:420px;
+      box-shadow:0 4px 14px rgba(0,0,0,0.4);
+    }
+  </style>
+
+  <div class="pi-result" id="piResult"></div>
+
+  <div class="row g-3 my-3">
+    <div class="col-md-6">
+      <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Nom du signataire{{else if eq .Form.UiLang "es"}}Nombre del firmante{{else if eq .Form.UiLang "de"}}Name des Unterzeichners{{else}}Signatory name{{end}}</label>
+      <input class="form-control" name="signatoryName" id="signatoryName">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Lieu et date{{else if eq .Form.UiLang "es"}}Lugar y fecha{{else if eq .Form.UiLang "de"}}Ort und Datum{{else}}Place and date{{end}}</label>
+      <input class="form-control" name="placeDate" id="placeDate">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label small fw-bold">{{if eq .Form.UiLang "fr"}}Téléphone d'urgence{{else if eq .Form.UiLang "es"}}Teléfono de emergencia{{else if eq .Form.UiLang "de"}}Notfalltelefon{{else}}Emergency phone{{end}}</label>
+      <input class="form-control" name="emergencyPhone" id="emergencyPhone" placeholder="1-800-579-7421">
+    </div>
+  </div>
+
+  <div class="mb-3 form-check">
+    <input class="form-check-input" type="checkbox" id="finalVersionCheck" name="finalVersion" value="1">
+    <label class="form-check-label fw-bold" for="finalVersionCheck">
+      {{if eq .Form.UiLang "fr"}}Version finale — j'ai vérifié ces informations et je suis autorisé à signer cette déclaration{{else if eq .Form.UiLang "es"}}Versión final — he verificado esta información y estoy autorizado a firmar esta declaración{{else if eq .Form.UiLang "de"}}Endgültige Version — ich habe diese Angaben geprüft und bin berechtigt, diese Erklärung zu unterschreiben{{else}}Final version — I have verified this information and am authorized to sign this declaration{{end}}
+    </label>
+  </div>
+
+  <button type="submit" class="btn btn-primary" id="generateBtn">
+    {{if eq .Form.UiLang "fr"}}Générer le PDF (brouillon){{else if eq .Form.UiLang "es"}}Generar el PDF (borrador){{else if eq .Form.UiLang "de"}}PDF erstellen (Entwurf){{else}}Generate PDF (draft){{end}}
+  </button>
+  <p class="draft-note" id="draftNote">
+    {{if eq .Form.UiLang "fr"}}Le document généré est un brouillon — vérifiez chaque champ et faites-le signer par une personne formée avant de le remettre au transporteur.{{else if eq .Form.UiLang "es"}}El documento generado es un borrador — verifica cada campo y hazlo firmar por una persona capacitada antes de entregarlo al transportista.{{else if eq .Form.UiLang "de"}}Das erstellte Dokument ist ein Entwurf — überprüfen Sie jedes Feld und lassen Sie es von einer geschulten Person unterschreiben, bevor Sie es dem Spediteur übergeben.{{else}}The generated document is a draft — verify every field and have it signed by a trained person before handing it to the carrier.{{end}}
+  </p>
+</form>
+
+<!-- ===== Saved consignees modal ===== -->
+<div class="modal fade" id="addrModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content qqt-modal-content">
+      <div class="modal-header qqt-modal-header">
+        <h5 class="modal-title">{{if eq .Form.UiLang "fr"}}Destinataires enregistrés{{else if eq .Form.UiLang "es"}}Destinatarios guardados{{else if eq .Form.UiLang "de"}}Gespeicherte Empfänger{{else}}Saved consignees{{end}}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control mb-3" id="addrSearchInput" placeholder="{{if eq .Form.UiLang "fr"}}Rechercher par nom ou adresse...{{else if eq .Form.UiLang "es"}}Buscar por nombre o dirección...{{else if eq .Form.UiLang "de"}}Nach Name oder Adresse suchen...{{else}}Search by name or address...{{end}}">
+        <div id="addrModalList" class="qqt-modal-list"></div>
+        <p class="text-muted small mt-2" id="addrModalEmpty" style="display:none;">
+          {{if eq .Form.UiLang "fr"}}Aucun destinataire enregistré pour l'instant. Remplis le champ Destinataire dans le formulaire puis clique sur "Enregistrer ce destinataire".{{else if eq .Form.UiLang "es"}}Aún no hay ningún destinatario guardado. Completa el campo Destinatario en el formulario y luego haz clic en "Guardar este destinatario".{{else if eq .Form.UiLang "de"}}Noch kein Empfänger gespeichert. Fülle das Feld Empfänger im Formular aus und klicke dann auf „Diesen Empfänger speichern“.{{else}}No saved consignees yet. Fill in the Consignee field on the form, then click "Save this consignee".{{end}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Predefined / custom packaging types modal ===== -->
+<div class="modal fade" id="pkgModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content qqt-modal-content">
+      <div class="modal-header qqt-modal-header">
+        <h5 class="modal-title">{{if eq .Form.UiLang "fr"}}Créer ou personnaliser vos types d'emballage{{else if eq .Form.UiLang "es"}}Crear o personalizar tus tipos de embalaje{{else if eq .Form.UiLang "de"}}Verpackungsarten erstellen oder anpassen{{else}}Create or customize your packaging types{{end}}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-4">
+          <div class="col-lg-7">
+            <input type="text" class="form-control mb-3" id="pkgSearchInput" placeholder="{{if eq .Form.UiLang "fr"}}Rechercher par nom...{{else if eq .Form.UiLang "es"}}Buscar por nombre...{{else if eq .Form.UiLang "de"}}Nach Name suchen...{{else}}Search by name...{{end}}">
+            <div id="pkgModalList" class="qqt-modal-list"></div>
+          </div>
+          <div class="col-lg-5">
+            <div class="qqt-add-panel">
+              <div class="fw-bold mb-2">{{if eq .Form.UiLang "fr"}}Type d'emballage personnalisé à ajouter{{else if eq .Form.UiLang "es"}}Tipo de embalaje personalizado a añadir{{else if eq .Form.UiLang "de"}}Eigene Verpackungsart hinzufügen{{else}}Custom packaging type to add{{end}}</div>
+              <input type="text" class="form-control mb-3" id="pkgCustomInput" placeholder="{{if eq .Form.UiLang "fr"}}ex: Baril en acier 45 gal{{else if eq .Form.UiLang "es"}}ej: Barril de acero 45 gal{{else if eq .Form.UiLang "de"}}z. B. 45-Gal-Stahlfass{{else}}e.g. 45-gal steel barrel{{end}}">
+              <button type="button" class="btn btn-primary w-100" id="pkgCustomAddBtn">
+                {{if eq .Form.UiLang "fr"}}Ajouter ce type d'emballage{{else if eq .Form.UiLang "es"}}Añadir este tipo de embalaje{{else if eq .Form.UiLang "de"}}Diese Verpackungsart hinzufügen{{else}}Add this packaging type{{end}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Custom UN numbers modal (browse saved + add new) ===== -->
+<div class="modal fade" id="customUnModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content qqt-modal-content">
+      <div class="modal-header qqt-modal-header">
+        <h5 class="modal-title">{{if eq .Form.UiLang "fr"}}Vos numéros UN personnalisés{{else if eq .Form.UiLang "es"}}Tus números UN personalizados{{else if eq .Form.UiLang "de"}}Ihre eigenen UN-Nummern{{else}}Your custom UN numbers{{end}}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <input type="text" class="form-control mb-3" id="customUnSearchInput" placeholder="{{if eq .Form.UiLang "fr"}}Rechercher par UN ou nom...{{else if eq .Form.UiLang "es"}}Buscar por UN o nombre...{{else if eq .Form.UiLang "de"}}Nach UN-Nummer oder Name suchen...{{else}}Search by UN or name...{{end}}">
+            <div id="customUnModalList" class="qqt-modal-list"></div>
+            <p class="text-muted small mt-2" id="customUnModalEmpty" style="display:none;">
+              {{if eq .Form.UiLang "fr"}}Aucun UN personnalisé enregistré pour l'instant — ajoute-en un à droite.{{else if eq .Form.UiLang "es"}}Aún no hay ningún UN personalizado guardado — añade uno a la derecha.{{else if eq .Form.UiLang "de"}}Noch keine eigene UN-Nummer gespeichert — füge rechts eine hinzu.{{else}}No custom UN saved yet — add one on the right.{{end}}
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <div class="qqt-add-panel">
+              <div class="fw-bold mb-3">{{if eq .Form.UiLang "fr"}}Ajouter un UN personnalisé{{else if eq .Form.UiLang "es"}}Añadir un UN personalizado{{else if eq .Form.UiLang "de"}}Eigene UN-Nummer hinzufügen{{else}}Add a custom UN{{end}}</div>
+
+              <label class="form-label small">{{if eq .Form.UiLang "fr"}}Numéro UN *{{else if eq .Form.UiLang "es"}}Número UN *{{else if eq .Form.UiLang "de"}}UN-Nummer *{{else}}UN number *{{end}}</label>
+              <input type="text" class="form-control mb-2" id="cuUnNumber" placeholder="{{if eq .Form.UiLang "fr"}}ex: 1234 (sans le préfixe UN){{else if eq .Form.UiLang "es"}}ej: 1234 (sin el prefijo UN){{else if eq .Form.UiLang "de"}}z. B. 1234 (ohne Präfix UN){{else}}e.g. 1234 (no UN prefix){{end}}">
+
+              <label class="form-label small">{{if eq .Form.UiLang "fr"}}Proper Shipping Name (nom technique exact) *{{else if eq .Form.UiLang "es"}}Proper Shipping Name (nombre técnico exacto) *{{else if eq .Form.UiLang "de"}}Proper Shipping Name (genaue technische Bezeichnung) *{{else}}Proper Shipping Name (correct technical name) *{{end}}</label>
+              <input type="text" class="form-control mb-2" id="cuPSN" placeholder="{{if eq .Form.UiLang "fr"}}ex: Formaldehyde solutions, flammable{{else if eq .Form.UiLang "es"}}ej: Formaldehyde solutions, flammable{{else if eq .Form.UiLang "de"}}z. B. Formaldehyde solutions, flammable{{else}}e.g. Formaldehyde solutions, flammable{{end}}">
+
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="form-label small">{{if eq .Form.UiLang "fr"}}Classe *{{else if eq .Form.UiLang "es"}}Clase *{{else if eq .Form.UiLang "de"}}Klasse *{{else}}Class *{{end}}</label>
+                  <select class="form-select" id="cuClass">
+                    <option value="">—</option>
+                    <option value="1">1 — Explosives</option>
+                    <option value="2.1">2.1 — Flammable gas</option>
+                    <option value="2.2">2.2 — Non-flammable gas</option>
+                    <option value="2.3">2.3 — Toxic gas</option>
+                    <option value="3">3 — Flammable liquid</option>
+                    <option value="4.1">4.1 — Flammable solid</option>
+                    <option value="4.2">4.2 — Spontaneously combustible</option>
+                    <option value="4.3">4.3 — Dangerous when wet</option>
+                    <option value="5.1">5.1 — Oxidizer</option>
+                    <option value="5.2">5.2 — Organic peroxide</option>
+                    <option value="6.1">6.1 — Toxic</option>
+                    <option value="6.2">6.2 — Infectious</option>
+                    <option value="7">7 — Radioactive</option>
+                    <option value="8">8 — Corrosive</option>
+                    <option value="9">9 — Miscellaneous</option>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label small">{{if eq .Form.UiLang "fr"}}Risque subsidiaire{{else if eq .Form.UiLang "es"}}Riesgo subsidiario{{else if eq .Form.UiLang "de"}}Nebengefahr{{else}}Subsidiary risk{{end}}</label>
+                  <select class="form-select" id="cuSubClass">
+                    <option value="">{{if eq .Form.UiLang "fr"}}Aucun{{else if eq .Form.UiLang "es"}}Ninguno{{else if eq .Form.UiLang "de"}}Keine{{else}}None{{end}}</option>
+                    <option value="1">1</option>
+                    <option value="2.1">2.1</option>
+                    <option value="2.2">2.2</option>
+                    <option value="2.3">2.3</option>
+                    <option value="3">3</option>
+                    <option value="4.1">4.1</option>
+                    <option value="4.2">4.2</option>
+                    <option value="4.3">4.3</option>
+                    <option value="5.1">5.1</option>
+                    <option value="5.2">5.2</option>
+                    <option value="6.1">6.1</option>
+                    <option value="6.2">6.2</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="form-label small">{{if eq .Form.UiLang "fr"}}Groupe d'emballage *{{else if eq .Form.UiLang "es"}}Grupo de embalaje *{{else if eq .Form.UiLang "de"}}Verpackungsgruppe *{{else}}Packing group *{{end}}</label>
+                  <select class="form-select" id="cuPG">
+                    <option value="">—</option>
+                    <option value="I">I</option>
+                    <option value="II">II</option>
+                    <option value="III">III</option>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label small">{{if eq .Form.UiLang "fr"}}Unité par colis{{else if eq .Form.UiLang "es"}}Unidad por bulto{{else if eq .Form.UiLang "de"}}Einheit pro Packstück{{else}}Unit per package{{end}}</label>
+                  <select class="form-select" id="cuUnit">
+                    <option value="KG">KG</option>
+                    <option value="L">L</option>
+                  </select>
+                </div>
+              </div>
+
+              <p class="text-muted small mb-1 mt-2">
+                {{if eq .Form.UiLang "fr"}}Paliers de quantité IATA — les 3 sont obligatoires (comme dans le tableau du DGR) :{{else if eq .Form.UiLang "es"}}Niveles de cantidad IATA — los 3 son obligatorios (como en la tabla del DGR):{{else if eq .Form.UiLang "de"}}IATA-Mengenstufen — alle 3 sind erforderlich (wie in der DGR-Tabelle):{{else}}IATA quantity tiers — all 3 required (as in the DGR table):{{end}}
+              </p>
+              <div class="row g-2 mb-1 align-items-end">
+                <div class="col-7">
+                  <label class="form-label small">{{if eq .Form.UiLang "fr"}}PI quantité limitée (Y-code) *{{else if eq .Form.UiLang "es"}}PI cantidad limitada (código Y) *{{else if eq .Form.UiLang "de"}}PI begrenzte Menge (Y-Code) *{{else}}Limited quantity PI (Y-code) *{{end}}</label>
+                  <input type="text" class="form-control" id="cuTier1Pi" placeholder="ex: Y342">
+                </div>
+                <div class="col-5">
+                  <label class="form-label small">{{if eq .Form.UiLang "fr"}}Qté max *{{else if eq .Form.UiLang "es"}}Cant. máx. *{{else if eq .Form.UiLang "de"}}Max. Menge *{{else}}Max qty *{{end}}</label>
+                  <input type="number" step="0.01" class="form-control" id="cuTier1Max" placeholder="1">
+                </div>
+              </div>
+              <div class="row g-2 mb-1 align-items-end">
+                <div class="col-7">
+                  <label class="form-label small">{{if eq .Form.UiLang "fr"}}PI passager + cargo *{{else if eq .Form.UiLang "es"}}PI pasajero + carga *{{else if eq .Form.UiLang "de"}}PI Passagier + Fracht *{{else}}Passenger + cargo PI *{{end}}</label>
+                  <input type="text" class="form-control" id="cuTier2Pi" placeholder="ex: 354">
+                </div>
+                <div class="col-5">
+                  <label class="form-label small">{{if eq .Form.UiLang "fr"}}Qté max *{{else if eq .Form.UiLang "es"}}Cant. máx. *{{else if eq .Form.UiLang "de"}}Max. Menge *{{else}}Max qty *{{end}}</label>
+                  <input type="number" step="0.01" class="form-control" id="cuTier2Max" placeholder="5">
+                </div>
+              </div>
+              <div class="row g-2 mb-3 align-items-end">
+                <div class="col-7">
+                  <label class="form-label small">{{if eq .Form.UiLang "fr"}}PI cargo uniquement (CAO) *{{else if eq .Form.UiLang "es"}}PI solo carga (CAO) *{{else if eq .Form.UiLang "de"}}PI nur Frachtflugzeug (CAO) *{{else}}Cargo Aircraft Only PI *{{end}}</label>
+                  <input type="text" class="form-control" id="cuTier3Pi" placeholder="ex: 365">
+                </div>
+                <div class="col-5">
+                  <label class="form-label small">{{if eq .Form.UiLang "fr"}}Qté max *{{else if eq .Form.UiLang "es"}}Cant. máx. *{{else if eq .Form.UiLang "de"}}Max. Menge *{{else}}Max qty *{{end}}</label>
+                  <input type="number" step="0.01" class="form-control" id="cuTier3Max" placeholder="60">
+                </div>
+              </div>
+
+              <div id="cuPictogramWrap" style="display:none;">
+                <label class="form-label small">{{if eq .Form.UiLang "fr"}}Pictogramme personnalisé (PNG, 200×200){{else if eq .Form.UiLang "es"}}Pictograma personalizado (PNG, 200×200){{else if eq .Form.UiLang "de"}}Eigenes Piktogramm (PNG, 200×200){{else}}Custom pictogram (PNG, 200×200){{end}}</label>
+                <input type="file" class="form-control mb-1" id="cuPictogramFile" accept="image/png">
+                <div id="cuPictogramPreviewWrap" style="display:none;" class="mb-2 d-flex align-items-center gap-2">
+                  <img id="cuPictogramPreview" style="width:48px;height:48px;border:1px solid var(--qq-border);border-radius:6px;">
+                  <button type="button" class="btn btn-outline-secondary btn-sm" id="cuPictogramRemoveBtn">{{if eq .Form.UiLang "fr"}}Retirer{{else if eq .Form.UiLang "es"}}Quitar{{else if eq .Form.UiLang "de"}}Entfernen{{else}}Remove{{end}}</button>
+                </div>
+                <p class="text-muted small mb-3">
+                  {{if eq .Form.UiLang "fr"}}Optionnel — uniquement pour les classes sans pictogramme officiel intégré (3, 8, 9). Doit être un PNG exactement 200×200px.{{else if eq .Form.UiLang "es"}}Opcional — solo para clases sin pictograma oficial integrado (3, 8, 9). Debe ser un PNG de exactamente 200×200px.{{else if eq .Form.UiLang "de"}}Optional — nur für Klassen ohne integriertes offizielles Piktogramm (3, 8, 9). Muss ein PNG mit genau 200×200px sein.{{else}}Optional — only for classes without a built-in official pictogram (3, 8, 9). Must be a PNG exactly 200×200px.{{end}}
+                </p>
+              </div>
+
+              <button type="button" class="btn btn-primary w-100" id="cuAddBtn">
+                {{if eq .Form.UiLang "fr"}}Ajouter et enregistrer ce UN{{else if eq .Form.UiLang "es"}}Añadir y guardar este UN{{else if eq .Form.UiLang "de"}}Diese UN-Nummer hinzufügen und speichern{{else}}Add and save this UN{{end}}
+              </button>
+              <p class="text-muted small mt-2 mb-0">
+                {{if eq .Form.UiLang "fr"}}* Champs obligatoires — les 3 paliers (Y-code, passager+cargo, cargo uniquement) doivent tous être remplis pour garantir l'exactitude du formulaire.{{else if eq .Form.UiLang "es"}}* Campos obligatorios — los 3 niveles (código Y, pasajero+carga, solo carga) deben completarse para garantizar la exactitud del formulario.{{else if eq .Form.UiLang "de"}}* Pflichtfelder — alle 3 Stufen (Y-Code, Passagier+Fracht, nur Fracht) müssen ausgefüllt werden, damit das Formular korrekt ist.{{else}}* Required fields — all 3 tiers (Y-code, passenger+cargo, cargo-only) must be filled in to keep the form accurate.{{end}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+
+  .qqt-modal-content{ background:#0d1b2a; color:#dbe6f0; border:1px solid #3a4a5c; }
+  .qqt-modal-header{ border-bottom:1px solid #3a4a5c; }
+  .qqt-modal-list{ max-height:420px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; }
+  .qqt-modal-row{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background:#132437; border:1px solid #3a4a5c; border-radius:8px; padding:10px 14px;
+  }
+  .qqt-modal-row .qqt-row-main{ min-width:0; }
+  .qqt-modal-row .qqt-row-main b{ display:block; }
+  .qqt-modal-row .qqt-row-main span{ font-size:0.82rem; color:#9fb3c8; }
+  .qqt-modal-row .qqt-row-actions{ display:flex; align-items:center; gap:8px; flex:0 0 auto; }
+  .qqt-row-del{
+    background:none; border:none; color:#9fb3c8; font-size:1.1rem; line-height:1; cursor:pointer;
+  }
+  .qqt-row-del:hover{ color:#ff6b6b; }
+  .qqt-badge-admin{
+    background:#2a3f52; color:#cfe0f0; font-size:0.7rem; padding:2px 8px; border-radius:10px; margin-left:6px;
+  }
+  .qqt-add-panel{
+    background:#0f2135; border:1px solid #3a4a5c; border-radius:10px; padding:16px;
+  }
+</style>
+
+    </article>
+  </main>
+
+  <footer class="pnsi-footer">
+    <div class="container-fluid px-4 py-2 d-flex align-items-center justify-content-between">
+
+        <a href="https://paypal.me/QuickquoteSupport"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="d-flex align-items-center text-decoration-none text-white">
+            <img src="/static/donate.png" alt="Donate" class="footer-donate">
+            <span>{{if eq .Form.UiLang "en"}}Keep us Alive · Support this tool{{else if eq .Form.UiLang "es"}}Manténlo vivo · Apoya esta herramienta{{else if eq .Form.UiLang "de"}}Am Leben halten · Tool unterstützen{{else}} Soutenez cet outil{{end}}</span>
+        </a>
+        <div class="footer-ticker" aria-hidden="true">
+            <div class="footer-ticker__viewport">
+                <div class="footer-ticker__track" id="footerTickerTrack" data-messages="{{.Ui.FooterNewsText}}"></div>
+            </div>
+        </div>
+
+        <div class="text-end opacity-75">
+            <div class="small mb-1">
+                <a href="/sitemap.xml" class="text-white text-decoration-underline">Sitemap</a>
+            </div>
+            © 2026 – Quick Quote Tool
+        </div>
+    </div>
+  </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* Footer ticker: rotate one message per cycle (infinite) */
+(function(){
+  function parseMessages(raw){
+    if(!raw) return [];
+    return raw.split('||').map(s=>s.trim()).filter(Boolean);
+  }
+  function initFooterTicker(){
+    const track = document.getElementById('footerTickerTrack');
+    if(!track) return;
+    const msgs = parseMessages(track.getAttribute('data-messages') || '');
+    if(!msgs.length){ track.textContent=''; return; }
+
+    let idx = 0;
+    track.textContent = msgs[idx];
+    track.style.animationDuration = '55s';
+
+    track.addEventListener('animationiteration', function(){
+      idx = (idx + 1) % msgs.length;
+      track.textContent = msgs[idx];
+    });
+  }
+  document.addEventListener('DOMContentLoaded', initFooterTicker);
+})();
+</script>
+<script>
+/* ===== Theme toggle ===== */
+(function(){
+  var STORAGE_KEY = "qqt_theme";
+  function preferredTheme(){
+    try{
+      var saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === "dark" || saved === "light") return saved;
+    }catch(e){}
+    return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  }
+  function applyTheme(theme){
+    var t = (theme === "dark") ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", t);
+    var lbl = document.getElementById("themeLabel");
+    if (lbl) lbl.textContent = (t === "dark") ? "Light" : "Dark";
+    var sun = document.querySelector("#themeToggle .icon-sun");
+    var moon = document.querySelector("#themeToggle .icon-moon");
+    if (sun && moon){
+      if (t === "dark"){ sun.style.display = "inline-block"; moon.style.display = "none"; }
+      else { sun.style.display = "none"; moon.style.display = "inline-block"; }
+    }
+  }
+  function setTheme(theme){
+    try{ localStorage.setItem(STORAGE_KEY, theme); }catch(e){}
+    applyTheme(theme);
+  }
+  applyTheme(preferredTheme());
+  var btn = document.getElementById("themeToggle");
+  if (btn){
+    btn.addEventListener("click", function(){
+      var current = document.documentElement.getAttribute("data-theme") || "light";
+      setTheme(current === "dark" ? "light" : "dark");
+    });
+  }
+
+  var langSw = document.getElementById("langSwitchG");
+  if (langSw){
+    langSw.querySelectorAll(".lang-menu-g li[data-lang]").forEach(function(li){
+      li.addEventListener("click", function(){
+        var chosen = li.getAttribute("data-lang");
+        try{ localStorage.setItem("qq_uiLang", chosen); }catch(e){}
+        var url = new URL(window.location.href);
+        url.searchParams.set("lang", chosen);
+        window.location.href = url.toString();
+      });
+    });
+  }
+
+  /* ===== Restore saved language preference (same behavior as the homepage) ===== */
+  (function(){
+    try {
+      var current = document.documentElement.getAttribute("lang") || "fr";
+      var saved = (localStorage.getItem("qq_uiLang") || "").trim();
+      var urlHasLang = new URLSearchParams(window.location.search).has("lang");
+      var onceKey = "qq_uiLang_applied_once";
+
+      function detectBrowserLang(){
+        var supported = ["fr","en","es","de"];
+        var langs = navigator.languages || [navigator.language || "fr"];
+        for (var i = 0; i < langs.length; i++){
+          var code = String(langs[i]).toLowerCase().split("-")[0];
+          if (supported.indexOf(code) !== -1) return code;
+        }
+        return "fr";
+      }
+
+      function redirectTo(lang){
+        var url = new URL(window.location.href);
+        url.searchParams.set("lang", lang);
+        window.location.href = url.toString();
+      }
+
+      if (saved && saved !== current) {
+        if (!sessionStorage.getItem(onceKey)) {
+          sessionStorage.setItem(onceKey, "1");
+          redirectTo(saved);
+          return;
+        }
+      } else if (!saved && !urlHasLang) {
+        var detected = detectBrowserLang();
+        if (detected !== current) {
+          if (!sessionStorage.getItem(onceKey)) {
+            sessionStorage.setItem(onceKey, "1");
+            try { localStorage.setItem("qq_uiLang", detected); } catch(e2) {}
+            redirectTo(detected);
+            return;
+          }
+        } else {
+          try { localStorage.setItem("qq_uiLang", detected); } catch(e2) {}
+        }
+      } else if (!saved && urlHasLang) {
+        try { localStorage.setItem("qq_uiLang", current); } catch(e2) {}
+      }
+    } catch(e) {}
+  })();
+  document.addEventListener("click", function(e){
+    var guides = document.getElementById("navGuides");
+    var tools = document.getElementById("navTools");
+    if (guides && !guides.contains(e.target)) guides.classList.remove("open");
+    if (tools && !tools.contains(e.target)) tools.classList.remove("open");
+    if (langSw && !langSw.contains(e.target)) langSw.classList.remove("open");
+  });
+})();
+
+/* ===== Mode toggle (air/ocean) ===== */
+var modeAirBtn = document.getElementById("modeAir");
+var modeOceanBtn = document.getElementById("modeOcean");
+var modeInput = document.getElementById("modeInput");
+
+// Global 4-language helper for JS-generated text (alerts, dynamically
+// built list rows, tooltips) — the Go template already renders each
+// language's static labels server-side; this covers the strings that
+// only exist client-side.
+var UI_LANG = document.documentElement.getAttribute("lang") || "en";
+function T4(fr, en, es, de){
+  if (UI_LANG === "fr") return fr;
+  if (UI_LANG === "es") return es;
+  if (UI_LANG === "de") return de;
+  return en;
+}
+
+function resetForm(keepMode){
+  var form = document.getElementById("hazForm");
+  form.reset();
+  if (keepMode) modeInput.value = keepMode;
+
+  if (typeof populateShipper === "function") populateShipper();
+  if (typeof renderAddrs === "function") renderAddrs();
+  document.getElementById("consigneeName").value = "";
+  document.getElementById("consigneeAddr").value = "";
+
+  var un0 = document.getElementById("unSelect");
+  un0.selectedIndex = 0;
+  if (typeof renderPgChips === "function") renderPgChips(un0.value);
+  if (typeof updateClassBadge === "function") updateClassBadge(un0.value);
+  if (typeof renderPackagingChips === "function") renderPackagingChips(modeInput.value);
+
+  var fpFields = document.getElementById("flashpointFields");
+  if (fpFields) fpFields.style.display = "none";
+
+  if (typeof updatePI === "function") updatePI();
+  if (typeof updateTotalQtyInfo === "function") updateTotalQtyInfo();
+
+  var check = document.getElementById("finalVersionCheck");
+  if (check) check.dispatchEvent(new Event("change"));
+}
+
+function setMode(m){
+  modeInput.value = m;
+  modeAirBtn.classList.toggle("active", m === "air");
+  modeOceanBtn.classList.toggle("active", m === "ocean");
+  document.getElementById("airFields").style.display = (m === "air") ? "" : "none";
+  document.getElementById("oceanFields").style.display = (m === "ocean") ? "" : "none";
+  document.getElementById("radioactiveWrap").style.display = (m === "air") ? "" : "none";
+  if (m === "ocean") { document.getElementById("radioactive").checked = false; }
+  if (typeof renderPackagingChips === "function") renderPackagingChips(m);
+  if (typeof updatePI === "function") updatePI();
+}
+modeAirBtn.onclick = function(){ resetForm("air"); setMode("air"); };
+modeOceanBtn.onclick = function(){ resetForm("ocean"); setMode("ocean"); };
+
+/* ===== UN / PG / quantity -> live PI preview (mirrors hazmat.go calcHazmat) ===== */
+var tieredSubstances = {
+  "1170": {
+    II:  [ {max:1,   pi:"Y341", cao:false}, {max:5,   pi:"353", cao:false}, {max:60,  pi:"364", cao:true} ],
+    III: [ {max:10,  pi:"Y344", cao:false}, {max:60,  pi:"355", cao:false}, {max:220, pi:"366", cao:true} ]
+  },
+  "1759": {
+    I:   [ {max:1,  pi:"858",  cao:false}, {max:25, pi:"862", cao:true} ],
+    II:  [ {max:5,  pi:"Y844", cao:false}, {max:15, pi:"859", cao:false}, {max:50, pi:"863", cao:true} ],
+    III: [ {max:5,  pi:"Y845", cao:false}, {max:25, pi:"860", cao:false}, {max:100, pi:"864", cao:true} ]
+  },
+  "1197": {
+    II:  [ {max:1,   pi:"Y341", cao:false}, {max:5,   pi:"353", cao:false}, {max:60,  pi:"364", cao:true} ],
+    III: [ {max:10,  pi:"Y344", cao:false}, {max:60,  pi:"355", cao:false}, {max:220, pi:"366", cao:true} ]
+  }
+};
+var fixedSubstances = {
+  "3077": {pg:"III", pi:"956", cao:false}
+};
+var qtyUnitByUn = { "1170":"L", "1197":"L", "3077":"KG", "1759":"KG" };
+var classByUn = { "1170":"3", "1197":"3", "3077":"9", "1759":"8" };
+var classLabelText = { "3": "Class 3 \u2014 Flammable liquid", "8": "Class 8 \u2014 Corrosive", "9": "Class 9 \u2014 Miscellaneous" };
+var placardAvailable = ["3", "8", "9"];
+function updateClassBadge(un){
+  var cls = classByUn[un] || "3";
+  var el = document.getElementById("classBadge");
+  var custom = (typeof customUNByKey !== "undefined") ? customUNByKey[un] : null;
+  if (custom && custom.pictogram) {
+    el.innerHTML = '<img src="' + custom.pictogram + '" alt="Class ' + cls + '">';
+  } else if (placardAvailable.indexOf(cls) !== -1) {
+    el.innerHTML = '<img src="/static/hazmat/Placard' + cls + '.png" alt="Class ' + cls + '">';
+  } else {
+    el.innerHTML = "";
+  }
+  el.title = (custom ? customDisplayClass(custom) : (classLabelText[cls] || ("Class " + cls)));
+}
+var selectedPG = "II";
+var pgInput = document.getElementById("pgInput");
+var pgChips = document.getElementById("pgChips");
+
+function renderPgChips(un){
+  var sub = tieredSubstances[un];
+  pgChips.innerHTML = "";
+  if (!sub) { document.getElementById("pgBlock").style.display = "none"; return; }
+  document.getElementById("pgBlock").style.display = "block";
+  var groups = Object.keys(sub); // e.g. ["I","II","III"] or ["II","III"]
+  if (groups.indexOf(selectedPG) === -1) selectedPG = groups[0];
+  groups.forEach(function(pg){
+    var chip = document.createElement("div");
+    chip.className = "chip" + (pg === selectedPG ? " selected" : "");
+    chip.setAttribute("data-pg", pg);
+    chip.textContent = "Groupe " + pg;
+    chip.onclick = function(){
+      pgChips.querySelectorAll(".chip").forEach(function(x){ x.classList.remove("selected"); });
+      chip.classList.add("selected");
+      selectedPG = pg;
+      pgInput.value = selectedPG;
+      updatePI();
+    };
+    pgChips.appendChild(chip);
+  });
+  pgInput.value = selectedPG;
+}
+
+var emsFlashpointByUn = {
+  "3077": { ems: "F-A, S-F", flashpointC: "85" }
+};
+
+document.getElementById("unSelect").addEventListener("change", function(){
+  var un = this.value;
+  renderPgChips(un);
+  updateClassBadge(un);
+  var unitSel = document.getElementById("qtyUnit");
+  if (qtyUnitByUn[un]) unitSel.value = qtyUnitByUn[un];
+
+  var custom = customUNByKey[un];
+  document.getElementById("customUN").value = custom ? "1" : "";
+  document.getElementById("customPSN").value = custom ? custom.psn : "";
+  document.getElementById("customClass").value = custom ? customDisplayClass(custom) : "";
+  // customPI / customCAO are kept in sync with the live quantity-tier
+  // calculation inside updatePI() below, since custom entries are now
+  // fully tiered just like the built-in substances.
+
+  var known = emsFlashpointByUn[un];
+  var emsInput = document.getElementById("emsNo");
+  var fpCheckbox = document.getElementById("flashpointEnabled");
+  var fpFields = document.getElementById("flashpointFields");
+  var fpValue = document.getElementById("flashpointValue");
+  if (known) {
+    emsInput.value = known.ems || "";
+    if (known.flashpointC) {
+      fpCheckbox.checked = true;
+      fpFields.style.display = "flex";
+      fpValue.value = known.flashpointC;
+      document.getElementById("flashpointUnit").value = "C";
+    }
+  } else {
+    emsInput.value = "";
+    fpCheckbox.checked = false;
+    fpFields.style.display = "none";
+    fpValue.value = "";
+  }
+  updatePI();
+});
+
+/* ===== Custom UN numbers (saved per browser, added into the live UN select) =====
+   Each entry now carries a full 3-tier IATA quantity ladder for one packing
+   group (mirrors the built-in tieredSubstances shape exactly), an optional
+   subsidiary risk, and an optional user-uploaded pictogram (data URL) for
+   classes without a bundled placard asset. */
+var CUSTOM_UN_KEY = "qq_hazmat_custom_un";
+var customUNByKey = {}; // key -> entry {un, psn, cls, subCls, pg, unit, tiers:[{pi,max}x3], pictogram}
+function loadCustomUNs(){ try { return JSON.parse(localStorage.getItem(CUSTOM_UN_KEY) || "[]"); } catch(e){ return []; } }
+function saveCustomUNs(list){ try { localStorage.setItem(CUSTOM_UN_KEY, JSON.stringify(list)); } catch(e){} }
+
+function customDisplayClass(entry){
+  return entry.cls + (entry.subCls ? (" (" + entry.subCls + ")") : "");
+}
+
+function registerCustomUN(entry){
+  // Prefix the key so it can never collide with a built-in UN digit key.
+  var key = "c" + entry.un;
+  customUNByKey[key] = entry;
+  tieredSubstances[key] = {};
+  tieredSubstances[key][entry.pg] = [
+    { max: entry.tiers[0].max, pi: entry.tiers[0].pi, cao: false },
+    { max: entry.tiers[1].max, pi: entry.tiers[1].pi, cao: false },
+    { max: entry.tiers[2].max, pi: entry.tiers[2].pi, cao: true }
+  ];
+  delete fixedSubstances[key]; // in case an older single-PI version of this key existed
+  classByUn[key] = entry.cls; // primary class only, used to pick the pictogram asset
+  qtyUnitByUn[key] = entry.unit || "KG";
+  return key;
+}
+
+// A custom UN saved before the 3-tier upgrade had {pi, cao} instead of a
+// {tiers:[...]} array. isValidCustomUNEntry() filters those out so an old
+// localStorage entry can never crash registerCustomUN() on load.
+function isValidCustomUNEntry(entry){
+  return !!(entry && entry.un && entry.psn && entry.cls && entry.pg &&
+    Array.isArray(entry.tiers) && entry.tiers.length === 3 &&
+    entry.tiers.every(function(t){ return t && t.pi && !isNaN(parseFloat(t.max)); }));
+}
+
+function addCustomUNOption(key, entry){
+  var opt = document.createElement("option");
+  opt.value = key;
+  opt.textContent = "\uD83E\uDDFE UN" + entry.un + " \u2014 " + entry.psn + T4(" (personnalis\u00e9)", " (custom)", " (personalizado)", " (eigene)");
+  document.getElementById("unSelect").appendChild(opt);
+}
+
+(function(){
+  var saved = loadCustomUNs();
+  var valid = saved.filter(isValidCustomUNEntry);
+  if (valid.length !== saved.length) {
+    // Silently drop entries saved under the old single-PI format (pre
+    // 3-tier upgrade) so they can't keep crashing this block on reload.
+    saveCustomUNs(valid);
+  }
+  valid.forEach(function(entry){
+    try {
+      var key = registerCustomUN(entry);
+      addCustomUNOption(key, entry);
+    } catch (e) {
+      // Never let one malformed saved entry break the rest of the page's
+      // script (packaging/consignee modals must still initialize below).
+    }
+  });
+})();
+
+(function(){
+  var modalEl = document.getElementById("customUnModal");
+  var bsModal = new bootstrap.Modal(modalEl);
+  var listEl = document.getElementById("customUnModalList");
+  var emptyEl = document.getElementById("customUnModalEmpty");
+  var searchInput = document.getElementById("customUnSearchInput");
+  var classSel = document.getElementById("cuClass");
+  var pictoWrap = document.getElementById("cuPictogramWrap");
+  var pictoFile = document.getElementById("cuPictogramFile");
+  var pictoPreviewWrap = document.getElementById("cuPictogramPreviewWrap");
+  var pictoPreview = document.getElementById("cuPictogramPreview");
+  var pictoRemoveBtn = document.getElementById("cuPictogramRemoveBtn");
+  var pendingPictogramDataUrl = null;
+
+  function updatePictogramVisibility(){
+    var hasDefault = placardAvailable.indexOf(classSel.value) !== -1;
+    pictoWrap.style.display = (classSel.value && !hasDefault) ? "block" : "none";
+  }
+  classSel.addEventListener("change", updatePictogramVisibility);
+
+  function clearPictogramPick(){
+    pendingPictogramDataUrl = null;
+    pictoFile.value = "";
+    pictoPreviewWrap.style.display = "none";
+    pictoPreview.src = "";
+  }
+  pictoRemoveBtn.addEventListener("click", clearPictogramPick);
+
+  pictoFile.addEventListener("change", function(){
+    var file = pictoFile.files && pictoFile.files[0];
+    if (!file) { clearPictogramPick(); return; }
+    if (file.type !== "image/png") {
+      alert(T4("Le pictogramme doit \u00eatre un fichier PNG.", "The pictogram must be a PNG file.", "El pictograma debe ser un archivo PNG.", "Das Piktogramm muss eine PNG-Datei sein."));
+      clearPictogramPick();
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(){
+      var dataUrl = reader.result;
+      var img = new Image();
+      img.onload = function(){
+        if (img.naturalWidth !== 200 || img.naturalHeight !== 200) {
+          var gotSize = img.naturalWidth + "\u00d7" + img.naturalHeight + "px";
+          alert(T4(
+            "Le pictogramme doit faire exactement 200\u00d7200px (re\u00e7u : " + gotSize + ").",
+            "The pictogram must be exactly 200\u00d7200px (got " + gotSize + ").",
+            "El pictograma debe medir exactamente 200\u00d7200px (recibido: " + gotSize + ").",
+            "Das Piktogramm muss genau 200\u00d7200px sein (erhalten: " + gotSize + ")."
+          ));
+          clearPictogramPick();
+          return;
+        }
+        pendingPictogramDataUrl = dataUrl;
+        pictoPreview.src = dataUrl;
+        pictoPreviewWrap.style.display = "flex";
+      };
+      img.onerror = function(){
+        alert(T4("Impossible de lire cette image.", "Could not read this image.", "No se pudo leer esta imagen.", "Dieses Bild konnte nicht gelesen werden."));
+        clearPictogramPick();
+      };
+      img.src = dataUrl;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function makeRow(entry, idx){
+    var row = document.createElement("div");
+    row.className = "qqt-modal-row";
+
+    var main = document.createElement("div");
+    main.className = "qqt-row-main";
+    var tiersText = entry.tiers.map(function(t){ return t.pi + " \u2264" + t.max + entry.unit; }).join(" \u00b7 ");
+    main.innerHTML = "<b>UN" + entry.un + " \u2014 " + entry.psn + "</b><span>" +
+      (T4("Classe ", "Class ", "Clase ", "Klasse ")) + customDisplayClass(entry) + " \u00b7 PG " + entry.pg + " \u00b7 " + tiersText + "</span>";
+    row.appendChild(main);
+
+    var actions = document.createElement("div");
+    actions.className = "qqt-row-actions";
+
+    var useBtn = document.createElement("button");
+    useBtn.type = "button";
+    useBtn.className = "btn btn-primary btn-sm";
+    useBtn.textContent = T4("Utiliser", "Use", "Usar", "Verwenden");
+    useBtn.addEventListener("click", function(){
+      var key = "c" + entry.un;
+      var sel = document.getElementById("unSelect");
+      if (!sel.querySelector('option[value="' + key + '"]')) addCustomUNOption(key, entry);
+      sel.value = key;
+      sel.dispatchEvent(new Event("change"));
+      bsModal.hide();
+    });
+    actions.appendChild(useBtn);
+
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "qqt-row-del";
+    del.setAttribute("aria-label", "Delete");
+    del.innerHTML = "\u00d7";
+    del.addEventListener("click", function(e){
+      e.stopPropagation();
+      var list = loadCustomUNs();
+      list.splice(idx, 1);
+      saveCustomUNs(list);
+      var key = "c" + entry.un;
+      delete customUNByKey[key];
+      delete tieredSubstances[key];
+      delete classByUn[key];
+      delete qtyUnitByUn[key];
+      var opt = document.getElementById("unSelect").querySelector('option[value="' + key + '"]');
+      if (opt) opt.remove();
+      renderList();
+    });
+    actions.appendChild(del);
+
+    row.appendChild(actions);
+    return row;
+  }
+
+  function renderList(){
+    var filter = (searchInput.value || "").trim().toLowerCase();
+    var list = loadCustomUNs();
+    listEl.innerHTML = "";
+    list.forEach(function(entry, idx){
+      var hay = (entry.un + " " + entry.psn).toLowerCase();
+      if (filter && hay.indexOf(filter) === -1) return;
+      listEl.appendChild(makeRow(entry, idx));
+    });
+    emptyEl.style.display = list.length ? "none" : "block";
+  }
+
+  searchInput.addEventListener("input", renderList);
+  document.getElementById("openCustomUnModalBtn").addEventListener("click", function(){
+    searchInput.value = "";
+    // clear the add-panel fields for a fresh entry each time
+    ["cuUnNumber","cuPSN","cuTier1Pi","cuTier1Max","cuTier2Pi","cuTier2Max","cuTier3Pi","cuTier3Max"].forEach(function(id){ document.getElementById(id).value = ""; });
+    document.getElementById("cuClass").value = "";
+    document.getElementById("cuSubClass").value = "";
+    document.getElementById("cuPG").value = "";
+    document.getElementById("cuUnit").value = "KG";
+    clearPictogramPick();
+    updatePictogramVisibility();
+    renderList();
+    bsModal.show();
+  });
+  modalEl.addEventListener("shown.bs.modal", function(){ searchInput.focus(); });
+
+  document.getElementById("cuAddBtn").addEventListener("click", function(){
+    var un = document.getElementById("cuUnNumber").value.trim().replace(/^un/i, "").trim();
+    var psn = document.getElementById("cuPSN").value.trim();
+    var cls = document.getElementById("cuClass").value;
+    var subCls = document.getElementById("cuSubClass").value;
+    var pg = document.getElementById("cuPG").value;
+    var unit = document.getElementById("cuUnit").value;
+    var t1pi = document.getElementById("cuTier1Pi").value.trim();
+    var t1max = parseFloat(document.getElementById("cuTier1Max").value);
+    var t2pi = document.getElementById("cuTier2Pi").value.trim();
+    var t2max = parseFloat(document.getElementById("cuTier2Max").value);
+    var t3pi = document.getElementById("cuTier3Pi").value.trim();
+    var t3max = parseFloat(document.getElementById("cuTier3Max").value);
+
+    var L = {
+      un: T4("Num\u00e9ro UN", "UN number", "N\u00famero UN", "UN-Nummer"),
+      psn: "Proper Shipping Name",
+      cls: T4("Classe", "Class", "Clase", "Klasse"),
+      pg: T4("Groupe d'emballage", "Packing group", "Grupo de embalaje", "Verpackungsgruppe"),
+      t1pi: T4("PI quantit\u00e9 limit\u00e9e", "Limited quantity PI", "PI cantidad limitada", "PI begrenzte Menge"),
+      t1max: T4("Qt\u00e9 max (palier 1)", "Max qty (tier 1)", "Cant. m\u00e1x. (nivel 1)", "Max. Menge (Stufe 1)"),
+      t2pi: T4("PI passager + cargo", "Passenger + cargo PI", "PI pasajero + carga", "PI Passagier + Fracht"),
+      t2max: T4("Qt\u00e9 max (palier 2)", "Max qty (tier 2)", "Cant. m\u00e1x. (nivel 2)", "Max. Menge (Stufe 2)"),
+      t3pi: T4("PI cargo uniquement", "Cargo Aircraft Only PI", "PI solo carga", "PI nur Frachtflugzeug"),
+      t3max: T4("Qt\u00e9 max (palier 3)", "Max qty (tier 3)", "Cant. m\u00e1x. (nivel 3)", "Max. Menge (Stufe 3)")
+    };
+
+    var missing = [];
+    if (!un) missing.push(L.un);
+    if (!psn) missing.push(L.psn);
+    if (!cls) missing.push(L.cls);
+    if (!pg) missing.push(L.pg);
+    if (!t1pi) missing.push(L.t1pi);
+    if (isNaN(t1max)) missing.push(L.t1max);
+    if (!t2pi) missing.push(L.t2pi);
+    if (isNaN(t2max)) missing.push(L.t2max);
+    if (!t3pi) missing.push(L.t3pi);
+    if (isNaN(t3max)) missing.push(L.t3max);
+    if (missing.length) {
+      alert(T4("Champs manquants : ", "Missing fields: ", "Campos faltantes: ", "Fehlende Felder: ") + missing.join(", "));
+      return;
+    }
+
+    var entry = {
+      un: un, psn: psn, cls: cls, subCls: subCls, pg: pg, unit: unit,
+      tiers: [ {pi:t1pi, max:t1max}, {pi:t2pi, max:t2max}, {pi:t3pi, max:t3max} ],
+      pictogram: pendingPictogramDataUrl || null
+    };
+    var list = loadCustomUNs().filter(function(e){ return e.un !== un; });
+    list.push(entry);
+    saveCustomUNs(list);
+
+    var key = registerCustomUN(entry);
+    var sel = document.getElementById("unSelect");
+    var existingOpt = sel.querySelector('option[value="' + key + '"]');
+    if (existingOpt) existingOpt.remove();
+    addCustomUNOption(key, entry);
+    sel.value = key;
+    sel.dispatchEvent(new Event("change"));
+
+    renderList();
+    bsModal.hide();
+  });
+})();
+
+document.getElementById("flashpointEnabled").addEventListener("change", function(){
+  document.getElementById("flashpointFields").style.display = this.checked ? "flex" : "none";
+});
+document.getElementById("qtyPerPackage").addEventListener("input", updatePI);
+document.getElementById("qtyPackages").addEventListener("input", updateTotalQtyInfo);
+document.getElementById("qtyUnit").addEventListener("change", updateTotalQtyInfo);
+
+function updateTotalQtyInfo(){
+  var n = parseFloat(document.getElementById("qtyPackages").value) || 0;
+  var q = parseFloat(document.getElementById("qtyPerPackage").value) || 0;
+  var unit = document.getElementById("qtyUnit").value;
+  var el = document.getElementById("totalQtyInfo");
+  if (n > 0 && q > 0) {
+    var total = (n * q);
+    var label = T4(
+      "Total de l'envoi (informatif, sans effet sur le PI) : " + total.toFixed(2) + " " + unit + " sur " + n + " colis",
+      "Shipment total (informational, does not affect PI) : " + total.toFixed(2) + " " + unit + " across " + n + " packages",
+      "Total del envío (informativo, no afecta al PI): " + total.toFixed(2) + " " + unit + " en " + n + " bultos",
+      "Sendungssumme (informativ, hat keinen Einfluss auf die PI): " + total.toFixed(2) + " " + unit + " über " + n + " Packstücke"
+    );
+    el.textContent = label;
+  } else {
+    el.textContent = "";
+  }
+}
+
+function updatePI(){
+  var un = document.getElementById("unSelect").value;
+  var qty = parseFloat(document.getElementById("qtyPerPackage").value) || 0;
+  var el = document.getElementById("piResult");
+
+  var pi = "", cao = false, overLimit = false;
+
+  if (tieredSubstances[un]){
+    var tiers = tieredSubstances[un][selectedPG];
+    var chosen = null;
+    for (var i = 0; i < tiers.length; i++){ if (qty <= tiers[i].max){ chosen = tiers[i]; break; } }
+    if (!chosen){ overLimit = true; chosen = tiers[tiers.length-1]; }
+    pi = chosen.pi; cao = chosen.cao;
+  } else {
+    var fx = fixedSubstances[un];
+    pi = fx.pi; cao = fx.cao;
+  }
+
+  // Keep the hidden customPI/customCAO fields (submitted with the form) in
+  // sync with the live quantity-tier calculation whenever a custom UN is
+  // selected — this runs regardless of air/ocean mode since a custom UN
+  // can be shipped either way.
+  if (typeof customUNByKey !== "undefined" && customUNByKey[un]) {
+    document.getElementById("customPI").value = pi || "";
+    document.getElementById("customCAO").value = cao ? "1" : "";
+  }
+
+  if (modeInput.value === "ocean") {
+    el.style.display = "none";
+    el.innerHTML = "";
+    return;
+  }
+  el.style.display = "";
+
+  var html;
+  if (!pi) {
+    html = "<b>No IATA Packing Instruction on file</b> for this UN in air mode \u2014 this substance is referenced for ocean (IMO) shipments in our list.";
+  } else {
+    html = "<b>Packing Instruction: " + pi + "</b> \u2014 " + (cao ? "Cargo Aircraft Only" : "Passenger + Cargo Aircraft");
+  }
+  if (overLimit) html += '<div class="warn-box">Quantity exceeds standard tiers \u2014 review manually before shipping.</div>';
+  else if (pi && cao) html += '<div class="cao-badge">' +
+    '<svg viewBox="0 0 120 90" style="height:38px;flex:0 0 auto;">' +
+    '<rect x="1" y="1" width="118" height="88" fill="#ff8c00" stroke="#000" stroke-width="3"/>' +
+    '<text x="60" y="30" font-size="15" font-family="Arial,sans-serif" font-weight="bold" text-anchor="middle" fill="#000">CARGO</text>' +
+    '<text x="60" y="47" font-size="15" font-family="Arial,sans-serif" font-weight="bold" text-anchor="middle" fill="#000">AIRCRAFT</text>' +
+    '<text x="60" y="64" font-size="15" font-family="Arial,sans-serif" font-weight="bold" text-anchor="middle" fill="#000">ONLY</text>' +
+    '</svg><span>CARGO AIRCRAFT ONLY \u2014 placard required, forbidden on passenger aircraft</span></div>';
+  el.innerHTML = html;
+}
+renderPgChips(document.getElementById("unSelect").value);
+updateClassBadge(document.getElementById("unSelect").value);
+
+/* ===== Final version toggle ===== */
+(function(){
+  var check = document.getElementById("finalVersionCheck");
+  var btn = document.getElementById("generateBtn");
+  var note = document.getElementById("draftNote");
+  var form = document.getElementById("hazForm");
+
+  function refresh(){
+    if (check.checked) {
+      btn.textContent = T4("Générer le PDF (version finale)", "Generate PDF (final version)", "Generar el PDF (versión final)", "PDF erstellen (endgültige Version)");
+      note.innerHTML = T4(
+        "<b>Aucun filigrane ne sera appliqué.</b> Assurez-vous que toutes les informations sont exactes et que vous êtes autorisé à signer avant de remettre ce document.",
+        "<b>No watermark will be applied.</b> Make sure every field is accurate and that you are authorized to sign before handing over this document.",
+        "<b>No se aplicará ninguna marca de agua.</b> Asegúrate de que toda la información sea exacta y de que estás autorizado a firmar antes de entregar este documento.",
+        "<b>Es wird kein Wasserzeichen angewendet.</b> Stellen Sie sicher, dass alle Angaben korrekt sind und Sie berechtigt sind zu unterschreiben, bevor Sie dieses Dokument übergeben."
+      );
+    } else {
+      btn.textContent = T4("Générer le PDF (brouillon)", "Generate PDF (draft)", "Generar el PDF (borrador)", "PDF erstellen (Entwurf)");
+      note.textContent = T4(
+        "Le document généré est un brouillon — vérifiez chaque champ et faites-le signer par une personne formée avant de le remettre au transporteur.",
+        "The generated document is a draft — verify every field and have it signed by a trained person before handing it to the carrier.",
+        "El documento generado es un borrador — verifica cada campo y hazlo firmar por una persona capacitada antes de entregarlo al transportista.",
+        "Das erstellte Dokument ist ein Entwurf — überprüfen Sie jedes Feld und lassen Sie es von einer geschulten Person unterschreiben, bevor Sie es dem Spediteur übergeben."
+      );
+    }
+  }
+  check.addEventListener("change", refresh);
+  refresh();
+
+  form.addEventListener("submit", function(e){
+    if (check.checked) {
+      var msg = T4(
+        "Vous êtes sur le point de générer une déclaration finale, sans filigrane. Confirmez-vous que ces informations sont exactes et vérifiées ?",
+        "You are about to generate a final declaration with no watermark. Do you confirm this information is accurate and verified?",
+        "Estás a punto de generar una declaración final, sin marca de agua. ¿Confirmas que esta información es exacta y ha sido verificada?",
+        "Sie sind dabei, eine endgültige Erklärung ohne Wasserzeichen zu erstellen. Bestätigen Sie, dass diese Angaben korrekt und geprüft sind?"
+      );
+      if (!confirm(msg)) { e.preventDefault(); return; }
+      setTimeout(function(){ resetForm(modeInput.value); }, 400);
+    }
+  });
+})();
+
+/* ===== Packaging types (predefined + custom, chosen via modal) ===== */
+var packagingOptionsByMode = {
+  air: [
+    { val: "Plastic jerrycan", fr: "Jerrycan plastique", en: "Plastic jerrycan", es: "Bidón de plástico", de: "Kunststoff-Kanister" },
+    { val: "Fiber board box", fr: "Bo\u00eete en carton", en: "Fiber board box", es: "Caja de cartón", de: "Pappkarton" },
+    { val: "Metal drum", fr: "F\u00fbt m\u00e9tallique", en: "Metal drum", es: "Bidón metálico", de: "Metallfass" },
+    { val: "Composite receptacle", fr: "R\u00e9cipient composite", en: "Composite receptacle", es: "Recipiente compuesto", de: "Kombinationsverpackung" }
+  ],
+  ocean: [
+    { val: "Plastic jerrycan, non-removable head (3H1)", fr: "Jerrycan plastique, t\u00eate fixe", en: "Plastic jerrycan, non-removable head", es: "Bidón de plástico, tapa fija", de: "Kunststoff-Kanister, fester Deckel" },
+    { val: "Plastic jerrycan, removable head (3H2)", fr: "Jerrycan plastique, t\u00eate amovible", en: "Plastic jerrycan, removable head", es: "Bidón de plástico, tapa desmontable", de: "Kunststoff-Kanister, abnehmbarer Deckel" },
+    { val: "Fiber board box", fr: "Bo\u00eete en carton", en: "Fiber board box", es: "Caja de cartón", de: "Pappkarton" },
+    { val: "Metal drum", fr: "F\u00fbt m\u00e9tallique", en: "Metal drum", es: "Bidón metálico", de: "Metallfass" },
+    { val: "Composite receptacle", fr: "R\u00e9cipient composite", en: "Composite receptacle", es: "Recipiente compuesto", de: "Kombinationsverpackung" }
+  ]
+};
+var CUSTOM_PKG_KEY = "qq_hazmat_custom_packaging";
+function loadCustomPackaging(){ try { return JSON.parse(localStorage.getItem(CUSTOM_PKG_KEY) || "[]"); } catch(e){ return []; } }
+function saveCustomPackaging(list){ try { localStorage.setItem(CUSTOM_PKG_KEY, JSON.stringify(list)); } catch(e){} }
+
+(function(){
+  var hiddenInput = document.getElementById("packagingType");
+  var currentLabel = document.getElementById("packagingCurrentLabel");
+  var modalEl = document.getElementById("pkgModal");
+  var bsModal = new bootstrap.Modal(modalEl);
+  var listEl = document.getElementById("pkgModalList");
+  var searchInput = document.getElementById("pkgSearchInput");
+  var customInput = document.getElementById("pkgCustomInput");
+  var addBtn = document.getElementById("pkgCustomAddBtn");
+
+  function setCurrent(label, val){
+    currentLabel.textContent = label;
+    hiddenInput.value = val;
+  }
+
+  function makeRow(label, val, isCustom){
+    var row = document.createElement("div");
+    row.className = "qqt-modal-row";
+
+    var main = document.createElement("div");
+    main.className = "qqt-row-main";
+    var b = document.createElement("b");
+    b.textContent = label;
+    main.appendChild(b);
+    if (!isCustom){
+      var badge = document.createElement("span");
+      badge.className = "qqt-badge-admin";
+      badge.textContent = T4("Pr\u00e9d\u00e9fini", "Predefined", "Predefinido", "Vordefiniert");
+      b.appendChild(badge);
+    }
+    row.appendChild(main);
+
+    var actions = document.createElement("div");
+    actions.className = "qqt-row-actions";
+
+    var useBtn = document.createElement("button");
+    useBtn.type = "button";
+    useBtn.className = "btn btn-primary btn-sm";
+    useBtn.textContent = T4("Utiliser", "Use", "Usar", "Verwenden");
+    useBtn.addEventListener("click", function(){
+      setCurrent(label, val);
+      bsModal.hide();
+    });
+    actions.appendChild(useBtn);
+
+    if (isCustom){
+      var del = document.createElement("button");
+      del.type = "button";
+      del.className = "qqt-row-del";
+      del.setAttribute("aria-label", "Delete");
+      del.innerHTML = "\u00d7";
+      del.addEventListener("click", function(e){
+        e.stopPropagation();
+        var list = loadCustomPackaging().filter(function(v){ return v !== val; });
+        saveCustomPackaging(list);
+        renderList();
+      });
+      actions.appendChild(del);
+    }
+
+    row.appendChild(actions);
+    return row;
+  }
+
+  function renderList(){
+    var filter = (searchInput.value || "").trim().toLowerCase();
+    var base = packagingOptionsByMode[modeInput.value] || packagingOptionsByMode.air;
+    var custom = loadCustomPackaging();
+    listEl.innerHTML = "";
+    var any = false;
+
+    base.forEach(function(opt){
+      var label = T4(opt.fr, opt.en, opt.es, opt.de);
+      if (filter && label.toLowerCase().indexOf(filter) === -1) return;
+      listEl.appendChild(makeRow(label, opt.val, false));
+      any = true;
+    });
+    custom.forEach(function(val){
+      if (filter && val.toLowerCase().indexOf(filter) === -1) return;
+      listEl.appendChild(makeRow(val, val, true));
+      any = true;
+    });
+    if (!any){
+      var empty = document.createElement("p");
+      empty.className = "text-muted small";
+      empty.textContent = T4("Aucun résultat.", "No results.", "Sin resultados.", "Keine Ergebnisse.");
+      listEl.appendChild(empty);
+    }
+  }
+
+  searchInput.addEventListener("input", renderList);
+  document.getElementById("openPkgModalBtn").addEventListener("click", function(){
+    searchInput.value = "";
+    renderList();
+    bsModal.show();
+  });
+  modalEl.addEventListener("shown.bs.modal", function(){ searchInput.focus(); });
+
+  addBtn.addEventListener("click", function(){
+    var val = customInput.value.trim();
+    if (!val) { customInput.focus(); return; }
+    var list = loadCustomPackaging();
+    if (list.indexOf(val) === -1) list.push(val);
+    saveCustomPackaging(list);
+    customInput.value = "";
+    setCurrent(val, val);
+    renderList();
+    bsModal.hide();
+  });
+  customInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter") { e.preventDefault(); addBtn.click(); }
+  });
+
+  window.renderPackagingChips = function(mode){
+    var base = packagingOptionsByMode[mode] || packagingOptionsByMode.air;
+    if (base.length) setCurrent(T4(base[0].fr, base[0].en, base[0].es, base[0].de), base[0].val);
+    if (modalEl.classList.contains("show")) renderList();
+  };
+
+  renderPackagingChips("air");
+})();
+
+/* ===== Shipper (saved once per browser) ===== */
+var SHIP_KEY = "qq_hazmat_shipper";
+function loadShipper(){ try { return JSON.parse(localStorage.getItem(SHIP_KEY) || "null"); } catch(e){ return null; } }
+function populateShipper(){
+  var s = loadShipper();
+  if (s){
+    document.getElementById("shipperName").value = s.name || "";
+    document.getElementById("shipperAddr").value = s.addr || "";
+    document.getElementById("shipperPhone").value = s.phone || "";
+    document.getElementById("shipperEmail").value = s.email || "";
+  }
+}
+populateShipper();
+document.getElementById("saveShipBtn").onclick = function(){
+  var name = document.getElementById("shipperName").value.trim();
+  var addr = document.getElementById("shipperAddr").value.trim();
+  if (!name || !addr) { alert("Enter at least a name and address first."); return; }
+  var s = {
+    name: name,
+    phone: document.getElementById("shipperPhone").value.trim(),
+    email: document.getElementById("shipperEmail").value.trim(),
+    addr: addr
+  };
+  try { localStorage.setItem(SHIP_KEY, JSON.stringify(s)); } catch(e){}
+};
+
+/* ===== Saved consignees (chosen via modal) ===== */
+var ADDR_KEY = "qq_hazmat_consignees";
+function loadAddrs(){ try { return JSON.parse(localStorage.getItem(ADDR_KEY) || "[]"); } catch(e){ return []; } }
+function saveAddrs(list){ try { localStorage.setItem(ADDR_KEY, JSON.stringify(list)); } catch(e){} }
+
+(function(){
+  var modalEl = document.getElementById("addrModal");
+  var bsModal = new bootstrap.Modal(modalEl);
+  var listEl = document.getElementById("addrModalList");
+  var emptyEl = document.getElementById("addrModalEmpty");
+  var searchInput = document.getElementById("addrSearchInput");
+
+  function makeRow(a, idx){
+    var row = document.createElement("div");
+    row.className = "qqt-modal-row";
+
+    var main = document.createElement("div");
+    main.className = "qqt-row-main";
+    main.innerHTML = "<b>" + a.name + "</b><span>" + a.addr + "</span>";
+    row.appendChild(main);
+
+    var actions = document.createElement("div");
+    actions.className = "qqt-row-actions";
+
+    var useBtn = document.createElement("button");
+    useBtn.type = "button";
+    useBtn.className = "btn btn-primary btn-sm";
+    useBtn.textContent = T4("Utiliser", "Use", "Usar", "Verwenden");
+    useBtn.addEventListener("click", function(){
+      document.getElementById("consigneeName").value = a.name;
+      document.getElementById("consigneeAddr").value = a.addr;
+      bsModal.hide();
+    });
+    actions.appendChild(useBtn);
+
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "qqt-row-del";
+    del.setAttribute("aria-label", "Delete");
+    del.innerHTML = "\u00d7";
+    del.addEventListener("click", function(e){
+      e.stopPropagation();
+      var updated = loadAddrs();
+      updated.splice(idx, 1);
+      saveAddrs(updated);
+      renderList();
+    });
+    actions.appendChild(del);
+
+    row.appendChild(actions);
+    return row;
+  }
+
+  function renderList(){
+    var filter = (searchInput.value || "").trim().toLowerCase();
+    var list = loadAddrs();
+    document.getElementById("addrCount").textContent = list.length;
+    listEl.innerHTML = "";
+    var shown = 0;
+    list.forEach(function(a, idx){
+      if (filter && a.name.toLowerCase().indexOf(filter) === -1 && a.addr.toLowerCase().indexOf(filter) === -1) return;
+      listEl.appendChild(makeRow(a, idx));
+      shown++;
+    });
+    emptyEl.style.display = list.length ? "none" : "block";
+  }
+  window.renderAddrs = function(){
+    document.getElementById("addrCount").textContent = loadAddrs().length;
+    if (modalEl.classList.contains("show")) renderList();
+  };
+
+  searchInput.addEventListener("input", renderList);
+  document.getElementById("openAddrModalBtn").addEventListener("click", function(){
+    searchInput.value = "";
+    renderList();
+    bsModal.show();
+  });
+  modalEl.addEventListener("shown.bs.modal", function(){ searchInput.focus(); });
+
+  document.getElementById("saveAddrBtn").onclick = function(){
+    var name = document.getElementById("consigneeName").value.trim();
+    var addr = document.getElementById("consigneeAddr").value.trim();
+    if (!name || !addr) { alert(T4("Entrez au moins un nom et une adresse.", "Enter at least a name and address first.", "Ingresa al menos un nombre y una dirección.", "Gib mindestens einen Namen und eine Adresse ein.")); return; }
+    var list = loadAddrs().filter(function(a){ return a.name !== name; });
+    list.push({ name: name, addr: addr });
+    saveAddrs(list);
+    renderAddrs();
+  };
+
+  renderAddrs();
+})();
+
+updatePI();
+updateTotalQtyInfo();
+
+
+/* ===== Overpack checkbox tooltip (hover on desktop, tap-on-icon on mobile) ===== */
+(function(){
+  var wrap = document.getElementById("overpackWrap");
+  var label = document.getElementById("overpackLabel");
+  var icon = document.getElementById("overpackInfoIcon");
+  var tip = document.getElementById("overpackTooltip");
+  if (!wrap || !label || !icon || !tip) return;
+  var show = function(){ tip.style.display = "block"; };
+  var hide = function(){ tip.style.display = "none"; };
+  label.addEventListener("mouseenter", show);
+  label.addEventListener("mouseleave", hide);
+  icon.addEventListener("click", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    tip.style.display = (tip.style.display === "block") ? "none" : "block";
+  });
+  document.addEventListener("click", function(e){
+    if (!wrap.contains(e.target)) hide();
+  });
+})();
+</script>
+</body>
+</html>

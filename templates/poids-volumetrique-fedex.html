@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="{{.Form.UiLang}}">
+<head>
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('qqt_theme')
+         || localStorage.getItem('qq_theme')
+         || localStorage.getItem('theme');
+    if(t === 'dark' || t === 'light'){
+      document.documentElement.setAttribute('data-theme', t);
+    }
+  }catch(e){}
+})();
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  {{if eq .Form.UiLang "fr"}}
+    <title>Poids volumétrique FedEx (DIM) expliqué | QuickQuoteTool</title>
+    <meta name="description" content="Comprenez le poids volumétrique (DIM), les formules et son impact sur les tarifs.">
+  {{else if eq .Form.UiLang "es"}}
+    <title>Peso volumétrico (DIM) de FedEx explicado | QuickQuoteTool</title>
+    <meta name="description" content="Entienda el peso volumétrico (DIM), las fórmulas y su impacto en el costo.">
+  {{else if eq .Form.UiLang "de"}}
+    <title>FedEx Volumengewicht (DIM) erklärt | QuickQuoteTool</title>
+    <meta name="description" content="Verstehen Sie DIM-Formeln und den Einfluss auf Versandkosten.">
+  {{else}}
+    <title>FedEx Dimensional Weight (DIM) Explained | QuickQuoteTool</title>
+    <meta name="description" content="Understand FedEx dimensional weight (DIM), formulas, and how it impacts shipping costs.">
+  {{end}}
+
+  <link rel="canonical" href="https://quickquotetool.ca/poids-volumetrique-fedex">
+  
+  <link rel="alternate" hreflang="fr-CA" href="https://quickquotetool.ca/poids-volumetrique-fedex?lang=fr">
+  <link rel="alternate" hreflang="en" href="https://quickquotetool.ca/poids-volumetrique-fedex?lang=en">
+  <link rel="alternate" hreflang="es" href="https://quickquotetool.ca/poids-volumetrique-fedex?lang=es">
+  <link rel="alternate" hreflang="de" href="https://quickquotetool.ca/poids-volumetrique-fedex?lang=de">
+  <link rel="alternate" hreflang="x-default" href="https://quickquotetool.ca/poids-volumetrique-fedex?lang=en">
+<meta name="robots" content="index,follow">
+
+  <meta property="og:url" content="https://quickquotetool.ca/poids-volumetrique-fedex">
+  <meta property="og:site_name" content="QuickQuoteTool">
+  <meta property="og:type" content="article">
+
+  
+  <meta name="twitter:card" content="summary">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body{ background:#f4f6f9; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .pnsi-header{ background: linear-gradient(90deg, #204E82, #012844); color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.25); }
+    .pnsi-header a{ color:#fff; text-decoration:none; font-weight:600; }
+    .pnsi-header a:hover{ text-decoration:underline; }
+    .wrap{ max-width: 980px; }
+    .card{ box-shadow: 0 2px 10px rgba(0,0,0,.10); border: 1px solid #dde3ea; border-radius: 10px; }
+    .muted{ color: rgba(17,24,39,.75); }
+    .pill{ display:inline-flex; align-items:center; gap:.5rem; padding:.25rem .6rem; border-radius: 999px; background: rgba(255,255,255,.92); border: 1px solid rgba(32,78,130,.18); color:#204E82; font-weight:700; font-size:.85rem; }
+    a{ color:#204E82; }
+    a:hover{ color:#143a66; }
+    code{ background: rgba(0,0,0,.04); padding:.1rem .25rem; border-radius:.25rem; }
+
+    .nav-left{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
+    .nav-left .navlink{padding:8px 12px;color:rgba(255,255,255,.85);text-decoration:none !important;font-size:14px;font-weight:600;border-bottom:2px solid transparent;white-space:nowrap;}
+    .nav-left .navlink:hover{color:#fff;background:rgba(255,255,255,.08)}
+    .nav-left .navlink.active{color:#fff;border-bottom-color:#ffcc00}
+    .nav-guides{position:relative}
+    .nav-guides-menu{display:none;position:absolute;top:100%;left:0;background:#fff;color:#1c2733;min-width:280px;border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.22);padding:6px;z-index:30;}
+    .nav-guides.open .nav-guides-menu{display:block}
+    .nav-guides-menu a{display:block;padding:9px 12px;border-radius:7px;color:#1c2733 !important;text-decoration:none !important;font-size:13.5px}
+    .nav-guides-menu a:hover{background:#eef3fd;color:#1565d8 !important}
+.nav-guides-menu a.current{font-weight:700;color:#1565d8 !important;background:#eef3fd;}
+html[data-theme="dark"] .nav-guides-menu a.current{color:#ffcc00 !important;background:rgba(255,204,0,.12) !important;}
+    html[data-theme="dark"] .nav-guides-menu{background:#0f1a2c;color:#e5e7eb}
+    html[data-theme="dark"] .nav-guides-menu a{color:#e5e7eb !important}
+    html[data-theme="dark"] .nav-guides-menu a:hover{background:rgba(255,255,255,.08)}
+    .theme-btn{display:inline-flex;align-items:center;justify-content:center;height:34px;padding:0 10px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;user-select:none;font-weight:700;font-size:.85rem;gap:8px;}
+    .theme-btn svg{width:16px;height:16px}
+    .lang-switch-g{position:relative}
+    .lang-btn-g{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 10px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;font-weight:700;font-size:.85rem;}
+    .lang-menu-g{display:none;position:absolute;top:100%;right:0;background:#fff;color:#1c2733;min-width:110px;border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.22);padding:6px;z-index:30;margin-top:4px;list-style:none;}
+    .lang-switch-g.open .lang-menu-g{display:block}
+    .lang-menu-g li{padding:8px 10px;border-radius:7px;cursor:pointer;font-size:13.5px;font-weight:600}
+    .lang-menu-g li:hover{background:#eef3fd;color:#1565d8}
+    html[data-theme="dark"] .lang-menu-g{background:#0f1a2c;color:#e5e7eb}
+    html[data-theme="dark"] .lang-menu-g li:hover{background:rgba(255,255,255,.08)}
+  /* Theme variables (Bootstrap-aware) */
+:root{
+  --qq-bg: #f5f7fb;
+  --qq-text: #0f172a;
+  --qq-muted: #475569;
+  --qq-card: #ffffff;
+  --qq-border: rgba(15, 23, 42, 0.12);
+  --qq-link: #0d6efd;
+  --qq-link-hover: #084298;
+  --qq-code-bg: rgba(13,110,253,0.10);
+  --qq-code-text: #0b3b8c;
+}
+html[data-theme="dark"]{
+  --qq-bg: #0b1220;
+  --qq-text: #e5e7eb;
+  --qq-muted: #9ca3af;
+  --qq-card: #0f1a2c;
+  --qq-border: rgba(229,231,235,0.16);
+  --qq-link: #ffcc00;
+  --qq-link-hover: #ffe066;
+  --qq-code-bg: rgba(255,204,0,0.14);
+  --qq-code-text: #ffe8a3;
+
+  /* Bootstrap vars so cards/text don't go dark-on-dark */
+  --bs-body-bg: var(--qq-bg);
+  --bs-body-color: var(--qq-text);
+  --bs-secondary-color: var(--qq-muted);
+  --bs-border-color: var(--qq-border);
+  --bs-link-color: var(--qq-link);
+  --bs-link-hover-color: var(--qq-link-hover);
+}
+
+body{
+  background: var(--qq-bg) !important;
+  color: var(--qq-text) !important;
+}
+
+.card{
+  background: var(--qq-card) !important;
+  color: var(--qq-text) !important;
+  border-color: var(--qq-border) !important;
+}
+
+.text-muted, .small, small{
+  color: var(--qq-muted) !important;
+}
+
+a{
+  color: var(--qq-link);
+}
+a:hover{
+  color: var(--qq-link-hover);
+}
+
+code, .badge.bg-light, .badge.text-bg-light{
+  background: var(--qq-code-bg) !important;
+  color: var(--qq-code-text) !important;
+}
+</style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "FedEx Dimensional Weight Explained | QuickQuoteTool",
+    "description": "Understand FedEx dimensional weight (DIM), formulas, and how it impacts shipping rates.",
+    "inLanguage": ["en","fr","es","de"],
+    "datePublished": "2025-12-26",
+    "dateModified": "2025-12-26",
+    "author": {"@type":"Organization","name":"QuickQuoteTool"},
+    "publisher": {"@type":"Organization","name":"QuickQuoteTool","url":"https://quickquotetool.ca/"},
+    "mainEntityOfPage": {"@type":"WebPage","@id":"https://quickquotetool.ca/poids-volumetrique-fedex"}
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "What is dimensional weight?", "acceptedAnswer": {"@type": "Answer", "text": "Dimensional weight is based on package volume and can be used for billing when it exceeds actual weight."}}, {"@type": "Question", "name": "Which weight does FedEx bill?", "acceptedAnswer": {"@type": "Answer", "text": "Typically the higher of actual weight vs DIM weight, depending on service rules."}}, {"@type": "Question", "name": "How can I reduce DIM charges?", "acceptedAnswer": {"@type": "Answer", "text": "Use tighter packaging and confirm dimensions before rating."}}
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="pnsi-header py-2">
+    <div class="container wrap d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="nav-left">
+        <a href="/?lang={{.Form.UiLang}}" class="navlink">{{.Ui.NavCalculator}}</a>
+        <div class="nav-guides" id="navTools">
+          <a href="#" class="navlink" onclick="document.getElementById('navTools').classList.toggle('open');return false;">{{.Ui.NavTools}} <span style="font-size:10px;">▾</span></a>
+          <div class="nav-guides-menu">
+            <a href="https://shipping.quickquotetool.ca/" target="_blank" rel="noopener">QuickProof</a>
+            <a href="/outils/matieres-dangereuses?lang={{.Form.UiLang}}">{{if eq .Form.UiLang "fr"}}Déclaration matières dangereuses{{else if eq .Form.UiLang "es"}}Declaración de mercancías peligrosas{{else if eq .Form.UiLang "de"}}Gefahrgutdeklaration{{else}}Dangerous Goods Declaration{{end}}</a>
+          </div>
+        </div>
+        <div class="nav-guides" id="navGuides">
+          <a href="#" class="navlink active" onclick="document.getElementById('navGuides').classList.toggle('open');return false;">{{.Ui.NavGuides}} <span style="font-size:10px;">▾</span></a>
+          <div class="nav-guides-menu">
+            {{if eq .Form.UiLang "fr"}}
+              <a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">Comment calculer les tarifs FedEx</a>
+              <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}" class="current">Poids volumétrique FedEx (DIM) expliqué</a>
+              <a href="/surcharges-fedex?lang={{.Form.UiLang}}">Surcharges FedEx expliquées</a>
+              <a href="/expedition-canada-usa?lang={{.Form.UiLang}}">Expédition Canada ↔ États‑Unis</a>
+            {{else}}
+              <a href="/comment-calculer-tarifs-fedex?lang={{.Form.UiLang}}">How to calculate FedEx shipping rates</a>
+              <a href="/poids-volumetrique-fedex?lang={{.Form.UiLang}}" class="current">FedEx dimensional weight (DIM)</a>
+              <a href="/surcharges-fedex?lang={{.Form.UiLang}}">FedEx surcharges explained</a>
+              <a href="/expedition-canada-usa?lang={{.Form.UiLang}}">Canada ↔ US shipping</a>
+            {{end}}
+          </div>
+        </div>
+        <a href="/faq?lang={{.Form.UiLang}}" class="navlink">{{.Ui.LinkFAQ}}</a>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <button type="button" class="theme-btn" id="themeToggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M21.64 13.02A8.49 8.49 0 0 1 11 2.36a.75.75 0 0 0-.9-.9A10 10 0 1 0 22.54 13.9a.75.75 0 0 0-.9-.88z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" style="display:none"><path d="M6.76 4.84l-1.8-1.8-1.06 1.06 1.8 1.8 1.06-1.06zm10.48 0 1.06 1.06 1.8-1.8-1.06-1.06-1.8 1.8zM12 4V1.5h-1.5V4H12zm0 18.5V20h-1.5v2.5H12zM4 13.5H1.5V12H4v1.5zm18.5 0H20V12h2.5v1.5zM6.76 19.16l-1.06-1.06-1.8 1.8 1.06 1.06 1.8-1.8zm12.54-1.06-1.06 1.06 1.8 1.8 1.06-1.06-1.8-1.8zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/></svg>
+          <span class="code" id="themeLabel">Dark</span>
+        </button>
+        <div class="lang-switch-g" id="langSwitchG">
+          <button type="button" class="lang-btn-g" onclick="document.getElementById('langSwitchG').classList.toggle('open')">
+            {{if eq .Form.UiLang "fr"}}FR{{else if eq .Form.UiLang "es"}}ES{{else if eq .Form.UiLang "de"}}DE{{else}}EN{{end}} <span style="font-size:10px;">▾</span>
+          </button>
+          <ul class="lang-menu-g">
+            <li data-lang="fr">FR</li>
+            <li data-lang="en">EN</li>
+            <li data-lang="es">ES</li>
+            <li data-lang="de">DE</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container wrap my-4">
+    <article class="card p-4 p-md-5">
+
+{{if eq .Form.UiLang "fr"}}
+<h1>Poids volumétrique FedEx (DIM) expliqué</h1>
+<p class="muted">FedEx peut facturer le plus élevé entre le poids réel et le poids volumétrique.</p>
+
+<h2 class="mt-4">Formules</h2>
+<ul>
+  <li>Pouces : <code>(L × l × H) ÷ 139</code></li>
+  <li>Centimètres : <code>(L × l × H) ÷ 5000</code></li>
+</ul>
+
+<h2 class="mt-4">Réduire l’impact du DIM</h2>
+<ul>
+  <li>Choisissez une boîte plus ajustée.</li>
+  <li>Vérifiez vos dimensions avant la soumission.</li>
+</ul>
+
+<p class="mt-4">
+  <a class="btn btn-primary" href="/fedex-quote?lang={{.Form.UiLang}}">Obtenir une soumission</a>
+</p>
+{{else if eq .Form.UiLang "es"}}
+<h1>Peso volumétrico (DIM) de FedEx explicado</h1>
+<p class="muted">FedEx puede cobrar el mayor entre el peso real y el peso volumétrico.</p>
+
+<h2 class="mt-4">Fórmulas</h2>
+<ul>
+  <li>Pulgadas: <code>(L × A × H) ÷ 139</code></li>
+  <li>Centímetros: <code>(L × A × H) ÷ 5000</code></li>
+</ul>
+
+<h2 class="mt-4">Cómo reducir el impacto del DIM</h2>
+<ul>
+  <li>Use una caja más ajustada.</li>
+  <li>Verifique dimensiones antes de cotizar.</li>
+</ul>
+
+<p class="mt-4">
+  <a class="btn btn-primary" href="/fedex-quote?lang={{.Form.UiLang}}">Obtener cotización</a>
+</p>
+{{else if eq .Form.UiLang "de"}}
+<h1>FedEx Volumengewicht (DIM) erklärt</h1>
+<p class="muted">FedEx berechnet ggf. das höhere aus Istgewicht und DIM.</p>
+
+<h2 class="mt-4">Formeln</h2>
+<ul>
+  <li>Zoll: <code>(L × B × H) ÷ 139</code></li>
+  <li>Zentimeter: <code>(L × B × H) ÷ 5000</code></li>
+</ul>
+
+<h2 class="mt-4">DIM-Einfluss reduzieren</h2>
+<ul>
+  <li>Passgenau verpacken.</li>
+  <li>Maße vor dem Angebot prüfen.</li>
+</ul>
+
+<p class="mt-4">
+  <a class="btn btn-primary" href="/fedex-quote?lang={{.Form.UiLang}}">FedEx-Angebot erhalten</a>
+</p>
+{{else}}
+<h1>FedEx Dimensional Weight (DIM) Explained</h1>
+<p class="muted">FedEx may bill the higher of actual weight and DIM weight.</p>
+
+<h2 class="mt-4">Formulas</h2>
+<ul>
+  <li>Inches: <code>(L × W × H) ÷ 139</code></li>
+  <li>Centimeters: <code>(L × W × H) ÷ 5000</code></li>
+</ul>
+
+<h2 class="mt-4">How to reduce DIM impact</h2>
+<ul>
+  <li>Use tighter packaging.</li>
+  <li>Verify dimensions before requesting a quote.</li>
+</ul>
+
+<p class="mt-4">
+  <a class="btn btn-primary" href="/fedex-quote?lang={{.Form.UiLang}}">Get a FedEx quote</a>
+</p>
+{{end}}
+
+</article>
+  </main>
+
+  <footer class="text-center py-4 muted">
+    <div class="container wrap">
+      <small>© 2026 – QuickQuoteTool • <a href="/sitemap.xml" style="color:inherit">{{if eq .Form.UiLang "fr"}}Plan du site{{else if eq .Form.UiLang "es"}}Mapa del sitio{{else if eq .Form.UiLang "de"}}Sitemap{{else}}Sitemap{{end}}</a></small>
+    </div>
+  </footer>
+<script>
+(function(){
+  /* Theme toggle */
+  var STORAGE_KEY = "qqt_theme";
+  function preferredTheme(){
+    try{
+      var saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === "dark" || saved === "light") return saved;
+    }catch(e){}
+    return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  }
+  function applyTheme(theme){
+    var t = (theme === "dark") ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", t);
+    var lbl = document.getElementById("themeLabel");
+    if (lbl) lbl.textContent = (t === "dark") ? "Light" : "Dark";
+    var sun = document.querySelector("#themeToggle .icon-sun");
+    var moon = document.querySelector("#themeToggle .icon-moon");
+    if (sun && moon){
+      if (t === "dark"){ sun.style.display = "inline-block"; moon.style.display = "none"; }
+      else { sun.style.display = "none"; moon.style.display = "inline-block"; }
+    }
+  }
+  function setTheme(theme){
+    try{ localStorage.setItem(STORAGE_KEY, theme); }catch(e){}
+    applyTheme(theme);
+  }
+  applyTheme(preferredTheme());
+  var btn = document.getElementById("themeToggle");
+  if (btn){
+    btn.addEventListener("click", function(){
+      var current = document.documentElement.getAttribute("data-theme") || "light";
+      setTheme(current === "dark" ? "light" : "dark");
+    });
+  }
+
+  /* Language switcher: navigates within the same page (GET), remembers choice */
+  var langSw = document.getElementById("langSwitchG");
+  if (langSw){
+    langSw.querySelectorAll(".lang-menu-g li[data-lang]").forEach(function(li){
+      li.addEventListener("click", function(){
+        var chosen = li.getAttribute("data-lang");
+        try{ localStorage.setItem("qq_uiLang", chosen); }catch(e){}
+        var url = new URL(window.location.href);
+        url.searchParams.set("lang", chosen);
+        window.location.href = url.toString();
+      });
+    });
+  }
+
+  /* Close dropdowns on outside click */
+  document.addEventListener("click", function(e){
+    var guides = document.getElementById("navGuides");
+    var tools = document.getElementById("navTools");
+    if (guides && !guides.contains(e.target)) guides.classList.remove("open");
+    if (tools && !tools.contains(e.target)) tools.classList.remove("open");
+    if (langSw && !langSw.contains(e.target)) langSw.classList.remove("open");
+  });
+})();
+</script>
+</body>
+</html>

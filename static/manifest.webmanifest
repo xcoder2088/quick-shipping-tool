@@ -1,6 +1,6 @@
 {
-  "name": "Quick Shipping Tool",
-  "short_name": "Quick Shipping",
+  "name": "QuickProof",
+  "short_name": "QuickProof",
   "description": "Shipment photo documentation for QuickQuoteTool",
   "id": "/",
   "start_url": "/",

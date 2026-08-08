@@ -1,4 +1,4 @@
-const CACHE_NAME = "quick-shipping-tool-v1";
+const CACHE_NAME = "quickproof-v1";
 const APP_SHELL = [
     "/",
     "/manifest.webmanifest",
