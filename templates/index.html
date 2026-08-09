@@ -123,7 +123,7 @@
         #settingsDestinationEmail:focus,
         #settingsUserEmail:focus {
             outline: none;
-            border-color: #2563eb;
+            border-color: #017424;
         }
 
         .required {
@@ -133,9 +133,9 @@
         .destination-info {
             margin-bottom: 24px;
             padding: 12px 14px;
-            background: #eff6ff;
+            background: #eef8f0;
             border-radius: 10px;
-            color: #1e40af;
+            color: #0d5c22;
             font-size: 14px;
             word-break: break-word;
         }
@@ -143,7 +143,7 @@
         .destination-info strong {
             display: block;
             margin-bottom: 3px;
-            color: #1e3a8a;
+            color: #0a4a1c;
         }
 
         .sender-info {
@@ -224,7 +224,7 @@
         .primary-button,
         .confirm-button,
         .new-shipment {
-            background: #2563eb;
+            background: #017424;
             color: white;
         }
 
@@ -271,12 +271,12 @@
         }
 
         .send {
-            background: #2563eb;
+            background: #017424;
             color: white;
         }
 
         .send:disabled {
-            background: #93b4f5;
+            background: #8fc9a0;
             color: white;
             cursor: not-allowed;
         }
@@ -448,7 +448,7 @@
 
         #confirmNotes:focus {
             outline: none;
-            border-color: #2563eb;
+            border-color: #017424;
         }
 
         .notes-help {
@@ -572,10 +572,32 @@ body { min-height: 100dvh; }
     padding-top: 0 !important;
     text-align: center;
 }
+.header h1 .brand-quick{
+    color:#ffffff;
+    text-shadow: -1px -1px 0 rgba(0,0,0,.55), 1px -1px 0 rgba(0,0,0,.55), -1px 1px 0 rgba(0,0,0,.55), 1px 1px 0 rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.25);
+}
+.header h1 .brand-proof{
+    color:#017424;
+    text-shadow: -1px -1px 0 rgba(0,0,0,.35), 1px -1px 0 rgba(0,0,0,.35), -1px 1px 0 rgba(0,0,0,.35), 1px 1px 0 rgba(0,0,0,.35);
+}
+.qp-powered-footer{
+    text-align:center;
+    font-size:12.5px;
+    color:#6b7280;
+    margin-top:6px;
+}
+.qp-powered-footer a{
+    color:#017424;
+    font-weight:700;
+    text-decoration:none;
+}
+.qp-powered-footer a:hover{
+    text-decoration:underline;
+}
 .app-logo {
     display: block;
-    width: 64px;
-    height: 64px;
+    width: 84px;
+    height: 84px;
     object-fit: cover;
     border-radius: 16px;
     margin: 0 auto 8px;
@@ -602,7 +624,7 @@ body { min-height: 100dvh; }
 .warning-v3 strong { display:block; margin-bottom:4px; }
 @media (max-width: 480px) {
     .app { padding-left:16px !important; padding-right:16px !important; }
-    .app-logo { width:58px; height:58px; }
+    .app-logo { width:76px; height:76px; }
 }
 
 
@@ -610,21 +632,21 @@ body { min-height: 100dvh; }
 .recipient-panel-v32 {
     margin: 0 0 22px;
     padding: 14px;
-    background: #eff6ff;
+    background: #eef8f0;
     border-radius: 12px;
 }
 .recipient-panel-title-v32 {
     margin-bottom: 10px;
     font-size: 14px;
     font-weight: 800;
-    color: #1e3a8a;
+    color: #0a4a1c;
 }
 .recipient-choice-v32 {
     display: flex;
     align-items: flex-start;
     gap: 10px;
     padding: 10px 0;
-    border-top: 1px solid #dbeafe;
+    border-top: 1px solid #bfe8c8;
 }
 .recipient-choice-v32:first-of-type { border-top: 0; }
 .recipient-choice-v32 input[type="checkbox"] {
@@ -632,6 +654,7 @@ body { min-height: 100dvh; }
     height: 20px;
     margin: 2px 0 0;
     flex: 0 0 auto;
+    accent-color: #017424;
 }
 .recipient-choice-text-v32 { min-width: 0; }
 .recipient-choice-name-v32 {
@@ -689,7 +712,7 @@ body { min-height: 100dvh; }
 }
 .recipient-card-v32 input:focus {
     outline: none;
-    border-color: #2563eb;
+    border-color: #017424;
 }
 .recipient-remove-v32 {
     width: 100%;
@@ -733,8 +756,8 @@ label[for="settingsDestinationEmail"] {
         }
 
         #setupScreen .app-logo {
-            width: clamp(54px, 8vh, 64px);
-            height: clamp(54px, 8vh, 64px);
+            width: clamp(64px, 9.5vh, 80px);
+            height: clamp(64px, 9.5vh, 80px);
             margin-bottom: clamp(8px, 1.4vh, 14px);
         }
 
@@ -777,8 +800,8 @@ label[for="settingsDestinationEmail"] {
             }
 
             #setupScreen .app-logo {
-                width: 50px;
-                height: 50px;
+                width: 62px;
+                height: 62px;
                 margin-bottom: 6px;
             }
 
@@ -875,7 +898,7 @@ label[for="settingsDestinationEmail"] {
         }
 
         .quickquote-home-link:focus-visible {
-            outline: 2px solid #2563eb;
+            outline: 2px solid #017424;
             outline-offset: 4px;
             border-radius: 10px;
         }
@@ -904,17 +927,17 @@ label[for="settingsDestinationEmail"] {
 .settings-link{
     display:block;
     padding:12px 14px;
-    border:1px solid #dbeafe;
+    border:1px solid #bfe8c8;
     border-radius:10px;
-    background:#f8fbff;
-    color:#2563eb;
+    background:#f2faf4;
+    color:#017424;
     text-decoration:none;
     font-weight:600;
     transition:.15s;
 }
 
 .settings-link:hover{
-    background:#eff6ff;
+    background:#e5f6e9;
 }
     
 @media (max-width:600px){
@@ -956,10 +979,9 @@ padding:20px 16px calc(20px + env(safe-area-inset-bottom));
                      class="app-logo"
                      alt="QuickProof"
                      onerror="this.onerror=null;this.src='/static/icons/icon-192.png';">
-    <span class="quickquote-home-hint">Have you tried our QuickQuote Tool?</span>
             </a>
 
-            <h1>QuickProof</h1>
+            <h1><span class="brand-quick">Quick</span><span class="brand-proof">Proof</span></h1>
 
             <p class="setup-subtitle">
                 First time setup<br>
@@ -1027,12 +1049,15 @@ padding:20px 16px calc(20px + env(safe-area-inset-bottom));
                      class="app-logo"
                      alt="QuickProof"
                      onerror="this.onerror=null;this.src='/static/icons/icon-192.png';">
-    <span class="quickquote-home-hint">Have you tried our QuickQuote Tool?</span>
             </a>
-<h1>QuickProof</h1>
+<h1><span class="brand-quick">Quick</span><span class="brand-proof">Proof</span></h1>
 
             <p>Shipment Photos
          Proof | Email | Archive</p>
+
+            <div class="qp-powered-footer">
+                Powered by <a href="https://quickquotetool.ca" target="_blank" rel="noopener">QuickQuoteTool</a>
+            </div>
 
             <button
                 type="button"
