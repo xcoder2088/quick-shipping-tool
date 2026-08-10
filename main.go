@@ -141,7 +141,7 @@ func main() {
 
 	fmt.Println("=================================")
 	fmt.Println("  QuickProof")
-	fmt.Println("  http://localhost:8281")
+	fmt.Println("  http://localhost:8081")
 
 	if apiKey != "" && fromEmail != "" {
 		fmt.Println("  MailerSend: READY")
@@ -157,7 +157,7 @@ func main() {
 
 	log.Fatal(
 		http.ListenAndServe(
-			":8281",
+			":8081",
 			nil,
 		),
 	)
