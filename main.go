@@ -19,7 +19,7 @@ import (
 
 const (
 	maxUploadSize = 50 << 20 // 50 MB
-	maxPhotos     = 5
+	maxPhotos     = 4
 
 	mailerSendURL = "https://api.mailersend.com/v1/email"
 )
@@ -109,7 +109,7 @@ func main() {
 
 	http.HandleFunc(
 		"/api/upload",
-		uploadHandler,
+		rateLimit("upload", 10, time.Minute, uploadHandler),
 	)
 
 	http.HandleFunc(
@@ -158,7 +158,7 @@ func main() {
 	log.Fatal(
 		http.ListenAndServe(
 			":8081",
-			nil,
+			securityHeaders(http.DefaultServeMux),
 		),
 	)
 }
@@ -566,7 +566,7 @@ func uploadHandler(
 			http.StatusBadRequest,
 			UploadResponse{
 				Success: false,
-				Message: "Maximum 5 photos per shipment",
+				Message: "Maximum 4 photos per shipment",
 			},
 		)
 
