@@ -127,6 +127,11 @@ func main() {
 		termsHandler,
 	)
 
+	http.HandleFunc(
+		"/.well-known/assetlinks.json",
+		assetLinksHandler,
+	)
+
 	// ==================================================
 	// CHECK MAILERSEND CONFIGURATION
 	// ==================================================
@@ -762,6 +767,22 @@ func uploadHandler(
 			savedFiles,
 			destinationPath,
 		)
+
+		// --------------------------------------------------
+		// WATERMARK (logo + "Powered by QuickQuoteTool.ca")
+		// --------------------------------------------------
+		// Stamped in place on the saved file, so the same watermarked
+		// image is what later gets attached to the outgoing email. A
+		// failure here is logged but never blocks the upload — the
+		// un-watermarked photo is still better than no photo at all.
+
+		if err := watermarkPhoto(destinationPath); err != nil {
+
+			log.Println(
+				"Unable to watermark photo:",
+				err,
+			)
+		}
 
 		log.Printf(
 			"Customer: %s | Shipment: %s | Saved: %s",
