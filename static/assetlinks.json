@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "ca.quickquotetool.quickproof",
+        "sha256_cert_fingerprints": ["1A:2F:83:FF:EF:B6:C7:8D:61:6C:0F:8E:91:15:42:29:56:3C:70:61:03:11:E5:C9:41:25:D2:E9:83:B7:B8:6A"]
+      }
+    }]
