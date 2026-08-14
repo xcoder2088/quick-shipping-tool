@@ -40,19 +40,24 @@ const watermarkMarginRatio = 0.012
 // single bad file never blocks the rest of the upload.
 func watermarkPhoto(path string) error {
 
-	original, err := os.Open(path)
+	raw, err := os.ReadFile(path)
 	if err != nil {
-		return fmt.Errorf("watermark: open %s: %w", path, err)
+		return fmt.Errorf("watermark: read %s: %w", path, err)
 	}
 
-	img, format, decodeErr := image.Decode(original)
-	original.Close()
+	img, format, decodeErr := image.Decode(bytes.NewReader(raw))
 
 	if decodeErr != nil {
 		// Not a decodable/supported image — skip silently, the original
 		// upload stays exactly as-is.
 		return nil
 	}
+
+	// Correct for phone camera rotation BEFORE stamping the badge, so the
+	// watermark lands right-side-up and the saved file no longer depends
+	// on an EXIF tag (which re-encoding below would otherwise discard).
+	orientation := readExifOrientation(raw)
+	img = applyExifOrientation(img, orientation)
 
 	badgeImg, err := png.Decode(bytes.NewReader(watermarkPNG))
 	if err != nil {
