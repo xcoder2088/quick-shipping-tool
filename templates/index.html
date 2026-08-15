@@ -1114,11 +1114,11 @@ padding:20px 16px calc(20px + env(safe-area-inset-bottom));
                     <img src="/static/icons/icon-192.png" alt="" onerror="this.style.display='none';">
                 </div>
                 <div>
-                    <p class="install-title">Install QuickProof</p>
-                    <p class="install-desc">Add it to your Home Screen once — no need to come back through the website every time.</p>
+                    <p class="install-title" id="installAndroidTitle"></p>
+                    <p class="install-desc" id="installAndroidDesc"></p>
                 </div>
             </div>
-            <button type="button" class="install-cta" id="installAndroidButton">Install App</button>
+            <button type="button" class="install-cta" id="installAndroidButton"></button>
         </div>
 
         <!-- iOS Safari: no programmatic prompt, show the manual steps -->
@@ -1128,28 +1128,27 @@ padding:20px 16px calc(20px + env(safe-area-inset-bottom));
                     <img src="/static/icons/icon-192.png" alt="" onerror="this.style.display='none';">
                 </div>
                 <div>
-                    <p class="install-title">Add QuickProof to your Home Screen</p>
-                    <p class="install-desc">So you can open it directly next time, without going through the website.</p>
+                    <p class="install-title" id="installIOSTitle"></p>
+                    <p class="install-desc" id="installIOSDesc"></p>
                 </div>
             </div>
             <ul class="install-steps">
                 <li>
                     <span class="install-step-badge">1</span>
-                    Tap the Share button
+                    <span id="installStep1Text"></span>
                     <svg class="ios-share-icon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 16V4"></path>
                         <path d="M7 8l5-5 5 5"></path>
                         <rect x="4" y="12" width="16" height="8" rx="2"></rect>
                     </svg>
-                    at the bottom of Safari
                 </li>
                 <li>
                     <span class="install-step-badge">2</span>
-                    Scroll down and tap "Add to Home Screen"
+                    <span id="installStep2Text"></span>
                 </li>
                 <li>
                     <span class="install-step-badge">3</span>
-                    Tap "Add" — done!
+                    <span id="installStep3Text"></span>
                 </li>
             </ul>
         </div>
@@ -1161,8 +1160,8 @@ padding:20px 16px calc(20px + env(safe-area-inset-bottom));
                     <img src="/static/icons/icon-192.png" alt="" onerror="this.style.display='none';">
                 </div>
                 <div>
-                    <p class="install-title">Add QuickProof to your Home Screen</p>
-                    <p class="install-desc">Open your browser menu and look for "Add to Home Screen" or "Install App" so you don't need to come back through the website.</p>
+                    <p class="install-title" id="installGenericTitle"></p>
+                    <p class="install-desc" id="installGenericDesc"></p>
                 </div>
             </div>
         </div>
@@ -1645,7 +1644,7 @@ padding:20px 16px calc(20px + env(safe-area-inset-bottom));
 <script>
 
     // ==============================================
-    // V3 - AUTOMATIC LANGUAGE (FR / EN / ES / DE)
+    // V3 - AUTOMATIC LANGUAGE (FR / EN / ES / DE / ZH)
     // ==============================================
     const I18N = {
       en: {
@@ -1713,11 +1712,31 @@ padding:20px 16px calc(20px + env(safe-area-inset-bottom));
 
 
     const UI_TEXT = {
-      en: {hint:"Have you tried our QuickQuote Tool?", first:"First time setup", configure:"Configure your shipping email preferences.", yourEmail:"Your Email", emailHelp:"Your email will identify who submitted the shipment and will later be used as the reply address. Both addresses are saved on this device.", saveContinue:"SAVE & CONTINUE", confirmTitle:"Confirm Shipment", verify:"Please verify before sending.", customer:"Customer", sendTo:"Send To", sentBy:"Sent By", cancel:"CANCEL", confirmSend:"CONFIRM & SEND", sending:"Sending...", settingsSubtitle:"Change your email preferences.", save:"SAVE", photosSent:"PHOTOS SENT", newShipment:"NEW SHIPMENT", successShipmentLabel:"Shipment / PO", successPhoto1:"1 photo successfully processed", successPhotoN:n=>`${n} photos successfully processed`, successDestination:"Destination", successSubmittedBy:"Submitted by", customerPlaceholder:"Enter customer name", shipmentPlaceholder:"Enter shipment / PO", eitherRequired:"* Customer Name and Shipment / PO are both required", referenceWarning:"Please enter both a Customer Name and a Shipment / PO.", linkPrivacy:"Privacy Policy", linkTerms:"Terms of Service", linkSupport:"Support"},
-      fr: {hint:"Avez-vous essayé notre outil QuickQuote ?", first:"Première configuration", configure:"Configurez vos préférences de courriel pour les expéditions.", yourEmail:"Votre courriel", emailHelp:"Votre courriel permet d’identifier la personne qui a soumis l’expédition et sera utilisé comme adresse de réponse. Les adresses sont enregistrées sur cet appareil.", saveContinue:"ENREGISTRER ET CONTINUER", confirmTitle:"Confirmer l’expédition", verify:"Veuillez vérifier avant l’envoi.", customer:"Client", sendTo:"Envoyer à", sentBy:"Envoyé par", cancel:"ANNULER", confirmSend:"CONFIRMER ET ENVOYER", sending:"Envoi en cours...", settingsSubtitle:"Modifiez vos préférences de courriel.", save:"ENREGISTRER", photosSent:"PHOTOS ENVOYÉES", newShipment:"NOUVELLE EXPÉDITION", successShipmentLabel:"Expédition / PO", successPhoto1:"1 photo traitée avec succès", successPhotoN:n=>`${n} photos traitées avec succès`, successDestination:"Destination", successSubmittedBy:"Soumis par", customerPlaceholder:"Entrer le nom du client", shipmentPlaceholder:"Entrer l’expédition / PO", eitherRequired:"* Nom du client et Expédition / PO sont tous les deux obligatoires", referenceWarning:"Veuillez entrer un nom de client et un numéro d’expédition / PO.", linkPrivacy:"Politique de confidentialité", linkTerms:"Conditions d’utilisation", linkSupport:"Assistance"},
-      es: {hint:"¿Has probado nuestra herramienta QuickQuote?", first:"Configuración inicial", configure:"Configure sus preferencias de correo para los envíos.", yourEmail:"Su correo electrónico", emailHelp:"Su correo identifica quién envió el envío y se utilizará como dirección de respuesta. Las direcciones se guardan en este dispositivo.", saveContinue:"GUARDAR Y CONTINUAR", confirmTitle:"Confirmar envío", verify:"Verifique la información antes de enviar.", customer:"Cliente", sendTo:"Enviar a", sentBy:"Enviado por", cancel:"CANCELAR", confirmSend:"CONFIRMAR Y ENVIAR", sending:"Enviando...", settingsSubtitle:"Cambie sus preferencias de correo electrónico.", save:"GUARDAR", photosSent:"FOTOS ENVIADAS", newShipment:"NUEVO ENVÍO", successShipmentLabel:"Envío / PO", successPhoto1:"1 foto procesada correctamente", successPhotoN:n=>`${n} fotos procesadas correctamente`, successDestination:"Destino", successSubmittedBy:"Enviado por", customerPlaceholder:"Introducir nombre del cliente", shipmentPlaceholder:"Introducir envío / PO", eitherRequired:"* El nombre del cliente y el envío / PO son obligatorios", referenceWarning:"Introduzca un nombre de cliente y un envío / PO.", linkPrivacy:"Política de privacidad", linkTerms:"Términos de servicio", linkSupport:"Soporte"},
-      de: {hint:"Haben Sie unser QuickQuote-Tool ausprobiert?", first:"Ersteinrichtung", configure:"Konfigurieren Sie Ihre E-Mail-Einstellungen für Sendungen.", yourEmail:"Ihre E-Mail-Adresse", emailHelp:"Ihre E-Mail-Adresse kennzeichnet, wer die Sendung eingereicht hat, und wird später als Antwortadresse verwendet. Die Adressen werden auf diesem Gerät gespeichert.", saveContinue:"SPEICHERN & WEITER", confirmTitle:"Sendung bestätigen", verify:"Bitte vor dem Senden überprüfen.", customer:"Kunde", sendTo:"Senden an", sentBy:"Gesendet von", cancel:"ABBRECHEN", confirmSend:"BESTÄTIGEN & SENDEN", sending:"Wird gesendet...", settingsSubtitle:"Ändern Sie Ihre E-Mail-Einstellungen.", save:"SPEICHERN", photosSent:"FOTOS GESENDET", newShipment:"NEUE SENDUNG", successShipmentLabel:"Sendung / PO", successPhoto1:"1 Foto erfolgreich verarbeitet", successPhotoN:n=>`${n} Fotos erfolgreich verarbeitet`, successDestination:"Ziel", successSubmittedBy:"Eingereicht von", customerPlaceholder:"Kundenname eingeben", shipmentPlaceholder:"Sendung / PO eingeben", eitherRequired:"* Kundenname und Sendung / PO sind beide erforderlich", referenceWarning:"Bitte geben Sie sowohl einen Kundennamen als auch eine Sendung / PO ein.", linkPrivacy:"Datenschutzrichtlinie", linkTerms:"Nutzungsbedingungen", linkSupport:"Support"},
-      zh: {hint:"试过我们的 QuickQuote 工具吗？", first:"首次设置", configure:"配置您的货运邮件偏好。", yourEmail:"您的电子邮件", emailHelp:"您的电子邮件用于识别提交货运资料的人员，并将作为回复地址。所有地址都会保存在此设备上。", saveContinue:"保存并继续", confirmTitle:"确认货运", verify:"发送前请核对信息。", customer:"客户", sendTo:"发送至", sentBy:"提交者", cancel:"取消", confirmSend:"确认并发送", sending:"发送中...", settingsSubtitle:"更改您的电子邮件偏好。", save:"保存", photosSent:"照片已发送", newShipment:"新建货运", successShipmentLabel:"货运 / PO", successPhoto1:"已成功处理 1 张照片", successPhotoN:n=>`已成功处理 ${n} 张照片`, successDestination:"发送至", successSubmittedBy:"提交者", customerPlaceholder:"输入客户名称", shipmentPlaceholder:"输入货运 / PO", eitherRequired:"* 客户名称和货运 / PO 均为必填项", referenceWarning:"请输入客户名称和货运 / PO。", linkPrivacy:"隐私政策", linkTerms:"服务条款", linkSupport:"支持"}
+      en: {hint:"Have you tried our QuickQuote Tool?", first:"First time setup", configure:"Configure your shipping email preferences.", yourEmail:"Your Email", emailHelp:"Your email will identify who submitted the shipment and will later be used as the reply address. Both addresses are saved on this device.", saveContinue:"SAVE & CONTINUE", confirmTitle:"Confirm Shipment", verify:"Please verify before sending.", customer:"Customer", sendTo:"Send To", sentBy:"Sent By", cancel:"CANCEL", confirmSend:"CONFIRM & SEND", sending:"Sending...", settingsSubtitle:"Change your email preferences.", save:"SAVE", photosSent:"PHOTOS SENT", newShipment:"NEW SHIPMENT", successShipmentLabel:"Shipment / PO", successPhoto1:"1 photo successfully processed", successPhotoN:n=>`${n} photos successfully processed`, successDestination:"Destination", successSubmittedBy:"Submitted by", customerPlaceholder:"Enter customer name", shipmentPlaceholder:"Enter shipment / PO", eitherRequired:"* Customer Name and Shipment / PO are both required", referenceWarning:"Please enter both a Customer Name and a Shipment / PO.", linkPrivacy:"Privacy Policy", linkTerms:"Terms of Service", linkSupport:"Support",
+        installAndroidTitle:"Install QuickProof", installAndroidDesc:"Add it to your Home Screen once — no need to come back through the website every time.", installCta:"Install App",
+        installIOSTitle:"Add QuickProof to your Home Screen", installIOSDesc:"So you can open it directly next time, without going through the website.",
+        installStep1:"Tap the Share icon at the bottom of Safari", installStep2:"Scroll down and tap \"Add to Home Screen\"", installStep3:"Tap \"Add\" — done!",
+        installGenericTitle:"Add QuickProof to your Home Screen", installGenericDesc:"Open your browser menu and look for \"Add to Home Screen\" or \"Install App\" so you don't need to come back through the website."},
+      fr: {hint:"Avez-vous essayé notre outil QuickQuote ?", first:"Première configuration", configure:"Configurez vos préférences de courriel pour les expéditions.", yourEmail:"Votre courriel", emailHelp:"Votre courriel permet d’identifier la personne qui a soumis l’expédition et sera utilisé comme adresse de réponse. Les adresses sont enregistrées sur cet appareil.", saveContinue:"ENREGISTRER ET CONTINUER", confirmTitle:"Confirmer l’expédition", verify:"Veuillez vérifier avant l’envoi.", customer:"Client", sendTo:"Envoyer à", sentBy:"Envoyé par", cancel:"ANNULER", confirmSend:"CONFIRMER ET ENVOYER", sending:"Envoi en cours...", settingsSubtitle:"Modifiez vos préférences de courriel.", save:"ENREGISTRER", photosSent:"PHOTOS ENVOYÉES", newShipment:"NOUVELLE EXPÉDITION", successShipmentLabel:"Expédition / PO", successPhoto1:"1 photo traitée avec succès", successPhotoN:n=>`${n} photos traitées avec succès`, successDestination:"Destination", successSubmittedBy:"Soumis par", customerPlaceholder:"Entrer le nom du client", shipmentPlaceholder:"Entrer l’expédition / PO", eitherRequired:"* Nom du client et Expédition / PO sont tous les deux obligatoires", referenceWarning:"Veuillez entrer un nom de client et un numéro d’expédition / PO.", linkPrivacy:"Politique de confidentialité", linkTerms:"Conditions d’utilisation", linkSupport:"Assistance",
+        installAndroidTitle:"Installer QuickProof", installAndroidDesc:"Ajoutez-la une fois à votre écran d’accueil — plus besoin de repasser par le site à chaque fois.", installCta:"Installer l’application",
+        installIOSTitle:"Ajouter QuickProof à l’écran d’accueil", installIOSDesc:"Pour l’ouvrir directement la prochaine fois, sans passer par le site.",
+        installStep1:"Appuyez sur l’icône Partager en bas de Safari", installStep2:"Faites défiler et appuyez sur « Sur l’écran d’accueil »", installStep3:"Appuyez sur « Ajouter » — terminé !",
+        installGenericTitle:"Ajouter QuickProof à l’écran d’accueil", installGenericDesc:"Ouvrez le menu de votre navigateur et cherchez « Ajouter à l’écran d’accueil » ou « Installer l’application » pour ne plus avoir à repasser par le site."},
+      es: {hint:"¿Has probado nuestra herramienta QuickQuote?", first:"Configuración inicial", configure:"Configure sus preferencias de correo para los envíos.", yourEmail:"Su correo electrónico", emailHelp:"Su correo identifica quién envió el envío y se utilizará como dirección de respuesta. Las direcciones se guardan en este dispositivo.", saveContinue:"GUARDAR Y CONTINUAR", confirmTitle:"Confirmar envío", verify:"Verifique la información antes de enviar.", customer:"Cliente", sendTo:"Enviar a", sentBy:"Enviado por", cancel:"CANCELAR", confirmSend:"CONFIRMAR Y ENVIAR", sending:"Enviando...", settingsSubtitle:"Cambie sus preferencias de correo electrónico.", save:"GUARDAR", photosSent:"FOTOS ENVIADAS", newShipment:"NUEVO ENVÍO", successShipmentLabel:"Envío / PO", successPhoto1:"1 foto procesada correctamente", successPhotoN:n=>`${n} fotos procesadas correctamente`, successDestination:"Destino", successSubmittedBy:"Enviado por", customerPlaceholder:"Introducir nombre del cliente", shipmentPlaceholder:"Introducir envío / PO", eitherRequired:"* El nombre del cliente y el envío / PO son obligatorios", referenceWarning:"Introduzca un nombre de cliente y un envío / PO.", linkPrivacy:"Política de privacidad", linkTerms:"Términos de servicio", linkSupport:"Soporte",
+        installAndroidTitle:"Instalar QuickProof", installAndroidDesc:"Agréguela una vez a su pantalla de inicio — no necesita volver al sitio web cada vez.", installCta:"Instalar la app",
+        installIOSTitle:"Agregar QuickProof a la pantalla de inicio", installIOSDesc:"Así podrá abrirla directamente la próxima vez, sin pasar por el sitio web.",
+        installStep1:"Toque el ícono Compartir en la parte inferior de Safari", installStep2:"Desplácese hacia abajo y toque «Agregar a la pantalla de inicio»", installStep3:"Toque «Agregar» — ¡listo!",
+        installGenericTitle:"Agregar QuickProof a la pantalla de inicio", installGenericDesc:"Abra el menú de su navegador y busque «Agregar a la pantalla de inicio» o «Instalar app» para no tener que volver al sitio web."},
+      de: {hint:"Haben Sie unser QuickQuote-Tool ausprobiert?", first:"Ersteinrichtung", configure:"Konfigurieren Sie Ihre E-Mail-Einstellungen für Sendungen.", yourEmail:"Ihre E-Mail-Adresse", emailHelp:"Ihre E-Mail-Adresse kennzeichnet, wer die Sendung eingereicht hat, und wird später als Antwortadresse verwendet. Die Adressen werden auf diesem Gerät gespeichert.", saveContinue:"SPEICHERN & WEITER", confirmTitle:"Sendung bestätigen", verify:"Bitte vor dem Senden überprüfen.", customer:"Kunde", sendTo:"Senden an", sentBy:"Gesendet von", cancel:"ABBRECHEN", confirmSend:"BESTÄTIGEN & SENDEN", sending:"Wird gesendet...", settingsSubtitle:"Ändern Sie Ihre E-Mail-Einstellungen.", save:"SPEICHERN", photosSent:"FOTOS GESENDET", newShipment:"NEUE SENDUNG", successShipmentLabel:"Sendung / PO", successPhoto1:"1 Foto erfolgreich verarbeitet", successPhotoN:n=>`${n} Fotos erfolgreich verarbeitet`, successDestination:"Ziel", successSubmittedBy:"Eingereicht von", customerPlaceholder:"Kundenname eingeben", shipmentPlaceholder:"Sendung / PO eingeben", eitherRequired:"* Kundenname und Sendung / PO sind beide erforderlich", referenceWarning:"Bitte geben Sie sowohl einen Kundennamen als auch eine Sendung / PO ein.", linkPrivacy:"Datenschutzrichtlinie", linkTerms:"Nutzungsbedingungen", linkSupport:"Support",
+        installAndroidTitle:"QuickProof installieren", installAndroidDesc:"Einmal zum Startbildschirm hinzufügen — Sie müssen nicht jedes Mal über die Website zurückkehren.", installCta:"App installieren",
+        installIOSTitle:"QuickProof zum Startbildschirm hinzufügen", installIOSDesc:"So können Sie sie beim nächsten Mal direkt öffnen, ohne über die Website zu gehen.",
+        installStep1:"Tippen Sie unten in Safari auf das Teilen-Symbol", installStep2:"Scrollen Sie nach unten und tippen Sie auf „Zum Home-Bildschirm“", installStep3:"Tippen Sie auf „Hinzufügen“ — fertig!",
+        installGenericTitle:"QuickProof zum Startbildschirm hinzufügen", installGenericDesc:"Öffnen Sie das Menü Ihres Browsers und suchen Sie nach „Zum Startbildschirm hinzufügen“ oder „App installieren“, damit Sie nicht jedes Mal über die Website gehen müssen."},
+      zh: {hint:"试过我们的 QuickQuote 工具吗？", first:"首次设置", configure:"配置您的货运邮件偏好。", yourEmail:"您的电子邮件", emailHelp:"您的电子邮件用于识别提交货运资料的人员，并将作为回复地址。所有地址都会保存在此设备上。", saveContinue:"保存并继续", confirmTitle:"确认货运", verify:"发送前请核对信息。", customer:"客户", sendTo:"发送至", sentBy:"提交者", cancel:"取消", confirmSend:"确认并发送", sending:"发送中...", settingsSubtitle:"更改您的电子邮件偏好。", save:"保存", photosSent:"照片已发送", newShipment:"新建货运", successShipmentLabel:"货运 / PO", successPhoto1:"已成功处理 1 张照片", successPhotoN:n=>`已成功处理 ${n} 张照片`, successDestination:"发送至", successSubmittedBy:"提交者", customerPlaceholder:"输入客户名称", shipmentPlaceholder:"输入货运 / PO", eitherRequired:"* 客户名称和货运 / PO 均为必填项", referenceWarning:"请输入客户名称和货运 / PO。", linkPrivacy:"隐私政策", linkTerms:"服务条款", linkSupport:"支持",
+        installAndroidTitle:"安装 QuickProof", installAndroidDesc:"将其添加到主屏幕一次 — 以后无需每次都通过网站访问。", installCta:"安装应用",
+        installIOSTitle:"将 QuickProof 添加到主屏幕", installIOSDesc:"这样下次可以直接打开，无需通过网站。",
+        installStep1:"点击 Safari 底部的分享图标", installStep2:"向下滚动并点击“添加到主屏幕”", installStep3:"点击“添加”— 完成！",
+        installGenericTitle:"将 QuickProof 添加到主屏幕", installGenericDesc:"打开浏览器菜单，查找“添加到主屏幕”或“安装应用”，这样就不用每次都通过网站了。"}
     };
     const ui = UI_TEXT[appLanguage] || UI_TEXT.en;
     function applyStaticTranslations() {
@@ -1748,6 +1767,10 @@ padding:20px 16px calc(20px + env(safe-area-inset-bottom));
       }
       const setupUser=document.getElementById('setupUserEmail'); if(setupUser) setupUser.placeholder=tr.recipientEmail;
       set('#settingsPrivacy',ui.linkPrivacy); set('#settingsTerms',ui.linkTerms); set('#settingsSupport',ui.linkSupport);
+      set('#installAndroidTitle',ui.installAndroidTitle); set('#installAndroidDesc',ui.installAndroidDesc); set('#installAndroidButton',ui.installCta);
+      set('#installIOSTitle',ui.installIOSTitle); set('#installIOSDesc',ui.installIOSDesc);
+      set('#installStep1Text',ui.installStep1); set('#installStep2Text',ui.installStep2); set('#installStep3Text',ui.installStep3);
+      set('#installGenericTitle',ui.installGenericTitle); set('#installGenericDesc',ui.installGenericDesc);
     }
     applyStaticTranslations();
 
