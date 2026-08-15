@@ -974,12 +974,199 @@ padding:20px 16px calc(20px + env(safe-area-inset-bottom));
     to{ transform:rotate(360deg); }
 }
 
+/* ==========================================
+   ADD TO HOME SCREEN BANNER
+   Shown only when running in a regular mobile
+   browser tab (not yet installed). Two variants:
+   Android/Chrome gets a real 1-tap install button
+   (beforeinstallprompt); iOS Safari gets a short
+   animated "Share -> Add to Home Screen" guide,
+   since iOS has no programmatic install prompt.
+========================================== */
+.install-banner{
+    display:none;
+    background:#061a3a;
+    color:#fff;
+    border-radius:14px;
+    padding:14px 14px 16px;
+    margin:0 0 20px;
+    box-shadow:0 6px 18px rgba(6,26,58,.25);
+    position:relative;
+}
+.install-banner.show{ display:block; }
+.install-banner .install-close{
+    position:absolute;
+    top:8px;
+    right:8px;
+    width:30px;
+    height:30px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,.12);
+    color:#fff;
+    font-size:16px;
+    line-height:1;
+    cursor:pointer;
+}
+.install-banner .install-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding-right:26px;
+}
+.install-banner .install-icon{
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    background:rgba(255,255,255,.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+}
+.install-banner .install-icon img{
+    width:26px;
+    height:26px;
+    border-radius:6px;
+}
+.install-banner .install-title{
+    font-weight:700;
+    font-size:15px;
+    margin:0 0 2px;
+}
+.install-banner .install-desc{
+    font-size:12.5px;
+    color:#c9d4e6;
+    margin:0;
+    line-height:1.4;
+}
+.install-banner .install-cta{
+    margin-top:12px;
+    width:100%;
+    height:42px;
+    border:none;
+    border-radius:10px;
+    background:#017424;
+    color:#fff;
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+}
+.install-banner .install-steps{
+    margin:12px 0 0;
+    padding:0;
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+.install-banner .install-steps li{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    color:#e7ecf5;
+}
+.install-banner .install-step-badge{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:rgba(255,255,255,.16);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:700;
+    flex-shrink:0;
+}
+.install-banner .ios-share-icon{
+    width:20px;
+    height:20px;
+    flex-shrink:0;
+    animation:iosSharePulse 1.6s ease-in-out infinite;
+}
+@keyframes iosSharePulse{
+    0%,100%{ transform:translateY(0); opacity:1; }
+    50%{ transform:translateY(-4px); opacity:.7; }
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="app">
+
+    <!-- ==========================================
+         ADD TO HOME SCREEN BANNER
+         Hidden by default; installBanner.js below
+         shows the right variant (or none, if the
+         app is already installed).
+    =========================================== -->
+
+    <div class="install-banner" id="installBanner">
+        <button type="button" class="install-close" id="installBannerClose" aria-label="Close">&times;</button>
+
+        <!-- Android / Chrome: real 1-tap install -->
+        <div id="installVariantAndroid" style="display:none;">
+            <div class="install-row">
+                <div class="install-icon">
+                    <img src="/static/icons/icon-192.png" alt="" onerror="this.style.display='none';">
+                </div>
+                <div>
+                    <p class="install-title">Install QuickProof</p>
+                    <p class="install-desc">Add it to your Home Screen once — no need to come back through the website every time.</p>
+                </div>
+            </div>
+            <button type="button" class="install-cta" id="installAndroidButton">Install App</button>
+        </div>
+
+        <!-- iOS Safari: no programmatic prompt, show the manual steps -->
+        <div id="installVariantIOS" style="display:none;">
+            <div class="install-row">
+                <div class="install-icon">
+                    <img src="/static/icons/icon-192.png" alt="" onerror="this.style.display='none';">
+                </div>
+                <div>
+                    <p class="install-title">Add QuickProof to your Home Screen</p>
+                    <p class="install-desc">So you can open it directly next time, without going through the website.</p>
+                </div>
+            </div>
+            <ul class="install-steps">
+                <li>
+                    <span class="install-step-badge">1</span>
+                    Tap the Share button
+                    <svg class="ios-share-icon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 16V4"></path>
+                        <path d="M7 8l5-5 5 5"></path>
+                        <rect x="4" y="12" width="16" height="8" rx="2"></rect>
+                    </svg>
+                    at the bottom of Safari
+                </li>
+                <li>
+                    <span class="install-step-badge">2</span>
+                    Scroll down and tap "Add to Home Screen"
+                </li>
+                <li>
+                    <span class="install-step-badge">3</span>
+                    Tap "Add" — done!
+                </li>
+            </ul>
+        </div>
+
+        <!-- Fallback for browsers with neither path (rare) -->
+        <div id="installVariantGeneric" style="display:none;">
+            <div class="install-row">
+                <div class="install-icon">
+                    <img src="/static/icons/icon-192.png" alt="" onerror="this.style.display='none';">
+                </div>
+                <div>
+                    <p class="install-title">Add QuickProof to your Home Screen</p>
+                    <p class="install-desc">Open your browser menu and look for "Add to Home Screen" or "Install App" so you don't need to come back through the website.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ==========================================
          FIRST TIME SETUP
@@ -2605,6 +2792,100 @@ padding:20px 16px calc(20px + env(safe-area-inset-bottom));
                 .catch((error) => console.error("Service worker registration failed:", error));
         });
     }
+</script>
+
+
+<script>
+/* Add-to-Home-Screen banner.
+   New users who arrive via the website don't know they should install
+   QuickProof, so every visit looks like "go back to the site" instead of
+   a 1-tap icon. This shows the right nudge once installability is known,
+   and gets out of the way (permanently) once the app is already installed. */
+(() => {
+    "use strict";
+
+    const DISMISS_KEY = "qp_install_banner_dismissed_until";
+    const DISMISS_DAYS = 7;
+
+    function isStandalone() {
+        return window.matchMedia("(display-mode: standalone)").matches ||
+            window.navigator.standalone === true; // iOS Safari
+    }
+
+    function isDismissed() {
+        const until = parseInt(localStorage.getItem(DISMISS_KEY) || "0", 10);
+        return Date.now() < until;
+    }
+
+    function dismiss() {
+        const until = Date.now() + DISMISS_DAYS * 24 * 60 * 60 * 1000;
+        try { localStorage.setItem(DISMISS_KEY, String(until)); } catch (e) {}
+        hideBanner();
+    }
+
+    const banner = document.getElementById("installBanner");
+    if (!banner) return;
+
+    function hideBanner() {
+        banner.classList.remove("show");
+    }
+
+    function showVariant(id) {
+        if (isStandalone() || isDismissed()) return;
+        ["installVariantAndroid", "installVariantIOS", "installVariantGeneric"].forEach((vid) => {
+            const el = document.getElementById(vid);
+            if (el) el.style.display = (vid === id) ? "" : "none";
+        });
+        banner.classList.add("show");
+    }
+
+    const closeBtn = document.getElementById("installBannerClose");
+    if (closeBtn) closeBtn.addEventListener("click", dismiss);
+
+    if (isStandalone()) {
+        // Already installed and running from the Home Screen icon — nothing to do.
+        return;
+    }
+
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+
+    let androidPromptEvent = null;
+    window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        androidPromptEvent = e;
+        showVariant("installVariantAndroid");
+    });
+
+    const androidBtn = document.getElementById("installAndroidButton");
+    if (androidBtn) {
+        androidBtn.addEventListener("click", async () => {
+            if (!androidPromptEvent) return;
+            androidPromptEvent.prompt();
+            try {
+                await androidPromptEvent.userChoice;
+            } catch (e) {}
+            androidPromptEvent = null;
+            hideBanner();
+        });
+    }
+
+    window.addEventListener("appinstalled", hideBanner);
+
+    if (isIOS) {
+        // iOS never fires beforeinstallprompt — show the manual steps directly.
+        showVariant("installVariantIOS");
+    } else {
+        // Non-iOS browser that may not support beforeinstallprompt either
+        // (e.g. desktop Firefox). Give it a moment for the Chrome/Edge
+        // event above to fire before falling back to generic instructions.
+        setTimeout(() => {
+            if (!androidPromptEvent && !isStandalone() && !isDismissed()) {
+                showVariant("installVariantGeneric");
+            }
+        }, 2500);
+    }
+})();
 </script>
 
 
