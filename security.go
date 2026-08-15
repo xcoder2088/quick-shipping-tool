@@ -1,3 +1,5 @@
+// Copyright (c) 2025-2026 Francois "Brad" Bradette. All rights reserved.
+// Proprietary and confidential. Not open source. See LICENSE.
 package main
 
 // ==================================================
